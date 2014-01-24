@@ -1,5 +1,5 @@
 { nixpkgs
-, nixes
+, hydra_scripts
 , supportedSystems ? [ "x86_64-linux" ]
 , system ? builtins.currentSystem
 , attrs ? [ "pkgs.pythonPackages.virtualenv" "pkgs.bash" ]
@@ -22,7 +22,7 @@ let
   machine =
     { config, pkgs, ... }: configVM;
 
-  vmBuildNixText = builtins.readFile <nixes/vm_build.nix>;
+  vmBuildNixText = builtins.readFile <hydra_scripts/release/vm_build.nix>;
   vmBuildNixFile = writeText "vm-build.nix" vmBuildNixText;
 
   attrs_str = toString attrs;  # legacy
