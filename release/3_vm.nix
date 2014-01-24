@@ -77,8 +77,10 @@ let
 
     timeout ${vm_timeout} ${vm.config.system.build.vm}/bin/run-*-vm
 
+    mkdir -p $out/tarballs
     cp ./nix-vm.*/xchg/out.tar.xz $out/tarballs
 
+    mkdir -p $out/nix-support
     for i in $out/tarballs/*; do
         echo "file binary-dist $i" >> $out/nix-support/hydra-build-products
     done
