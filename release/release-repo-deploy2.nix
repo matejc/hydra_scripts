@@ -98,7 +98,7 @@ let
 
     '';
     post_phases = (if cov_command == "" then [] else ["customCoverageReportPhase"]) ++ (if with_vnc_command == "" then [] else ["withVncPhase"]);
-    Xvncmy = <hydra_scripts/Xvncmy.sh>;
+    Xvncmy = <hydra_scripts/release/Xvncmy.sh>;
   in {
     build = pkgs.releaseTools.nixBuild ({
       name = package_name;
