@@ -3,7 +3,7 @@
 , supportedSystems ? [ "x86_64-linux" ]
 , system ? builtins.currentSystem
 , attrs ? [ "pkgs.pythonPackages.virtualenv" "pkgs.bash" ]
-, storeDir ? "/var/matej"
+, prefixDir ? "/var/matej"
 , minimal ? false
 , vm_timeout ? "180"
 }:
@@ -31,14 +31,16 @@ let
     echo "############################### DO SOMETHING, WILL YOU? ###############################"
     export PATH=${nix}/bin:$PATH
 
-    mkdir -p ${storeDir}
-    chgrp 30000 ${storeDir}
-    chmod 1775 ${storeDir}
-    export NIX_STORE_DIR=${storeDir}
+    mkdir -p ${prefixDir}/store
+    chgrp -R 30000 ${prefixDir}
+    chmod -R 1775 ${prefixDir}
+    export NIX_STORE_DIR=${prefixDir}/store
 
-    nix-build ${vmBuildNixFile} -A vmEnvironment --argstr nixpkgs ${vmNixpkgs.outPath} --argstr prefix ${storeDir} --argstr attrs_str ${attrs_str} --show-trace
+    nix-build ${vmBuildNixFile} -A vmEnvironment --argstr nixpkgs ${vmNixpkgs.outPath} --argstr prefix ${prefixDir} --argstr attrs_str ${attrs_str} --show-trace
 
-    ${gnutar}/bin/tar cfv /tmp/xchg/out.tar ${storeDir}
+    test -L ./result && cp -Pv ./result ${prefixDir}
+
+    ${gnutar}/bin/tar cfv /tmp/xchg/out.tar ${prefixDir}
     ${xz}/bin/xz /tmp/xchg/out.tar
     echo "############################### YOU DID SOMETHING, DID YOU? ###############################"
   '';
