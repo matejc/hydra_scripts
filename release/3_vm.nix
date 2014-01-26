@@ -1,7 +1,7 @@
 { nixpkgs
 , hydra_scripts
 , system ? builtins.currentSystem
-, attrs ? [ "pkgs.pythonPackages.virtualenv" "pkgs.bash" ]
+, attrs ? [ "pkgs.nix" "pkgs.bash" ]
 , prefixDir ? "/var/matej"
 , minimal ? false
 , vm_timeout ? "180"
