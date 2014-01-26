@@ -35,7 +35,7 @@ let
     chmod -R 1775 ${prefixDir}
     export NIX_STORE_DIR=${prefixDir}/store
 
-    nix-build ${vmBuildNixFile} -A vmEnvironment --argstr nixpkgs ${vmNixpkgs.outPath} --argstr prefix ${prefixDir} --argstr attrs_str ${attrs_str} --argstr system ${system} --show-trace
+    nix-build ${vmBuildNixFile} -A vmEnvironment --argstr nixpkgs ${vmNixpkgs.outPath} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} --show-trace
 
     test -L ./result && cp -Pv ./result ${prefixDir}
 
