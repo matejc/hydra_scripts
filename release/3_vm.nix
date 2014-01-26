@@ -48,7 +48,7 @@ let
     
     export NIX_OTHER_STORES=/nix/store
 
-    nix-build ${<hydra_scripts/release/vm_build.nix>} -A vmEnvironment --argstr nixpkgs ${vmNixpkgs.outPath} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} --show-trace
+    echo nix-build ${<hydra_scripts/release/vm_build.nix>} -A vmEnvironment --argstr nixpkgs ${vmNixpkgs.outPath} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} --show-trace
 
     test -L ./result && cp -Pv ./result ${prefixDir}
 
