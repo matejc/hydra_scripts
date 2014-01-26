@@ -45,6 +45,8 @@ let
     export NIX_DB_DIR=${prefixDir}/var/nix/db
     mkdir -p ${prefixDir}/etc/nix
     export NIX_CONF_DIR=${prefixDir}/etc/nix
+    
+    export NIX_OTHER_STORES=/nix/store
 
     nix-build ${vmBuildNixFilePath} -A vmEnvironment --argstr nixpkgs ${vmNixpkgsPath} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} --show-trace
 
