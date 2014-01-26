@@ -1,5 +1,5 @@
 { nixpkgs
-, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
+, system ? "x86_64-linux"
 , package_name
 , package_repo
 , build_command ? "make all"
@@ -22,13 +22,12 @@
 , hydra_scripts
 }:
 
-with import <nixpkgs/pkgs/top-level/release-lib.nix> { inherit supportedSystems; };
+with import <nixpkgs/pkgs/top-level/release-lib.nix> { supportedSystems = [ system ]; };
 
 let
   removeFirst = (str: pkgs.lib.drop 1 (pkgs.lib.splitString "." str));
   nullPkgs = import <nixpkgs> { };
   nativePkgs = import <nixpkgs> { system = builtins.currentSystem; };
-  genAttrs' = pkgs.lib.genAttrs supportedSystems;
   getSetFromStr = str: set: (pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." str) set);
   getImports = prefix: paths: set: map (item: prefix + (toString (getSetFromStr item.package set)) + item.path) paths;
   getSet = (n: value: pkgs.lib.listToAttrs [(pkgs.lib.nameValuePair (builtins.head (pkgs.lib.splitString "." n)) (pkgs.lib.setAttrByPath (removeFirst n) value))]);
@@ -49,7 +48,7 @@ let
     }
   '';
 
-  build_pair = builtins.listToAttrs [(pkgs.lib.nameValuePair package_name (genAttrs' (system:
+  build_pair = builtins.listToAttrs [(pkgs.lib.nameValuePair package_name (
   let
     pkgs = import <nixpkgs> { inherit system; };
     ADD_CFLAGS_COMPILE = pkgs.lib.concatStringsSep " " (getImports "-I" CFLAGS_COMPILE_SETS pkgs);
@@ -264,7 +263,7 @@ let
       '';
     });
   }
-  )))];
+  ))];
 
   jobs = build_pair;
  
