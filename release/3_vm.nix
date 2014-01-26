@@ -50,6 +50,8 @@ let
 
     echo nix-build ${<hydra_scripts/release/vm_build.nix>} -A vmEnvironment --argstr nixpkgs ${vmNixpkgs.outPath} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} --show-trace
 
+    echo $? > /tmp/xchg/exitstatuscode
+
     test -L ./result && cp -Pv ./result ${prefixDir}
 
     ${gnutar}/bin/tar cfv /tmp/xchg/out.tar ${prefixDir}
@@ -90,6 +92,9 @@ let
     export > vm-state-client/xchg/saved-env
 
     timeout ${vm_timeout} ${vm.config.system.build.vm}/bin/run-*-vm
+
+    EXITSTATUSCODE=`cat ./nix-vm.*/xchg/exitstatuscode`
+    test 0 -ne $EXITSTATUSCODE && exit $EXITSTATUSCODE
 
     mkdir -p $out/tarballs
     cp ./nix-vm.*/xchg/out.tar.xz $out/tarballs
