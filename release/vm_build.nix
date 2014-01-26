@@ -1,4 +1,4 @@
-{ nixpkgs, prefix, attrs_str ? "pkgs.nix pkgs.unzip" }:
+{ nixpkgs, prefix, system, attrs_str ? "pkgs.nix pkgs.bash" }:
 let
 
   config = {
@@ -7,7 +7,7 @@ let
       stateDir = prefix+"/state";
     };
   };
-  pkgs = import nixpkgs { system = builtins.currentSystem; inherit config; };
+  pkgs = import nixpkgs { inherit system config; };
 
   parsed_attrs = (map (n: pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." n) pkgs) (pkgs.lib.splitString " " attrs_str));
 
