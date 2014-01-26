@@ -4,7 +4,7 @@ let
   config = {
     nix = {
       storeDir = prefix+"/store";
-      stateDir = prefix+"/state";
+      stateDir = prefix+"/var/nix";
     };
   };
   pkgs = import nixpkgs { inherit system config; };
