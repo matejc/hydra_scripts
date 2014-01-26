@@ -21,10 +21,6 @@ let
   machine =
     { config, pkgs, ... }: configVM;
 
-  vmBuildNixText = builtins.readFile <hydra_scripts/release/vm_build.nix>;
-  vmBuildNixFile = writeText "vm-build.nix" vmBuildNixText;
-  vmBuildNixFilePath = vmBuildNixFile.outPath;
-
   attrs_str = toString attrs;  # legacy
 
   vmBuildCommands = ''
@@ -45,6 +41,7 @@ let
     export NIX_DB_DIR=${prefixDir}/var/nix/db
     mkdir -p ${prefixDir}/etc/nix
     export NIX_CONF_DIR=${prefixDir}/etc/nix
+    export TMPDIR=/tmp
     
     export NIX_OTHER_STORES=/nix/store
 
@@ -111,8 +108,6 @@ let
     builder = "${bash}/bin/sh";
     args = ["-e" vmRunCommand];
   };
-  
-  vmNixpkgsPath = vmNixpkgs.outPath;
 
   vmNixpkgs = stdenv.mkDerivation {
     name = "vm-nixpkgs";
