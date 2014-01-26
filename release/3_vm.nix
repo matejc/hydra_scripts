@@ -23,6 +23,7 @@ let
 
   vmBuildNixText = builtins.readFile <hydra_scripts/release/vm_build.nix>;
   vmBuildNixFile = writeText "vm-build.nix" vmBuildNixText;
+  vmBuildNixFilePath = vmBuildNixFile.outPath;
 
   attrs_str = toString attrs;  # legacy
 
@@ -45,7 +46,7 @@ let
     mkdir -p ${prefixDir}/etc/nix
     export NIX_CONF_DIR=${prefixDir}/etc/nix
 
-    nix-build ${vmBuildNixFile} -A vmEnvironment --argstr nixpkgs ${vmNixpkgs.outPath} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} --show-trace
+    nix-build ${vmBuildNixFilePath} -A vmEnvironment --argstr nixpkgs ${vmNixpkgsPath} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} --show-trace
 
     test -L ./result && cp -Pv ./result ${prefixDir}
 
@@ -103,6 +104,8 @@ let
     builder = "${bash}/bin/sh";
     args = ["-e" vmRunCommand];
   };
+  
+  vmNixpkgsPath = vmNixpkgs.outPath;
 
   vmNixpkgs = stdenv.mkDerivation {
     name = "vm-nixpkgs";
