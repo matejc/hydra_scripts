@@ -31,19 +31,10 @@ let
     chgrp -R 30000 ${prefixDir}
     chmod -R 1775 ${prefixDir}
     export NIX_STORE_DIR=${prefixDir}/store
-    mkdir ${prefixDir}/share
-    export NIX_DATA_DIR=${prefixDir}/share
-    mkdir -p ${prefixDir}/log/nix
-    export NIX_LOG_DIR=${prefixDir}/log/nix
     mkdir -p ${prefixDir}/var/nix
     export NIX_STATE_DIR=${prefixDir}/var/nix
     mkdir ${prefixDir}/var/nix/db
     export NIX_DB_DIR=${prefixDir}/var/nix/db
-    mkdir -p ${prefixDir}/etc/nix
-    export NIX_CONF_DIR=${prefixDir}/etc/nix
-    export TMPDIR=/tmp
-    
-    export NIX_OTHER_STORES=/nix/store
 
     nix-build ${<hydra_scripts/release/vm_build.nix>} -A vmEnvironment --argstr nixpkgs ${vmNixpkgs.outPath} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} -vvv --show-trace
 
