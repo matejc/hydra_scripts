@@ -74,7 +74,7 @@ let
   ];
 
   vmRunCommand = writeText "vm-run" ''
-    export PATH=${coreutils}/bin:$PATH
+    export PATH=${coreutils}/bin:${gawk}/bin:$PATH
 
     mkdir -p vm-state-client/xchg
     export > vm-state-client/xchg/saved-env
