@@ -42,7 +42,8 @@ let
 
     test -L ./result && cp -Pv ./result ${prefixDir}
 
-    ${gnutar}/bin/tar cfv /tmp/xchg/out.tar ${prefixDir}
+    ${gnutar}/bin/tar cvf /tmp/xchg/out.tar `nix-store -qR ./result`
+
     ${xz}/bin/xz /tmp/xchg/out.tar
     echo "############################### BUILD END ###############################"
   '';
