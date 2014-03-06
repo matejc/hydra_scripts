@@ -20,7 +20,7 @@
 , hydra_scripts
 }:
 
-with import nixpkgs+"/pkgs/top-level/release-lib.nix" { supportedSystems = [ system ]; };
+with import (nixpkgs+"/pkgs/top-level/release-lib.nix") { supportedSystems = [ system ]; };
 
 let
   removeFirst = (str: pkgs.lib.drop 1 (pkgs.lib.splitString "." str));
@@ -79,7 +79,7 @@ let
 
     '';
     post_phases = (if cov_command == "" then [] else ["customCoverageReportPhase"]) ++ (if with_vnc_command == "" then [] else ["withVncPhase"]);
-    Xvncmy = hydra_scripts+"/release/Xvncmy.sh";
+    Xvncmy = (hydra_scripts+"/release/Xvncmy.sh");
   in {
     build = pkgs.releaseTools.nixBuild ({
       name = package_name;
