@@ -48,7 +48,7 @@ let
     }
   '';
 
-  build = builtins.listToAttrs [(pkgs.lib.nameValuePair package_name (
+  jobs = builtins.listToAttrs [(pkgs.lib.nameValuePair package_name (
   let
     pkgs = import nixpkgs { inherit system; };
     ADD_CFLAGS_COMPILE = pkgs.lib.concatStringsSep " " (getImports "-I" CFLAGS_COMPILE_SETS pkgs);
@@ -205,7 +205,5 @@ let
 
   }
   ))];
-
-  jobs = build;
  
 in jobs
