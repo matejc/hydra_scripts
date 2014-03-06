@@ -20,12 +20,12 @@
 , hydra_scripts
 }:
 
-with import <nixpkgs/pkgs/top-level/release-lib.nix> { supportedSystems = [ system ]; };
+with import nixpkgs+"/pkgs/top-level/release-lib.nix" { supportedSystems = [ system ]; };
 
 let
   removeFirst = (str: pkgs.lib.drop 1 (pkgs.lib.splitString "." str));
-  nullPkgs = import <nixpkgs> { };
-  nativePkgs = import <nixpkgs> { system = builtins.currentSystem; };
+  nullPkgs = import nixpkgs { };
+  nativePkgs = import nixpkgs { system = builtins.currentSystem; };
   getSetFromStr = str: set: (pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." str) set);
   getImports = prefix: paths: set: map (item: prefix + (toString (getSetFromStr item.package set)) + item.path) paths;
   getSet = (n: value: pkgs.lib.listToAttrs [(pkgs.lib.nameValuePair (builtins.head (pkgs.lib.splitString "." n)) (pkgs.lib.setAttrByPath (removeFirst n) value))]);
@@ -50,7 +50,7 @@ let
 
   build = builtins.listToAttrs [(pkgs.lib.nameValuePair package_name (
   let
-    pkgs = import <nixpkgs> { inherit system; };
+    pkgs = import nixpkgs { inherit system; };
     ADD_CFLAGS_COMPILE = pkgs.lib.concatStringsSep " " (getImports "-I" CFLAGS_COMPILE_SETS pkgs);
     ADD_LDFLAGS = pkgs.lib.concatStringsSep " " (getImports "-L" LDFLAGS_SETS pkgs);
     parsed_buildins = (map (n: pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." n) pkgs) (pkgs.lib.splitString " " build_inputs_str));
@@ -79,7 +79,7 @@ let
 
     '';
     post_phases = (if cov_command == "" then [] else ["customCoverageReportPhase"]) ++ (if with_vnc_command == "" then [] else ["withVncPhase"]);
-    Xvncmy = <hydra_scripts/release/Xvncmy.sh>;
+    Xvncmy = hydra_scripts+"/release/Xvncmy.sh";
   in {
     build = pkgs.releaseTools.nixBuild ({
       name = package_name;
