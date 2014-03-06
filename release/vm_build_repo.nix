@@ -83,7 +83,7 @@ let
   in {
     build = pkgs.releaseTools.nixBuild ({
       name = package_name;
-      src = <package_repo>;
+      src = package_repo;
       doCoverageAnalysis = do_lcov;
       dontBuild = false;
       buildInputs = [ build_env pkgs.cacert ];
