@@ -104,6 +104,7 @@ let
     while `test -f /var/images/$HASH.lock`; do sleep 1; done
     touch /var/images/$HASH.lock
     export NIX_DISK_IMAGE=/var/images/$HASH.img
+    chmod g+w $NIX_DISK_IMAGE
     timeout ${vm_timeout} ${vm.config.system.build.vm}/bin/run-*-vm
     rm /var/images/$HASH.lock
 
