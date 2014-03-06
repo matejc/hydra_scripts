@@ -7,7 +7,7 @@
 , check_command ? ""
 , dist_path ? "./dist"
 , docs_path ? "./docs/html"
-, build_inputs_str ? [ "pkgs.python27" "pkgs.python27Packages.virtualenv" "pkgs.libxml2" "pkgs.libxslt" ]
+, build_inputs_str ? "pkgs.python27 pkgs.python27Packages.virtualenv pkgs.libxml2 pkgs.libxslt"
 , CFLAGS_COMPILE_SETS ? []
 , LDFLAGS_SETS ? []
 , do_lcov ? false
