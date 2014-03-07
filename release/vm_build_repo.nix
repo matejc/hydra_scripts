@@ -56,7 +56,7 @@ let
     parsed_buildins = (map (n: pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." n) pkgs) (pkgs.lib.splitString " " build_inputs_str));
     build_env = pkgs.buildEnv {
       name = "build_env."+system;
-      paths = parsed_buildins ++ [ pkgs.tree pkgs.gnused pkgs.gnumake pkgs.stdenv pkgs.binutils pkgs.findutils pkgs.coreutils pkgs.git pkgs.perl ] ++ (if with_vnc_command == "" then [] else [ pkgs.nix pkgs.tightvnc pkgs.xorg.fontmiscmisc pkgs.xorg.fontcursormisc pkgs.psmisc pkgs.xlibs.libX11 pkgs.xorg.xorgserver ]);
+      paths = parsed_buildins ++ [ pkgs.tree pkgs.gnused pkgs.gnumake pkgs.stdenv pkgs.binutils pkgs.findutils pkgs.coreutils pkgs.git pkgs.perl ] ++ (if with_vnc_command == "" then [] else [ pkgs.nix pkgs.tightvnc pkgs.xorg.fontmiscmisc pkgs.xorg.fontcursormisc pkgs.busybox pkgs.xlibs.libX11 pkgs.xorg.xorgserver ]);
       pathsToLink = [ "/" "/lib" "/include" ];
       ignoreCollisions = true;
     };
