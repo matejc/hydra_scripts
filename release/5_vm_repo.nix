@@ -55,8 +55,6 @@ let
     mkdir -p ${prefixDir}/var/nix/db
     export NIX_DB_DIR=${prefixDir}/var/nix/db
 
-    set -e
-
     nix-build ${<hydra_scripts/release/vm_build_repo.nix>} -A ${esc package_name} --argstr nixpkgs ${<nixpkgs>} --argstr hydra_scripts ${<hydra_scripts>} --argstr prefix ${prefixDir} --argstr build_inputs_str "${build_inputs_str}" --argstr system ${system} --argstr package_name "${esc package_name}" --argstr package_repo "${<package_repo>}" --argstr build_command "${esc build_command}" --argstr dist_command "${esc dist_command}" --argstr check_command "${esc check_command}" --argstr dist_path "${esc dist_path}" --argstr docs_path "${esc docs_path}" --argstr cov_command "${esc cov_command}" --argstr source_files "${esc source_files}" --argstr binary_files "${esc binary_files}" --argstr install_command "${esc install_command}" --argstr with_vnc_command "${esc with_vnc_command}" -vvv --show-trace
 
     echo $? > /tmp/xchg/exitstatuscode
@@ -109,10 +107,10 @@ let
     timeout ${vm_timeout} ${vm.config.system.build.vm}/bin/run-*-vm
     rm /var/images/$HASH.lock
 
+    chmod g+w $NIX_DISK_IMAGE
+
     EXITSTATUSCODE=`cat ./nix-vm.*/xchg/exitstatuscode`
     test 0 -ne $EXITSTATUSCODE && exit $EXITSTATUSCODE
-
-    chmod g+w $NIX_DISK_IMAGE
 
     mkdir -p $out/tarballs
     cp ./nix-vm.*/xchg/out.tar.xz $out/tarballs
