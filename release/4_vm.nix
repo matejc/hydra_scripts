@@ -36,7 +36,7 @@ let
     mkdir ${prefixDir}/var/nix/db
     export NIX_DB_DIR=${prefixDir}/var/nix/db
 
-    nix-build ${<hydra_scripts/release/vm_build.nix>} -A vmEnvironment --argstr nixpkgs ${vmNixpkgs.outPath} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} -vvv --show-trace
+    nix-build ${<hydra_scripts/release/vm_build.nix>} -A vmEnvironment --argstr nixpkgs ${<nixpkgs>} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} -vvv --show-trace
 
     echo $? > /tmp/xchg/exitstatuscode
 
@@ -105,16 +105,6 @@ let
     requiredSystemFeatures = [ "kvm" ];
     builder = "${bash}/bin/sh";
     args = ["-e" vmRunCommand];
-  };
-
-  vmNixpkgs = stdenv.mkDerivation {
-    name = "vm-nixpkgs";
-    src = fetchgit { url = https://github.com/matejc/nixpkgs; rev = "refs/heads/master"; };
-    phases = [ "unpackPhase" "installPhase" ];
-    installPhase = ''
-      mkdir -p $out
-      cp -rv $curSrc/* $out
-    '';
   };
 
   jobs = {
