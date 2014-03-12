@@ -33,7 +33,7 @@ let
     export NIX_STORE_DIR=${prefixDir}/store
     mkdir -p ${prefixDir}/var/nix
     export NIX_STATE_DIR=${prefixDir}/var/nix
-    mkdir ${prefixDir}/var/nix/db
+    mkdir -p ${prefixDir}/var/nix/db
     export NIX_DB_DIR=${prefixDir}/var/nix/db
 
     nix-build ${<hydra_scripts/release/vm_build.nix>} -A vmEnvironment --argstr nixpkgs ${<nixpkgs>} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} -vvv --show-trace
