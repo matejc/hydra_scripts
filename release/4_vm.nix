@@ -15,7 +15,7 @@ let
   configVM = {
     virtualisation.memorySize = 1024;
     virtualisation.graphics = false;
-    virtualisation.diskSize = 5000;
+    virtualisation.diskSize = 20000;
   };
 
   machine =
