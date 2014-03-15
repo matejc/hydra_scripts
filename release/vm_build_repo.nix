@@ -56,8 +56,8 @@ let
     parsed_buildins = (map (n: pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." n) pkgs) (pkgs.lib.splitString " " build_inputs_str));
     build_env = pkgs.buildEnv {
       name = "build_env."+system;
-      paths = parsed_buildins ++ [ pkgs.tree pkgs.gnused pkgs.gnumake pkgs.stdenv pkgs.binutils pkgs.findutils pkgs.coreutils pkgs.git pkgs.perl ] ++ (if with_vnc_command == "" then [] else [ pkgs.nix pkgs.tightvnc pkgs.xorg.fontmiscmisc pkgs.xorg.fontcursormisc pkgs.busybox pkgs.xlibs.libX11 pkgs.xorg.xorgserver ]);
-      pathsToLink = [ "/" "/lib" "/include" ];
+      paths = parsed_buildins ++ [ pkgs.tree pkgs.gnused pkgs.stdenv pkgs.binutils pkgs.findutils pkgs.coreutils pkgs.git pkgs.perl ] ++ (if with_vnc_command == "" then [] else [ pkgs.nix pkgs.tightvnc pkgs.xorg.fontmiscmisc pkgs.xorg.fontcursormisc pkgs.busybox pkgs.xlibs.libX11 pkgs.xorg.xorgserver ]);
+      pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
     build_in_out = (if buildinout then "true" else "false");
@@ -118,7 +118,6 @@ let
         if ${build_in_out} ; then
           cd $out
         fi
-        ${environs}
         ${check_command}
         if ${build_in_out} ; then
           cd $source_prefix
