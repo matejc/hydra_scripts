@@ -118,9 +118,9 @@ let
         if ${build_in_out} ; then
           cd $out
         fi
-        echo "BEGINNNNN"
-        echo $stdenv/setup
-        echo "ENNNNNNND"
+        echo "#############################################BEGINNNNN"
+        cat $stdenv/setup
+        echo "#############################################ENNNNNNND"
         ${check_command}
         if ${build_in_out} ; then
           cd $source_prefix
