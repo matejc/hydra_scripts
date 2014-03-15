@@ -122,8 +122,9 @@ let
           cd $out
         fi
         echo "#############################################BEGINNNNN"
-        which make
+        ${build_env}/bin/make tests
         echo "#############################################ENNNNNNND"
+        export PATH="${build_env}/bin:${build_env}/sbin"
         ${check_command}
         if ${build_in_out} ; then
           cd $source_prefix
