@@ -118,6 +118,7 @@ let
         if ${build_in_out} ; then
           cd $out
         fi
+        ${environs}
         ${check_command}
         if ${build_in_out} ; then
           cd $source_prefix
