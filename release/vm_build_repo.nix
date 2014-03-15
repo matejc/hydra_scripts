@@ -107,6 +107,9 @@ let
         fi
 
         ${build_command}
+        echo "#############################################BEGINNNNN"
+        which make
+        echo "#############################################ENNNNNNND"
 
         if ${build_in_out} ; then
           cd $source_prefix
@@ -119,7 +122,7 @@ let
           cd $out
         fi
         echo "#############################################BEGINNNNN"
-        cat $stdenv/setup
+        which make
         echo "#############################################ENNNNNNND"
         ${check_command}
         if ${build_in_out} ; then
