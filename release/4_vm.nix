@@ -38,13 +38,17 @@ let
 
     nix-build ${<hydra_scripts/release/vm_build.nix>} -A vmEnvironment --argstr nixpkgs ${<nixpkgs>} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} -vvv --show-trace
 
-    echo $? > /tmp/xchg/exitstatuscode
+    EXITSTATUSCODE=$?
 
-    test -L ./result && cp -Pv ./result ${prefixDir}
+    echo $EXITSTATUSCODE > /tmp/xchg/exitstatuscode
 
-    ${gnutar}/bin/tar cvf /tmp/xchg/out.tar "${prefixDir}/result" `nix-store -qR ./result`
-
-    ${xz}/bin/xz /tmp/xchg/out.tar
+    if [[ "0" -eq "$EXITSTATUSCODE" ]]; then
+      test -L ./result && cp -Pv ./result ${prefixDir}
+      ${gnutar}/bin/tar cvf /tmp/xchg/out.tar "${prefixDir}/result" `nix-store -qR ./result`
+      ${xz}/bin/xz /tmp/xchg/out.tar
+    else
+      echo "BUILD FAILED!"
+    fi
     echo "############################### BUILD END ###############################"
   '';
 
