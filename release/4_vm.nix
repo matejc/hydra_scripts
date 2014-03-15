@@ -59,8 +59,8 @@ let
       nix.readOnlyStore = true;
       systemd.services.backdoor.enable = false;
 
-      systemd.services.build-commands = {
-        description = "Build Commands";
+      systemd.services.build = {
+        description = "Build";
         wantedBy = [ "multi-user.target" ];
         after = [ "multi-user.target" ];
         script = ''
