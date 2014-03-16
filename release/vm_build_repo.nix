@@ -118,7 +118,11 @@ let
         if ${build_in_out} ; then
           cd $out
         fi
-        ${pkgs.bash}/bin/bash -c "PATH=${build_env}/bin:${build_env}/sbin ${check_command}"
+        echo "#################### DO WORK: BEGIN"
+        which make
+        make tests
+        ${check_command}
+        echo "#################### DO WORK: END"
         if ${build_in_out} ; then
           cd $source_prefix
         fi
