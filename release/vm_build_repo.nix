@@ -107,9 +107,6 @@ let
         fi
 
         ${build_command}
-        echo "#############################################BEGINNNNN"
-        which make
-        echo "#############################################ENNNNNNND"
 
         if ${build_in_out} ; then
           cd $source_prefix
@@ -121,11 +118,7 @@ let
         if ${build_in_out} ; then
           cd $out
         fi
-        echo "#############################################BEGINNNNN"
-        ${build_env}/bin/make tests
-        echo "#############################################ENNNNNNND"
-        export PATH="${build_env}/bin:${build_env}/sbin"
-        ${check_command}
+        ${pkgs.bash}/bin/bash -c "PATH=${build_env}/bin:${build_env}/sbin ${check_command}"
         if ${build_in_out} ; then
           cd $source_prefix
         fi
