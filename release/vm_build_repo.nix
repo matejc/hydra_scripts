@@ -118,7 +118,9 @@ let
         if ${build_in_out} ; then
           cd $out
         fi
+
         ${check_command}
+
         if ${build_in_out} ; then
           cd $source_prefix
         fi
