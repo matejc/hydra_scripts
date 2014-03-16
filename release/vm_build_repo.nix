@@ -118,11 +118,7 @@ let
         if ${build_in_out} ; then
           cd $out
         fi
-        echo "#################### DO WORK: BEGIN"
-        which make
-        make tests
         ${check_command}
-        echo "#################### DO WORK: END"
         if ${build_in_out} ; then
           cd $source_prefix
         fi
