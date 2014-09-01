@@ -1,7 +1,4 @@
-{ nixpkgs
-, system ? builtins.currentSystem
-}:
-
+{ nixpkgs, prefix, system, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv" }:
 let
 
   platform = {
@@ -104,20 +101,28 @@ let
       abi = "aapcs-linux";
     };
   };
-  pkgsFun = import <nixpkgs>;
-  pkgsNoParams = pkgsFun {};
-  pkgs = pkgsFun {
+
+  pkgs = import nixpkgs {
     crossSystem = crosssystem;
-    config = pkgs: {
-      packageOverrides = pkgs : {
-        distccMasquerade = pkgs.distccMasquerade.override {
-          gccRaw = pkgs.gccCrossStageFinal.gcc;
-          binutils = pkgs.binutilsCross;
-        };
-      };
+    inherit system config;
+  };
+
+  config = {
+    nix = {
+      storeDir = prefix+"/store";
+      stateDir = prefix+"/var/nix";
     };
   };
 
-  jobs.build = pkgs.bash.crossDrv;
+  parsed_attrs = (map (n: pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." n) pkgs) (pkgs.lib.splitString " " attrs_str));
 
-in jobs
+  build = {
+    vmEnvironment = pkgs.buildEnv {
+      name = "vm-environment";
+      paths = parsed_attrs;
+      pathsToLink = [ "/" ];
+      ignoreCollisions = true;
+    };
+  };
+in
+  build
