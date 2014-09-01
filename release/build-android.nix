@@ -104,7 +104,7 @@ let
 
   pkgs = import nixpkgs {
     crossSystem = crosssystem;
-    inherit system config;
+    inherit config;
   };
 
   config = {
