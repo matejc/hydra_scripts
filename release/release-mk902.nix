@@ -118,6 +118,6 @@ let
     };
   };
 
-  jobs.build = pkgs.bash;
+  jobs.build = pkgs.bash.crossDrv;
 
 in jobs
