@@ -81,7 +81,7 @@ let
     kernelTarget = "zImage";
     uboot = null;
     gcc = {
-      arch = "armv7a";
+      arch = "armv7";
       fpu = "vfp";
       float = "hard";
     };
@@ -98,7 +98,7 @@ let
     platform = platform;
     openssl.system = "linux-generic32";
     gcc = {
-      arch = "armv7a";
+      arch = "armv7";
       fpu = "vfp";
       float = "softfp";
       abi = "aapcs-linux";
