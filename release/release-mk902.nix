@@ -81,14 +81,14 @@ let
     kernelTarget = "zImage";
     uboot = null;
     gcc = {
-      arch = "armv7";
+      arch = "arm";
       fpu = "vfp";
       float = "hard";
     };
   };
 
   crosssystem = {
-    config = "armv7a-unknown-linux-gnueabi";
+    config = "armv6l-unknown-linux-gnueabi";
     bigEndian = false;
     arch = "arm";
     float = "hard";
@@ -98,7 +98,7 @@ let
     platform = platform;
     openssl.system = "linux-generic32";
     gcc = {
-      arch = "armv7";
+      arch = "arm";
       fpu = "vfp";
       float = "softfp";
       abi = "aapcs-linux";
