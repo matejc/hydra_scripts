@@ -88,7 +88,7 @@ let
   };
 
   crosssystem = {
-    config = "armv7a-softfp-linux-gnueabi";
+    config = "armv7a-unknown-linux-gnueabi";
     bigEndian = false;
     arch = "arm";
     float = "hard";
