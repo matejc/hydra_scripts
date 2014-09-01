@@ -88,6 +88,7 @@ let
     HASH=`echo "${prefixDir}" | sha1sum - | awk '{print $1}'`
 
     while `test -f /var/images/$HASH.lock`; do sleep 10; echo "Waiting: $HASH.lock"; done
+    mkdir -p /var/images
     touch /var/images/$HASH.lock
     export NIX_DISK_IMAGE=/var/images/$HASH.img
     timeout ${vm_timeout} ${vm.config.system.build.vm}/bin/run-*-vm
