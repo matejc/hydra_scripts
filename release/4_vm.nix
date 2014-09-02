@@ -95,7 +95,7 @@ let
     rm /var/images/$HASH.lock
 
     test -w $NIX_DISK_IMAGE || { echo "WARNING: `id` has no write permission for $NIX_DISK_IMAGE"; true }
-    chmod g+w $NIX_DISK_IMAGE; || true
+    chmod g+w $NIX_DISK_IMAGE || true
 
     EXITSTATUSCODE=`cat ./nix-vm.*/xchg/exitstatuscode`
     test 0 -ne $EXITSTATUSCODE && exit $EXITSTATUSCODE
