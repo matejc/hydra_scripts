@@ -131,6 +131,7 @@ let
       nodejs = pkgs.nodejs.override {
         utillinux = pkgs.utillinux.crossDrv;
       };
+      scons = pkgs.scons.crossDrv;
     };
   };
 
