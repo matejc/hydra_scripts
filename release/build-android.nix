@@ -113,7 +113,7 @@ let
       stateDir = prefix+"/var/nix";
     };
     packageOverrides = pkgs : {
-      python27.crossDrv = pkgs.stdenv.lib.overrideDerivation pkgs.python27 (oldAttrs : {
+      python27.crossDrv = pkgs.stdenv.lib.overrideDerivation pkgs.python27.crossDrv (oldAttrs : {
           configureFlags = oldAttrs.configureFlags + " --disable-ipv6 ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no ac_cv_have_long_long_format=yes";
           src = pkgs.fetchurl {
             url = "http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tar.xz";
