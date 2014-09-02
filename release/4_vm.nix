@@ -46,7 +46,7 @@ let
     if [[ "0" -eq "$EXITSTATUSCODE" ]]; then
       test -L ./result && cp -Pv ./result ${prefixDir}
       ${gnutar}/bin/tar cvf /tmp/xchg/out.tar "${prefixDir}/result" `nix-store -qR ./result`
-      ${xz}/bin/xz /tmp/xchg/out.tar
+      ${bzip2}/bin/bzip2 /tmp/xchg/out.tar
     else
       echo "BUILD FAILED!"
     fi
@@ -100,7 +100,7 @@ let
     test 0 -ne $EXITSTATUSCODE && exit $EXITSTATUSCODE
 
     mkdir -p $out/tarballs
-    cp ./nix-vm.*/xchg/out.tar.xz $out/tarballs
+    cp ./nix-vm.*/xchg/out.tar.bz2 $out/tarballs
 
     mkdir -p $out/nix-support
     for i in $out/tarballs/*; do
