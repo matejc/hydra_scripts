@@ -128,7 +128,7 @@ let
             patch -p3 < "${hydra_scripts}/patches/Python-2.7.5-xcompile.patch"
           '';
         };
-      })};
+      });};
     };
   };
 
