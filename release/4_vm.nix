@@ -94,7 +94,8 @@ let
     timeout ${vm_timeout} ${vm.config.system.build.vm}/bin/run-*-vm
     rm /var/images/$HASH.lock
 
-    { test -w $NIX_DISK_IMAGE && chmod g+w $NIX_DISK_IMAGE; } || echo "WARNING: Could not set write permission to $NIX_DISK_IMAGE"
+    test -w $NIX_DISK_IMAGE || { echo "WARNING: `id` has no write permission for $NIX_DISK_IMAGE"; true }
+    chmod g+w $NIX_DISK_IMAGE; || true
 
     EXITSTATUSCODE=`cat ./nix-vm.*/xchg/exitstatuscode`
     test 0 -ne $EXITSTATUSCODE && exit $EXITSTATUSCODE
