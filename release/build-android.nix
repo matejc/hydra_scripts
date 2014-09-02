@@ -120,7 +120,7 @@ let
             url = "http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tar.xz";
             sha256 = "1c8xan2dlsqfq8q82r3mhl72v3knq3qyn71fjq89xikx2smlqg7k";
           };
-          preConfigure = ''
+          postPatch = ''
             ./configure
             make --jobs=1 python Parser/pgen
             mv python python_for_build
