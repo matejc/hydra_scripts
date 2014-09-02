@@ -113,9 +113,9 @@ let
       stateDir = prefix+"/var/nix";
     };
     packageOverrides = pkgs : {
-      python27 = pkgs.python27 // {
+      python27 = pkgs.stdenv.lib.overrideDerivation pkgs.python27 (oldAttrs : {
         configureFlags = "--enable-shared --with-threads --enable-unicode --disable-ipv6";
-      };
+      });
     };
   };
 
