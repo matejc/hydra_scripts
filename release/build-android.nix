@@ -120,7 +120,7 @@ let
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
       paths = parsed_attrs;
-      pathsToLink = [ "bin" ];
+      pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
   };
