@@ -112,6 +112,11 @@ let
       storeDir = prefix+"/store";
       stateDir = prefix+"/var/nix";
     };
+    packageOverrides = pkgs : {
+      python27 = pkgs.python27.override {
+        configureFlags = "--enable-shared --with-threads --enable-unicode --disable-ipv6";
+      };
+    };
   };
 
   parsed_attrs = (map (n: pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." n) pkgs) (pkgs.lib.splitString " " attrs_str));
