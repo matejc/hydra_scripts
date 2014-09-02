@@ -121,6 +121,8 @@ let
           sha256 = "1c8xan2dlsqfq8q82r3mhl72v3knq3qyn71fjq89xikx2smlqg7k";
         };
         postBuild = ''
+          mv python python_for_build
+          mv Parser/pgen Parser/pgen_for_build
           patch -p3 < "${hydra_scripts}/patches/Python-2.7.5-xcompile.patch"
         '';
       });
