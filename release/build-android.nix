@@ -113,7 +113,7 @@ let
       stateDir = prefix+"/var/nix";
     };
     packageOverrides = pkgs : {
-      python27 = pkgs.python27.crossDrv // {
+      python27 = pkgs.python27 // {
         configureFlags = "--enable-shared --with-threads --enable-unicode --disable-ipv6";
       };
     };
