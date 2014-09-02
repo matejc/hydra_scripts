@@ -112,9 +112,9 @@ let
       storeDir = prefix+"/store";
       stateDir = prefix+"/var/nix";
     };
-    packageOverrides = pkgs : rec {
+    packageOverrides = pkgs : {
       python27 = pkgs.stdenv.lib.overrideDerivation pkgs.python27 (oldAttrs : rec{
-        crossAttrs = {
+        crossAttrs = rec {
           configureFlags = oldAttrs.configureFlags + " --disable-ipv6 ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no ac_cv_have_long_long_format=yes";
           version = "2.7.5";
           src = pkgs.fetchurl {
