@@ -1,4 +1,4 @@
-{ nixpkgs, prefix, system, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv" }:
+{ nixpkgs, hydra_scripts, prefix, system, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv" }:
 let
 
   platform = {
@@ -114,7 +114,12 @@ let
     };
     packageOverrides = pkgs : {
       python27 = pkgs.stdenv.lib.overrideDerivation pkgs.python27 (oldAttrs : {
-        configureFlags = "--enable-shared --with-threads --enable-unicode --disable-ipv6";
+        patches = oldAttrs.patches ++ [ "${hydra_scripts}/patches/Python-2.7.5-xcompile.patch" ];
+        configureFlags = oldAttrs.configureFlags + " --disable-ipv6 ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no ac_cv_have_long_long_format=yes";
+        src = pkgs.fetchurl {
+          url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
+          sha256 = "0nh7d3dp75f1aj0pamn4hla8s0l7nbaq4a38brry453xrfh11ppd";
+        };
       });
     };
   };
