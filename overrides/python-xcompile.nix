@@ -1,11 +1,13 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
-, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, libX11 }:
+, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, libX11, pkgs }:
 
 assert zlibSupport -> zlib != null;
 
 with stdenv.lib;
 
 let
+
+  py27Path = "${pkgs.path}/pkgs/development/interpreters/python/2.7";
 
   majorVersion = "2.7";
   version = "${majorVersion}.8";
@@ -17,17 +19,17 @@ let
 
   patches =
     [ # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
-      ./search-path.patch
+      "${py27Path}/search-path.patch"
 
       # Python recompiles a Python if the mtime stored *in* the
       # pyc/pyo file differs from the mtime of the source file.  This
       # doesn't work in Nix because Nix changes the mtime of files in
       # the Nix store to 1.  So treat that as a special case.
-      ./nix-store-mtime.patch
+      "${py27Path}/nix-store-mtime.patch"
 
       # patch python to put zero timestamp into pyc
       # if DETERMINISTIC_BUILD env var is set
-      ./deterministic-build.patch
+      "${py27Path}/deterministic-build.patch"
     ];
 
   postPatch = stdenv.lib.optionalString (stdenv.gcc.libc != null) ''
@@ -90,7 +92,7 @@ let
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
 
-    setupHook = ./setup-hook.sh;
+    setupHook = "${py27Path}/setup-hook.sh";
 
     postInstall =
       ''
