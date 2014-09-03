@@ -113,7 +113,7 @@ let
       stateDir = prefix+"/var/nix";
     };
     packageOverrides = pkgs : {
-      python27 = { crossDrv = pkgs.stdenv.lib.overrideDerivation pkgs.python27.crossDrv (oldAttrs : {
+      python27 = pkgs.stdenv.lib.overrideDerivation pkgs.python27.crossDrv (oldAttrs : {
         crossAttrs = {
           configureFlags = "--enable-shared --with-threads --enable-unicode --disable-ipv6 ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no ac_cv_have_long_long_format=yes";
           src = pkgs.fetchurl {
@@ -128,7 +128,7 @@ let
             patch -p3 < "${hydra_scripts}/patches/Python-2.7.5-xcompile.patch"
           '';
         };
-      });};
+      });
     };
   };
 
