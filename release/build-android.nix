@@ -113,7 +113,7 @@ let
       stateDir = prefix+"/var/nix";
     };
     packageOverrides = pkgs : {
-      python27 = pkgs.callPackage ../overrides/python-xcompile.nix { };
+      python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
     };
   };
 
