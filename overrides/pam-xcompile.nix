@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     propagatedBuildInputs = [ flex.crossDrv cracklib.crossDrv ];
     preConfigure = preConfigure + ''
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      echo ${stdenv.cross.config}
+      echo "${stdenv.cross.config}-gcc"
+      echo "armv6l-unknown-linux-gnueabi-gcc"
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       ls -laR /data/nix/store/p4bwnsjm3llg2h0zyc0qmrwly0lj0r08-gcc-cross-wrapper/bin
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
       #export LDFLAGS="$LDFLAGS $PWD/libyywrap-target.o"
       #sed -e 's/@CC@/gcc/' -i doc/specs/Makefile.in
       
-      export CC="armv6l-unknown-linux-gnueabi-gcc"
+      export CC="${stdenv.cross.config}-gcc"
     '';
     postConfigure = ''
       sed -e "s@ $PWD/libyywrap-target.o@ $PWD/libyywrap-host.o@" -i doc/specs/Makefile
