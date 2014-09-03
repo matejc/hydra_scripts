@@ -113,22 +113,7 @@ let
       stateDir = prefix+"/var/nix";
     };
     packageOverrides = pkgs : {
-      python27 = pkgs.stdenv.lib.overrideDerivation pkgs.python27 (oldAttrs : {
-        crossAttrs = {
-          configureFlags = "--enable-shared --with-threads --enable-unicode --disable-ipv6 ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no ac_cv_have_long_long_format=yes";
-          src = pkgs.fetchurl {
-            url = "http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tar.xz";
-            sha256 = "1c8xan2dlsqfq8q82r3mhl72v3knq3qyn71fjq89xikx2smlqg7k";
-          };
-          postPatch = ''
-            ./configure
-            make --jobs=1 python Parser/pgen
-            mv python python_for_build
-            mv Parser/pgen Parser/pgen_for_build
-            patch -p3 < "${hydra_scripts}/patches/Python-2.7.5-xcompile.patch"
-          '';
-        };
-      });
+      python27 = pkgs.callPackage ../overrides/python-xcompile.nix { };
     };
   };
 
