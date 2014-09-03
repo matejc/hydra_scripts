@@ -1,5 +1,6 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
-, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, libX11, pkgs }:
+, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, libX11
+, pkgs, hydra_scripts }:
 
 assert zlibSupport -> zlib != null;
 
@@ -68,7 +69,7 @@ let
         make --jobs=1 python Parser/pgen
         mv python python_for_build
         mv Parser/pgen Parser/pgen_for_build
-        patch -p3 < "../patches/Python-2.7.5-xcompile.patch"
+        patch -p3 < "${hydra_scripts}/patches/Python-2.7.5-xcompile.patch"
       '';
     };
 
