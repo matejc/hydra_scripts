@@ -115,10 +115,6 @@ let
     packageOverrides = pkgs : {
       python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
-      nodejs = pkgs.nodejs.override {
-        http-parser = pkgs.http-parser.crossDrv;
-        utillinux = pkgs.utillinux.crossDrv;
-      };
     };
   };
 
