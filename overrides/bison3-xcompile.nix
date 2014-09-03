@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     buildPhase = ''
-      make SHELL=${bash.crossDrv}
+      make SHELL=${bash.crossDrv}/bin/bash
     '';
   };
 
