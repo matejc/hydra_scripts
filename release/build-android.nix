@@ -2,7 +2,7 @@
 let
 
   platform = {
-    name = "mk902";
+    name = "arm";
     kernelMajor = "2.6";
     kernelHeadersBaseConfig = "kirkwood_defconfig";
     kernelBaseConfig = "bcmrpi_defconfig";
