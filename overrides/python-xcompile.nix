@@ -57,7 +57,7 @@ let
     crossAttrs = {
       name = "python-2.7.5-${stdenv.cross.config}";
       configureFlags = "--enable-shared --with-threads --enable-unicode --disable-ipv6 ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no ac_cv_have_long_long_format=yes";
-      src = pkgs.fetchurl {
+      src = fetchurl {
         url = "http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tar.xz";
         sha256 = "1c8xan2dlsqfq8q82r3mhl72v3knq3qyn71fjq89xikx2smlqg7k";
       };
