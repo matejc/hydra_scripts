@@ -5,8 +5,9 @@ stdenv.mkDerivation rec {
   name = "bison-3.0.2";
 
   crossAttrs = {
-    buildPhase = ''
-      make SHELL=${bash.crossDrv}/bin/bash
+    preBuild = ''
+      substituteInPlace Makefile.in \
+        --replace " doc/bison.help " " "
     '';
   };
 
