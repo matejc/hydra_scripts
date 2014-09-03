@@ -5,7 +5,9 @@ stdenv.mkDerivation rec {
   name = "bison-3.0.2";
 
   crossAttrs = {
-    makeFlags = "SHELL=${bash.crossDrv}";
+    buildPhase = ''
+      make SHELL=${bash.crossDrv}
+    '';
   };
 
   src = fetchurl {
