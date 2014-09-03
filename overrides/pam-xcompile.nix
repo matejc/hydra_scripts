@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
       echo $PATH
       ls -laR /data/nix/store/p4bwnsjm3llg2h0zyc0qmrwly0lj0r08-gcc-cross-wrapper/bin
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      cat ./config.log
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       #ar x ${flex.crossDrv}/lib/libfl.a
       #mv libyywrap.o libyywrap-target.o
