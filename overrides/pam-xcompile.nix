@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     propagatedBuildInputs = [ flex.crossDrv cracklib.crossDrv ];
     preConfigure = preConfigure + ''
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      ls -laR $PWD
+      ls -laR ${stdenv}
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       cat ./configure
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
       #mv libyywrap.o libyywrap-host.o
       export LDFLAGS="$LDFLAGS $PWD/libyywrap-target.o"
       sed -e 's/@CC@/gcc/' -i doc/specs/Makefile.in
+      
+      export CC="${stdenv.cross.config}-gcc"
     '';
     postConfigure = ''
       sed -e "s@ $PWD/libyywrap-target.o@ $PWD/libyywrap-host.o@" -i doc/specs/Makefile
