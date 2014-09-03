@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     propagatedBuildInputs = [ flex.crossDrv cracklib.crossDrv ];
     preConfigure = preConfigure + ''
       echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-      ls -lah ${flex.crossDrv}/lib
+      ${pkgs.tree}/bin/tree ${flex.crossDrv}
       ar x ${flex.crossDrv}/lib/libfl.a
       mv libyywrap.o libyywrap-target.o
       ar x ${flex}/lib/libfl.a
