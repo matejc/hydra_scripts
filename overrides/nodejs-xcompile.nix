@@ -41,7 +41,7 @@ in stdenv.mkDerivation {
       export CPATH="$CPATH:${glibc_multi.nativeDrv}/include"
     '';
     buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv glibc_multi.nativeDrv ]
-      ++ (optional stdenv.isLinux utillinux);
+      ++ (optional stdenv.isLinux utillinux.nativeDrv);
   };
 
   src = fetchurl {
