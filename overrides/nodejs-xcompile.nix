@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
   name = "nodejs-${version}";
 
   crossAttrs = rec {
-    configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
+    configureFlags = concatMap sharedConfigureFlags (builtins.attrNames (deps // {inherit v8;}));
     configurePhase = ''
       ./configure --prefix=$out ${toString configureFlags} --without-snapshot --dest-cpu=arm --dest-os=linux
     '';
