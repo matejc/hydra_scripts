@@ -13,7 +13,6 @@ let
   deps = {
     inherit openssl zlib http-parser;
     cares = c-ares;
-    inherit glibc_multi;
 
     # disabled system v8 because v8 3.14 no longer receives security fixes
     # we fall back to nodejs' internal v8 copy which receives backports for now
@@ -38,10 +37,11 @@ in stdenv.mkDerivation {
     preBuild = ''
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       #cat ./out/Makefile
-      #export CFLAGS="$CFLAGS -I${glibc_multi.nativeDrv}/include"
+      export CFLAGS="$CFLAGS -I${glibc_multi.nativeDrv}/include"
+      export LDFLAGS="$LDFLAGS -L${glibc_multi.nativeDrv}/lib"
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
-    #makeFlags = "CFLAGS=-I${glibc_multi.nativeDrv}/include";
+    makeFlags = "CFLAGS=-I${glibc_multi.nativeDrv}/include LDFLAGS=-L${glibc_multi.nativeDrv}/lib";
     buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv ]
       ++ (optional stdenv.isLinux utillinux);
   };
