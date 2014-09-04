@@ -142,7 +142,7 @@ let
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = parsed_attrs // (pkgs.lib.optionalAttrs build_openssh_service openssh_service);
+      paths = parsed_attrs ++ (if build_openssh_service then [openssh_service] else []);
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
