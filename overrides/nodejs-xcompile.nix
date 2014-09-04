@@ -1,9 +1,7 @@
 { stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand, which
-, pkgs, glibc_multi, overrideGCC, gcc48_multi }:
+, pkgs, glibc_multi }:
 
 let
-  stdenv_multi = overrideGCC stdenv gcc48_multi;
-
   dtrace = runCommand "dtrace-native" {} ''
     mkdir -p $out/bin
     ln -sv /usr/sbin/dtrace $out/bin
@@ -15,6 +13,7 @@ let
   deps = {
     inherit openssl zlib http-parser;
     cares = c-ares;
+    inherit glibc_multi;
 
     # disabled system v8 because v8 3.14 no longer receives security fixes
     # we fall back to nodejs' internal v8 copy which receives backports for now
@@ -27,8 +26,8 @@ let
     "--shared-${name}-libpath=${builtins.getAttr name deps}/lib"
   ];
 
-  inherit (stdenv_multi.lib) concatMap optional optionals maintainers licenses platforms;
-in stdenv_multi.mkDerivation {
+  inherit (stdenv.lib) concatMap optional optionals maintainers licenses platforms;
+in stdenv.mkDerivation {
   name = "nodejs-${version}";
 
   crossAttrs = rec {
@@ -44,7 +43,7 @@ in stdenv_multi.mkDerivation {
     '';
     #makeFlags = "CFLAGS=-I${glibc_multi.nativeDrv}/include";
     buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv ]
-      ++ (optional stdenv_multi.isLinux utillinux);
+      ++ (optional stdenv.isLinux utillinux);
   };
 
   src = fetchurl {
@@ -58,15 +57,15 @@ in stdenv_multi.mkDerivation {
     sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i configure
   '';
 
-  patches = if stdenv_multi.isDarwin then [ ./no-xcode.patch ] else null;
+  patches = if stdenv.isDarwin then [ ./no-xcode.patch ] else null;
 
-  postPatch = if stdenv_multi.isDarwin then ''
+  postPatch = if stdenv.isDarwin then ''
     (cd tools/gyp; patch -Np1 -i ${../../python-modules/gyp/no-darwin-cflags.patch})
   '' else null;
 
   buildInputs = [ python which ]
-    ++ (optional stdenv_multi.isLinux utillinux)
-    ++ optionals stdenv_multi.isDarwin [ pkgconfig openssl dtrace ];
+    ++ (optional stdenv.isLinux utillinux)
+    ++ optionals stdenv.isDarwin [ pkgconfig openssl dtrace ];
   setupHook = "${pkgs.path}/pkgs/development/web/nodejs/setup-hook.sh";
 
   meta = {
