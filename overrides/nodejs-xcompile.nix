@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
       ./configure --prefix=$out ${toString configureFlags} --without-snapshot --dest-cpu=arm --dest-os=linux
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
-    buildInputs = [ python which.nativeDrv ]
+    buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv ]
       ++ (optional stdenv.isLinux utillinux);
   };
 
