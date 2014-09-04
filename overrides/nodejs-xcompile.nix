@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand, which }:
+{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand, which
+, pkgs }:
 
 let
   dtrace = runCommand "dtrace-native" {} ''
@@ -59,7 +60,7 @@ in stdenv.mkDerivation {
   buildInputs = [ python which ]
     ++ (optional stdenv.isLinux utillinux)
     ++ optionals stdenv.isDarwin [ pkgconfig openssl dtrace ];
-  setupHook = ./setup-hook.sh;
+  setupHook = "${pkgs.path}/pkgs/development/web/nodejs/setup-hook.sh";
 
   meta = {
     description = "Event-driven I/O framework for the V8 JavaScript engine";
