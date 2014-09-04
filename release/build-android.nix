@@ -144,7 +144,7 @@ let
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = parsed_attrs ++ sevices;
+      paths = parsed_attrs ++ services;
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
