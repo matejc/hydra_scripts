@@ -28,11 +28,13 @@ let
 in stdenv.mkDerivation {
   name = "nodejs-${version}";
 
-  crossArgs = {
-    configureFlags = configureFlags;
+  crossArgs = rec {
+    configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
     preConfigure = ''
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       echo ${configureFlags}
+      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      echo "${configureFlags}" | sed 's/--build=${stdenv.system}/boo/'
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
   };
