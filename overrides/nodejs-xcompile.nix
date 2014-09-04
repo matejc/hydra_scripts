@@ -30,25 +30,16 @@ in stdenv.mkDerivation {
   name = "nodejs-${version}";
 
   crossAttrs = rec {
-    deps = {
-      openssl = openssl.crossDrv;
-      zlib = zlib.crossDrv;
-      http-parser = http-parser.crossDrv;
-      cares = c-ares.crossDrv;
-    };
-    configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
     configurePhase = ''
-      ./configure --prefix=$out ${toString configureFlags} --without-snapshot --dest-cpu=arm --dest-os=linux
+      ./configure --prefix=$out --without-snapshot --dest-cpu=arm --dest-os=linux \
+        --shared-openssl --shared-openssl-includes=${openssl.crossDrv} --shared-openssl-libpath=${openssl.crossDrv} \
+        --shared-zlib --shared-zlib-includes=${zlib.crossDrv} --shared-zlib-libpath=${zlib.crossDrv} \
+        --shared-http-parser --shared-http-parser-includes=${http-parser.crossDrv} --shared-http-parser-libpath=${http-parser.crossDrv} \
+        --shared-cares --shared-cares-includes=${c-ares.crossDrv} --shared-cares-libpath=${c-ares.crossDrv}
     '';
     preBuild = ''
-      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      #cat ./out/Makefile
-      export CFLAGS="$CFLAGS -I${glibc_multi.nativeDrv}/include"
-      export LDFLAGS="$LDFLAGS -L${glibc_multi.nativeDrv}/lib"
       export CPATH="$CPATH:${glibc_multi.nativeDrv}/include"
-      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
-    makeFlags = "CFLAGS=-I${glibc_multi.nativeDrv}/include LDFLAGS=-L${glibc_multi.nativeDrv}/lib";
     buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv glibc_multi.nativeDrv ]
       ++ (optional stdenv.isLinux utillinux);
   };
