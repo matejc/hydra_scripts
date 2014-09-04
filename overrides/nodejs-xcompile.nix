@@ -42,7 +42,7 @@ in stdenv.mkDerivation {
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
     makeFlags = "CFLAGS=-I${glibc_multi.nativeDrv}/include LDFLAGS=-L${glibc_multi.nativeDrv}/lib";
-    buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv ]
+    buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv glibc_multi.nativeDrv ]
       ++ (optional stdenv.isLinux utillinux);
   };
 
