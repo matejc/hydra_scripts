@@ -1,5 +1,5 @@
 { nixpkgs, hydra_scripts, prefix, system, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv"
-, build_openssh_service ? false }:
+, services_str ? "" }:
 let
 
   platform = {
@@ -130,19 +130,21 @@ let
     sha256 = "1q469mplwyvzm3r8nzz5s9afjfq8q9jh72mmwlzcd14hh5h65cpx";
   };
 
-  openssh_service = (import nixrehash_src).reService rec {
-    name = "openssh";
+  parsed_services = pkgs.lib.splitString " " services_str;
+
+  services = if services_str == "" then [] else [(import nixrehash_src).reService rec {
+    name = "arm-build-pack";
     configuration = let servicePrefix = "${prefix}/${name}/services"; in [
-    ({ config, pkgs, ...}: {
+    ({ config, pkgs, ...}: {} // pkgs.lib.optionalAttrs (pkgs.lib.any (x: x == "openssh") parsed_services) {
       services.openssh.enable = true;
     })
     ];
-  };
+  }];
 
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = parsed_attrs ++ (if build_openssh_service then [openssh_service] else []);
+      paths = parsed_attrs ++ sevices;
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
