@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand, which
-, pkgs, glibc_multi }:
+, pkgs, glibc_multi, overrideGCC, gcc48_multi }:
 
 let
   stdenv = overrideGCC stdenv gcc48_multi;
