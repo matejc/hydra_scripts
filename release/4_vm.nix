@@ -24,7 +24,7 @@ let
     { config, pkgs, ... }: configVM;
 
   attrs_str = toString attrs;  # legacy
-  services_str = toSting services;
+  services_str = toString services;
 
   vmBuildCommands = ''
     echo "############################### BUILD START ###############################"
