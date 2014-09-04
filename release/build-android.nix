@@ -1,5 +1,4 @@
-{ nixpkgs, hydra_scripts, prefix, system, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv"
-, services_str ? "" }:
+{ nixpkgs, hydra_scripts, prefix, system, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv" }:
 let
 
   platform = {
@@ -118,33 +117,16 @@ let
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { };
       nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
-      openssh = pkgs.openssh.crossDrv.override { etcDir = "${prefix}/etc/"; };
+      openssh = pkgs.openssh.override { etcDir = "${prefix}/etc/"; };
     };
   };
 
   parsed_attrs = (map (n: pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." n) pkgs) (pkgs.lib.splitString " " attrs_str));
 
-  nixrehash_src = pkgs.fetchgit {
-    url = "https://github.com/kiberpipa/nix-rehash";
-    rev = "0fe67d3691a61ed64cfa8f20d03a088880595a9f";
-    sha256 = "1q469mplwyvzm3r8nzz5s9afjfq8q9jh72mmwlzcd14hh5h65cpx";
-  };
-
-  parsed_services = pkgs.lib.splitString " " services_str;
-
-  services = if services_str == "" then [] else [(import nixrehash_src).reService rec {
-    name = "arm-build-pack";
-    configuration = let servicePrefix = "${prefix}/${name}/services"; in [
-    ({ config, pkgs, ...}: {} // pkgs.lib.optionalAttrs (pkgs.lib.any (x: x == "openssh") parsed_services) {
-      services.openssh.enable = true;
-    })
-    ];
-  }];
-
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = parsed_attrs ++ services;
+      paths = parsed_attrs;
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
