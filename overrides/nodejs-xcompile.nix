@@ -1,8 +1,8 @@
-{ stdenv_32bit, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand, which
+{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand, which
 , pkgs, glibc_multi }:
 
 let
-  stdenv = stdenv_32bit;
+  stdenv = overrideGCC stdenv gcc48_multi;
 
   dtrace = runCommand "dtrace-native" {} ''
     mkdir -p $out/bin
