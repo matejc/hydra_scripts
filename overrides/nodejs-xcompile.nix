@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
     configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
     configurePhase = ''
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      ./configure --prefix=$out ${toString configureFlags} --without-snapshot --dest-cpu=arm --dest-os=linux
+      ./configure --prefix=$out ${toString configureFlags} --without-snapshot --dest-cpu=arm --dest-os=linux --disable-multilib
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
     buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv ]
