@@ -116,6 +116,7 @@ let
       python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { };
+      nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
     };
   };
 
