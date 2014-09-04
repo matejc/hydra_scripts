@@ -28,7 +28,7 @@ let
 in stdenv.mkDerivation {
   name = "nodejs-${version}";
 
-  crossArgs = rec {
+  crossAttrs = rec {
     configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
     preConfigure = ''
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
