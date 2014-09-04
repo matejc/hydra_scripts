@@ -3,6 +3,7 @@
 , build_script ? "release/vm_build.nix"
 , system ? builtins.currentSystem
 , attrs ? [ "pkgs.nix" "pkgs.bash" ]
+, services ? []
 , prefixDir ? "/var/matej"
 , minimal ? false
 , vm_timeout ? "36000"
@@ -23,6 +24,7 @@ let
     { config, pkgs, ... }: configVM;
 
   attrs_str = toString attrs;  # legacy
+  services_str = toSting services;
 
   vmBuildCommands = ''
     echo "############################### BUILD START ###############################"
@@ -37,7 +39,7 @@ let
     mkdir -p ${prefixDir}/var/nix/db
     export NIX_DB_DIR=${prefixDir}/var/nix/db
 
-    nix-build ${<hydra_scripts>}"/"${build_script} -A vmEnvironment --argstr nixpkgs ${<nixpkgs>} --argstr hydra_scripts ${<hydra_scripts>} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} -vv --show-trace
+    nix-build ${<hydra_scripts>}"/"${build_script} -A vmEnvironment --argstr nixpkgs ${<nixpkgs>} --argstr hydra_scripts ${<hydra_scripts>} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr services_str "${services_str}" --argstr system ${system} -vv --show-trace
 
     EXITSTATUSCODE=$?
 
