@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
     buildInputs = [ python which.nativeDrv ]
-      ++ (optional stdenv.isLinux utillinux)
+      ++ (optional stdenv.isLinux utillinux);
   };
 
   src = fetchurl {
