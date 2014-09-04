@@ -31,11 +31,9 @@ in stdenv.mkDerivation {
 
   crossAttrs = rec {
     configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
-    preConfigure = ''
+    configurePhase = ''
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      echo ${toString configureFlags}
-      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      echo "${toString configureFlags}" | sed 's/--build=${stdenv.system}/boo/'
+      ./configure --prefix=$out ${toString configureFlags} --without-snapshot --dest-cpu=arm --dest-os=linux
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
   };
