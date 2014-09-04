@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand, which
-, pkgs }:
+, pkgs, glibc32 }:
 
 let
   dtrace = runCommand "dtrace-native" {} ''
@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
       ./configure --prefix=$out ${toString configureFlags} --without-snapshot --dest-cpu=arm --dest-os=linux --disable-multilib
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
-    buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv ]
+    buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv glibc32.nativeDrv ]
       ++ (optional stdenv.isLinux utillinux);
   };
 
