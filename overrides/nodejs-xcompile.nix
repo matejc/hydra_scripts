@@ -39,6 +39,7 @@ in stdenv.mkDerivation {
       #cat ./out/Makefile
       export CFLAGS="$CFLAGS -I${glibc_multi.nativeDrv}/include"
       export LDFLAGS="$LDFLAGS -L${glibc_multi.nativeDrv}/lib"
+      export CPATH="$CPATH:${glibc_multi.nativeDrv}/include"
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
     makeFlags = "CFLAGS=-I${glibc_multi.nativeDrv}/include LDFLAGS=-L${glibc_multi.nativeDrv}/lib";
