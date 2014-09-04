@@ -21,8 +21,8 @@ let
 
   sharedConfigureFlags = name: [
     "--shared-${name}"
-    "--shared-${name}-includes=${toString (builtins.getAttr name deps)}/include"
-    "--shared-${name}-libpath=${toString (builtins.getAttr name deps)}/lib"
+    "--shared-${name}-includes=${(builtins.getAttr name deps).outPath}/include"
+    "--shared-${name}-libpath=${(builtins.getAttr name deps).outPath}/lib"
   ];
 
   inherit (stdenv.lib) concatMap optional optionals maintainers licenses platforms;
