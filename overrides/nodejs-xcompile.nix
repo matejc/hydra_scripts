@@ -32,9 +32,9 @@ in stdenv.mkDerivation {
     configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
     preConfigure = ''
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      echo ${configureFlags}
+      echo ${toString configureFlags}
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      echo "${configureFlags}" | sed 's/--build=${stdenv.system}/boo/'
+      echo "${toString configureFlags}" | sed 's/--build=${stdenv.system}/boo/'
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
   };
