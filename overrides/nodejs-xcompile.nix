@@ -1,7 +1,9 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand, which
+{ stdenv_32bit, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand, which
 , pkgs, glibc_multi }:
 
 let
+  stdenv = stdenv_32bit;
+
   dtrace = runCommand "dtrace-native" {} ''
     mkdir -p $out/bin
     ln -sv /usr/sbin/dtrace $out/bin
@@ -36,11 +38,11 @@ in stdenv.mkDerivation {
     '';
     preBuild = ''
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      cat ./out/Makefile
-      export CFLAGS="$CFLAGS -I${glibc_multi.nativeDrv}/include"
+      #cat ./out/Makefile
+      #export CFLAGS="$CFLAGS -I${glibc_multi.nativeDrv}/include"
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
-    makeFlags = "CFLAGS=-I${glibc_multi.nativeDrv}/include";
+    #makeFlags = "CFLAGS=-I${glibc_multi.nativeDrv}/include";
     buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv ]
       ++ (optional stdenv.isLinux utillinux);
   };
