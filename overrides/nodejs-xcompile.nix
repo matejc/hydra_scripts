@@ -16,7 +16,7 @@ let
 
     # disabled system v8 because v8 3.14 no longer receives security fixes
     # we fall back to nodejs' internal v8 copy which receives backports for now
-    # inherit v8
+    inherit v8;
   };
 
   sharedConfigureFlags = name: [
@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
   name = "nodejs-${version}";
 
   crossAttrs = rec {
-    configureFlags = concatMap sharedConfigureFlags (builtins.attrNames (deps // {inherit v8;}));
+    configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
     configurePhase = ''
       ./configure --prefix=$out ${toString configureFlags} --without-snapshot --dest-cpu=arm --dest-os=linux
     '';
