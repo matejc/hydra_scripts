@@ -34,7 +34,8 @@ in stdenv.mkDerivation {
     configurePhase = ''
       ./configure --prefix=$out ${toString configureFlags} --without-snapshot --dest-cpu=arm --dest-os=linux
     '';
-    buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv glibc_multi.nativeDrv ]
+    makeFlags = "LDFLAGS=${glibc_multi.nativeDrv}/lib";
+    buildInputs = [ python.nativeDrv pkgconfig.nativeDrv which.nativeDrv ]
       ++ (optional stdenv.isLinux utillinux);
   };
 
