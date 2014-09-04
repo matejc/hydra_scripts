@@ -37,6 +37,7 @@ in stdenv.mkDerivation {
     preBuild = ''
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       cat ./out/Makefile
+      export CFLAGS="$CFLAGS -I${glibc_multi.nativeDrv}/include"
       echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     '';
     makeFlags = "CFLAGS=-I${glibc_multi.nativeDrv}/include";
