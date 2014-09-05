@@ -48,6 +48,7 @@ let
     dontBuild = true;
     installPhase = ''
     mkdir -p $out/bin
+    ln -svf ${openssh}/bin/* $out/bin
     ln -svf ${sshd_init} $out/bin/sshd_init
     ln -svf ${sshd_run} $out/bin/sshd_run
     ln -svf ${sshd_kill} $out/bin/sshd_kill
