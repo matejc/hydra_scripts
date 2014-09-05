@@ -133,8 +133,8 @@ let
 
   env = pkgs.writeScriptBin "env" ''
   #!${bash}/bin/bash
-  export PATH="${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) attrs);}"
-  export PATH="$PATH:${pkgs.lib.makeSearchPath "sbin" (map (a: a.outPath) attrs);}"
+  export PATH="${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) parsed_attrs)}"
+  export PATH="$PATH:${pkgs.lib.makeSearchPath "sbin" (map (a: a.outPath) parsed_attrs)}"
 
   "$@"
   '';
