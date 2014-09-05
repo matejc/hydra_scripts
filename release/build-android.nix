@@ -145,7 +145,7 @@ let
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      inherit paths ++ [env];
+      paths = paths ++ [env];
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
