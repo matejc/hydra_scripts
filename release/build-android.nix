@@ -134,7 +134,7 @@ let
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
       paths = parsed_attrs ++ (if build_sshd == "1" then [sshd] else []);
-      pathsToLink = [ "/" ];
+      pathsToLink = [ "/bin" ];
       ignoreCollisions = true;
     };
   };
