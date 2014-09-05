@@ -131,10 +131,18 @@ let
     coreutils = pkgs.coreutils.crossDrv;
     };
 
+  env = pkgs.writeScriptBin "env" ''
+  #!${bash}/bin/bash
+  export PATH="${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) attrs);}"
+  export PATH="$PATH:${pkgs.lib.makeSearchPath "sbin" (map (a: a.outPath) attrs);}"
+
+  "$@"
+  '';
+
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = parsed_attrs ++ (if build_sshd == "1" then [sshd] else []);
+      paths = parsed_attrs ++ [env] ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]);
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
