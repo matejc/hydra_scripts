@@ -46,7 +46,7 @@ let
 
     if [[ "0" -eq "$EXITSTATUSCODE" ]]; then
       test -L ./result && cp -Pv ./result ${prefixDir}
-      ${gnutar}/bin/tar cvf /tmp/xchg/out.tar "${prefixDir}/result" `nix-store -q --referrers-closure ./result` --mode=u+rw
+      ${gnutar}/bin/tar cvf /tmp/xchg/out.tar "${prefixDir}/result" `nix-store -qR ./result` --mode=u+rw
       ${bzip2}/bin/bzip2 /tmp/xchg/out.tar
     else
       echo "BUILD FAILED!"
