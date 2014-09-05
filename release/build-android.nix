@@ -134,9 +134,9 @@ let
   essentials = [pkgs.bash.crossDrv pkgs.coreutils.crossDrv pkgs.utillinux.crossDrv];
   paths = parsed_attrs ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]) ++ essentials;
 
-  env = pkgs.writeScriptBin "env" ''
+  env = pkgs.writeScriptBin "environment" ''
   #!${pkgs.bash.crossDrv}/bin/bash
-  export PATH="$out/bin:${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) paths)}"
+  PATH="$out/bin:${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) paths)}"
   export PATH="$PATH:${pkgs.lib.makeSearchPath "sbin" (map (a: a.outPath) paths)}"
 
   "$@"
@@ -145,7 +145,7 @@ let
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      inherit paths;
+      inherit paths ++ [env];
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
