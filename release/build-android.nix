@@ -133,7 +133,7 @@ let
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = parsed_attrs ++ (if build_sshd then [sshd] else []);
+      paths = parsed_attrs ++ (if build_sshd == "1" then [sshd] else []);
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
