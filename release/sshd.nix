@@ -1,4 +1,4 @@
-{ pkgs, openssh, bash, utillinux, coreutils, prefix }:
+{ pkgs, openssh, bash, utillinux, coreutils, openssl, prefix }:
 let
 
   sshd_config = pkgs.writeText "sshd_config" ''
@@ -6,7 +6,6 @@ let
     Port 9022
     AuthorizedKeysFile ${prefix}/etc/ssh/authorized_keys
     HostKey ${prefix}/etc/ssh/ssh_host_rsa_key
-    HostKey ${prefix}/etc/ssh/ssh_host_ecdsa_key
     HostKey ${prefix}/etc/ssh/ssh_host_dsa_key
     UsePrivilegeSeparation no
   '';
@@ -15,9 +14,8 @@ let
   #!${bash}/bin/bash
   source ${env}
   mkdir -p ${prefix}/etc/ssh
-  test -f ${prefix}/etc/ssh/ssh_host_rsa_key || ssh-keygen -t rsa -f ${prefix}/etc/ssh/ssh_host_rsa_key -N ""
-  test -f ${prefix}/etc/ssh/ssh_host_ecdsa_key || ssh-keygen -t ecdsa -f ${prefix}/etc/ssh/ssh_host_ecdsa_key -N ""
-  test -f ${prefix}/etc/ssh/ssh_host_dsa_key || ssh-keygen -t dsa -f ${prefix}/etc/ssh/ssh_host_dsa_key -N ""
+  test -f ${prefix}/etc/ssh/ssh_host_rsa_key || { openssl genrsa -out ${prefix}/etc/ssh/ssh_host_rsa_key 2048 && openssl rsa -pubout -in ${prefix}/etc/ssh/ssh_host_rsa_key -out ${prefix}/etc/ssh/ssh_host_rsa_key.pub }
+  test -f ${prefix}/etc/ssh/ssh_host_dsa_key || { openssl gendsa -out ${prefix}/etc/ssh/ssh_host_dsa_key 1024 && openssl rsa -pubout -in ${prefix}/etc/ssh/ssh_host_dsa_key -out ${prefix}/etc/ssh/ssh_host_dsa_key.pub }
   test -f ${prefix}/etc/ssh/sshd_config || ln -sv ${sshd_config} ${prefix}/etc/ssh/sshd_config
   '';
 
@@ -37,7 +35,7 @@ let
   
   env = pkgs.writeScript "env.sh" ''
   #!${bash}/bin/bash
-  export PATH="${utillinux}/bin:${bash}/bin:${openssh}/bin:${openssh}/sbin:${coreutils}/bin"
+  export PATH="${utillinux}/bin:${bash}/bin:${openssh}/bin:${openssh}/sbin:${coreutils}/bin:${openssl}/bin"
 
   "$@"
   '';
@@ -48,7 +46,6 @@ let
     dontBuild = true;
     installPhase = ''
     mkdir -p $out/bin
-    ln -svf ${openssh}/bin/* $out/bin
     ln -svf ${sshd_init} $out/bin/sshd_init
     ln -svf ${sshd_run} $out/bin/sshd_run
     ln -svf ${sshd_kill} $out/bin/sshd_kill
