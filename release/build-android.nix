@@ -128,6 +128,7 @@ let
     bash = pkgs.bash.crossDrv;
     openssh = pkgs.openssh.crossDrv;
     utillinux = pkgs.utillinux.crossDrv;
+    coreutils = pkgs.coreutils.crossDrv;
     };
 
   build = {
