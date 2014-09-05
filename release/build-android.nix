@@ -1,4 +1,4 @@
-{ nixpkgs, hydra_scripts, prefix, system, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv" }:
+{ nixpkgs, hydra_scripts, prefix, system, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv", build_sshd ? false }:
 let
 
   platform = {
@@ -116,17 +116,24 @@ let
       python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { };
-      nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
-      openssh = pkgs.openssh.override { etcDir = "${prefix}/etc/"; inherit pam; };
+      #nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
+      #openssh = pkgs.openssh.override { etcDir = "${prefix}/etc/"; inherit pam; };
     };
   };
 
   parsed_attrs = (map (n: pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." n) pkgs) (pkgs.lib.splitString " " attrs_str));
 
+  sshd = import ${hydra_scripts}/release/sshd.nix {
+    inherit pkgs prefix;
+    bash = pkgs.bash.crossDrv;
+    openssh = pkgs.openssh.crossDrv;
+    utillinux = pkgs.utillinux.crossDrv;
+    };
+
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = parsed_attrs;
+      paths = parsed_attrs ++ (if build_sshd then [sshd] else []);
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
