@@ -123,7 +123,7 @@ let
 
   parsed_attrs = (map (n: pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." n) pkgs) (pkgs.lib.splitString " " attrs_str));
 
-  sshd = import ${hydra_scripts}/release/sshd.nix {
+  sshd = import "${hydra_scripts}/release/sshd.nix" {
     inherit pkgs prefix;
     bash = pkgs.bash.crossDrv;
     openssh = pkgs.openssh.crossDrv;
