@@ -14,9 +14,9 @@ let
   sshd_init = pkgs.writeScript "sshd_init.sh" ''
   #!${bash}/bin/bash
   mkdir -p ${prefix}/etc/ssh
-  test -f ${prefix}/etc/ssh/ssh_host_rsa_key || ssh-keygen -t rsa -f ${prefix}/etc/ssh/ssh_host_rsa_key -N ""
-  test -f ${prefix}/etc/ssh/ssh_host_ecdsa_key || ssh-keygen -t ecdsa -f ${prefix}/etc/ssh/ssh_host_ecdsa_key -N ""
-  test -f ${prefix}/etc/ssh/ssh_host_dsa_key || ssh-keygen -t dsa -f ${prefix}/etc/ssh/ssh_host_dsa_key -N ""
+  test -f ${prefix}/etc/ssh/ssh_host_rsa_key || ${openssh}/bin/ssh-keygen -t rsa -f ${prefix}/etc/ssh/ssh_host_rsa_key -N ""
+  test -f ${prefix}/etc/ssh/ssh_host_ecdsa_key || ${openssh}/bin/ssh-keygen -t ecdsa -f ${prefix}/etc/ssh/ssh_host_ecdsa_key -N ""
+  test -f ${prefix}/etc/ssh/ssh_host_dsa_key || ${openssh}/bin/ssh-keygen -t dsa -f ${prefix}/etc/ssh/ssh_host_dsa_key -N ""
   test -f ${prefix}/etc/ssh/sshd_config || ln -sv ${sshd_config} ${prefix}/etc/ssh/sshd_config
   '';
 
