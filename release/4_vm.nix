@@ -6,6 +6,7 @@
 , prefixDir ? "/var/matej"
 , minimal ? false
 , vm_timeout ? "36000"
+, build_sshd ? false
 }:
 
 with import <nixpkgs/nixos/lib/build-vms.nix> { inherit system minimal; };
@@ -37,7 +38,7 @@ let
     mkdir -p ${prefixDir}/var/nix/db
     export NIX_DB_DIR=${prefixDir}/var/nix/db
 
-    nix-build ${<hydra_scripts>}"/"${build_script} -A vmEnvironment --argstr nixpkgs ${<nixpkgs>} --argstr hydra_scripts ${<hydra_scripts>} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} -vv --show-trace
+    nix-build ${<hydra_scripts>}"/"${build_script} -A vmEnvironment --argstr nixpkgs ${<nixpkgs>} --argstr hydra_scripts ${<hydra_scripts>} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} --arg build_sshd ${build_sshd} -vv --show-trace
 
     EXITSTATUSCODE=$?
 
