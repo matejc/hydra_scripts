@@ -129,6 +129,7 @@ let
     openssh = pkgs.openssh.crossDrv;
     utillinux = pkgs.utillinux.crossDrv;
     coreutils = pkgs.coreutils.crossDrv;
+    openssl = pkgs.openssl.crossDrv;
     };
 
   essentials = [pkgs.bash.crossDrv pkgs.coreutils.crossDrv pkgs.utillinux.crossDrv];
