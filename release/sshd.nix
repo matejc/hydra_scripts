@@ -1,10 +1,6 @@
 { pkgs, openssh, bash, utillinux, prefix }:
 let
 
-  openssh = pkgs.openssh;
-  bash = pkgs.bash;
-  utillinux = pkgs.utillinux;
-
   sshd_config = pkgs.writeText "sshd_config" ''
     PidFile ${prefix}/run/sshd.pid
     Port 9022
@@ -45,12 +41,6 @@ let
     ln -svf ${sshd_init} $out/bin/sshd_init
     ln -svf ${sshd_run} $out/bin/sshd_run
     ln -svf ${sshd_kill} $out/bin/sshd_kill
-    '';
-    shellHook = ''
-    mkdir -p ${prefix}/bin
-    ln -svf ${sshd_init} ${prefix}/bin/sshd_init
-    ln -svf ${sshd_run} ${prefix}/bin/sshd_run
-    ln -svf ${sshd_kill} ${prefix}/bin/sshd_kill
     '';
     };
 
