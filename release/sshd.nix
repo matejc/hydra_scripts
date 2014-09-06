@@ -43,6 +43,12 @@ let
   ${openssh}/sbin/sshd -f ${prefix}/etc/ssh/sshd_config
   '';
 
+  sshd_debug = pkgs.writeScript "sshd_debug.sh" ''
+  #!${bash}/bin/bash
+  source ${env}
+  ${openssh}/sbin/sshd -d -f ${prefix}/etc/ssh/sshd_config
+  '';
+
   sshd_kill = pkgs.writeScript "sshd_kill.sh" ''
   #!${bash}/bin/bash
   source ${env}
@@ -63,6 +69,7 @@ let
     installPhase = ''
     mkdir -p $out/bin
     ln -svf ${sshd_init} $out/bin/sshd_init
+    ln -svf ${sshd_debug} $out/bin/sshd_debug
     ln -svf ${sshd_run} $out/bin/sshd_run
     ln -svf ${sshd_kill} $out/bin/sshd_kill
     '';
