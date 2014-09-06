@@ -49,10 +49,7 @@ let
 
       # Needed for fstatfs()
       # I don't know why it is not properly detected cross building with glibc.
-      #configureFlags = [ "fu_cv_sys_stat_statfs2_bsize=yes" ];
-      configurePhase = ''
-        ./configure fu_cv_sys_stat_statfs2_bsize=yes ${optionalString (etcDir != null) "--sysconfdir=${etcDir}"}
-      '';
+      configureFlags = [ "fu_cv_sys_stat_statfs2_bsize=yes" ] ++ optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
       doCheck = false;
     };
 
