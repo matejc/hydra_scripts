@@ -21,6 +21,10 @@ let
     ForceCommand ${environment} bash
   '';
 
+  sshd_config = pkgs.writeText "sshd_config" ''
+    builder:x:20000:20000::${prefix}/home/builder:${bash}/bin/bash
+  '';
+
   sshd_init = pkgs.writeScript "sshd_init.sh" ''
   #!${bash}/bin/bash
   source ${env}
@@ -32,7 +36,9 @@ let
     openssl dsaparam -out ${prefix}/etc/ssh/dsaparam.pem 2048 && \
     openssl gendsa -out ${prefix}/etc/ssh/ssh_host_dsa_key ${prefix}/etc/ssh/dsaparam.pem && \
     openssl dsa -pubout -in ${prefix}/etc/ssh/ssh_host_dsa_key -out ${prefix}/etc/ssh/ssh_host_dsa_key.pub; }
-  test -f ${prefix}/etc/ssh/sshd_config || ln -sv ${sshd_config} ${prefix}/etc/ssh/sshd_config
+  test -f ${prefix}/etc/ssh/sshd_config || cp -v ${sshd_config} ${prefix}/etc/ssh/sshd_config
+  test -d ${prefix}/home/builder || mkdir -p ${prefix}/home/builder
+  test -f ${prefix}/etc/passwd || cp -v ${passwd} ${prefix}/etc/passwd
   '';
 
   sshd_run = pkgs.writeScript "sshd_run.sh" ''
