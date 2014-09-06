@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
 
-  patches = [ ./keep-path.patch dots_in_usernames ];
+  patches = [ "${pkgs.path}/pkgs/os-specific/linux/shadow/keep-path.patch" dots_in_usernames ];
 
   outputs = [ "out" "su" ];
 
