@@ -119,6 +119,11 @@ let
       #nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
       openssh = pkgs.openssh.override { etcDir = "${prefix}/etc/"; inherit pam; };
       shadow = pkgs.shadow.override { inherit pam; };
+      coreutils = pkgs.stdenv.lib.overrideDerivation pkgs.coreutils (oldAttrs : {
+        configurePhase = ''
+          ./configure fu_cv_sys_stat_statfs2_bsize=yes --sysconfdir=${prefix}/etc
+        '';
+      });
     };
   };
 
