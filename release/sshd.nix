@@ -16,11 +16,11 @@ let
   mkdir -p ${prefix}/etc/ssh
   test -f ${prefix}/etc/ssh/ssh_host_rsa_key || { \
     openssl genrsa -out ${prefix}/etc/ssh/ssh_host_rsa_key 2048 && \
-    openssl rsa -pubout -in ${prefix}/etc/ssh/ssh_host_rsa_key -out ${prefix}/etc/ssh/ssh_host_rsa_key.pub }
+    openssl rsa -pubout -in ${prefix}/etc/ssh/ssh_host_rsa_key -out ${prefix}/etc/ssh/ssh_host_rsa_key.pub; }
   test -f ${prefix}/etc/ssh/ssh_host_dsa_key || { \
     openssl dsaparam -out ${prefix}/etc/ssh/dsaparam.pem 2048 && \
     openssl gendsa -out ${prefix}/etc/ssh/ssh_host_dsa_key ${prefix}/etc/ssh/dsaparam.pem && \
-    openssl dsa -pubout -in ${prefix}/etc/ssh/ssh_host_dsa_key -out ${prefix}/etc/ssh/ssh_host_dsa_key.pub }
+    openssl dsa -pubout -in ${prefix}/etc/ssh/ssh_host_dsa_key -out ${prefix}/etc/ssh/ssh_host_dsa_key.pub; }
   test -f ${prefix}/etc/ssh/sshd_config || ln -sv ${sshd_config} ${prefix}/etc/ssh/sshd_config
   '';
 
