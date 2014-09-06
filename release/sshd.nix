@@ -21,7 +21,7 @@ let
     ForceCommand ${environment} bash
   '';
 
-  sshd_config = pkgs.writeText "sshd_config" ''
+  passwd = pkgs.writeText "passwd" ''
     builder:x:20000:20000::${prefix}/home/builder:${bash}/bin/bash
   '';
 
