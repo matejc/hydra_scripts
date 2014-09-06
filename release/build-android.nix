@@ -117,7 +117,7 @@ let
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { };
       #nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
-      #openssh = pkgs.openssh.override { etcDir = "${prefix}/etc/"; inherit pam; };
+      openssh = pkgs.openssh.override { etcDir = "${prefix}/etc/"; inherit pam; };
     };
   };
 
