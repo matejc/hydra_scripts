@@ -24,6 +24,12 @@ let
   passwd = pkgs.writeText "passwd" ''
     builder:x:20000:20000::${prefix}/home/builder:${bash}/bin/bash
   '';
+  group = pkgs.writeText "group" ''
+    users:x:20000:
+  '';
+  shadow = pkgs.writeText "shadow" ''
+    builder:!:16117::::::
+  '';
 
   sshd_init = pkgs.writeScript "sshd_init.sh" ''
   #!${bash}/bin/bash
@@ -39,6 +45,8 @@ let
   test -f ${prefix}/etc/ssh/sshd_config || cp -v ${sshd_config} ${prefix}/etc/ssh/sshd_config
   test -d ${prefix}/home/builder || mkdir -p ${prefix}/home/builder
   test -f ${prefix}/etc/passwd || cp -v ${passwd} ${prefix}/etc/passwd
+  test -f ${prefix}/etc/group || cp -v ${group} ${prefix}/etc/group
+  test -f ${prefix}/etc/shadow || cp -v ${shadow} ${prefix}/etc/shadow
   '';
 
   sshd_run = pkgs.writeScript "sshd_run.sh" ''
