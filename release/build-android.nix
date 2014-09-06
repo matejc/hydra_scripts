@@ -140,6 +140,7 @@ let
   #!${pkgs.bash.crossDrv}/bin/bash
   PATH="$out/bin:${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) paths)}"
   export PATH="$PATH:${pkgs.lib.makeSearchPath "sbin" (map (a: a.outPath) paths)}"
+  export PS1=\$
 
   "$@"
   '';
