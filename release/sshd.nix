@@ -1,13 +1,24 @@
-{ pkgs, openssh, bash, utillinux, coreutils, openssl, prefix }:
+{ pkgs, openssh, bash, utillinux, coreutils, openssl, env, prefix }:
 let
 
   sshd_config = pkgs.writeText "sshd_config" ''
     PidFile ${prefix}/run/sshd.pid
     Port 9022
-    AuthorizedKeysFile ${prefix}/etc/ssh/authorized_keys
     HostKey ${prefix}/etc/ssh/ssh_host_rsa_key
     HostKey ${prefix}/etc/ssh/ssh_host_dsa_key
     UsePrivilegeSeparation no
+    
+    UsePAM no
+    PasswordAuthentication no
+    PermitRootLogin no
+    PermitEmptyPasswords no
+    StrictModes no
+    PermitTTY no
+
+    PubkeyAuthentication yes
+    AuthorizedKeysFile ${prefix}/etc/ssh/authorized_keys
+
+    ForceCommand ${env} bash
   '';
 
   sshd_init = pkgs.writeScript "sshd_init.sh" ''
