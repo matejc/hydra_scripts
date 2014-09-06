@@ -118,9 +118,7 @@ let
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { };
       #nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
       openssh = pkgs.openssh.override { etcDir = "${prefix}/etc"; inherit pam; };
-      shadow =  pkgs.stdenv.lib.overrideDerivation (pkgs.shadow.override { inherit pam; glibcCross = pkgs.glibcCross; }) (oldAttrs : {
-        configureFlags = [ "--sysconfdir=${prefix}/etc" ];
-      });
+      shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; etcDir = "${prefix}/etc"; };
       coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { etcDir = "${prefix}/etc"; };
     };
   };
