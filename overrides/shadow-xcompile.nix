@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pam ? null, glibcCross ? null
-, etcDir ? null }:
+, etcDir ? null, pkgs }:
 
 let
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
   crossAttrs = {
-    configureFlags = ["--disable-subordinate-ids"] ++ stdenv.lib.optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
+    configureFlags = ["--disable-subordinate-ids"] ++ pkgs.lib.optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
   };
 
   src = fetchurl {
