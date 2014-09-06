@@ -18,7 +18,7 @@ in
 stdenv.mkDerivation rec {
   name = "shadow-4.2.1";
 
-  configureFlags = optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
+  configureFlags = pkgs.lib.optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
   crossAttrs = {
     configureFlags = ["--disable-subordinate-ids"] ++ pkgs.lib.optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
   };
