@@ -1,4 +1,4 @@
-{ pkgs, openssh, bash, utillinux, coreutils, openssl, env, prefix }:
+{ pkgs, openssh, bash, utillinux, coreutils, openssl, environment, prefix }:
 let
 
   sshd_config = pkgs.writeText "sshd_config" ''
@@ -18,7 +18,7 @@ let
     PubkeyAuthentication yes
     AuthorizedKeysFile ${prefix}/etc/ssh/authorized_keys
 
-    ForceCommand ${env} bash
+    ForceCommand ${environment} bash
   '';
 
   sshd_init = pkgs.writeScript "sshd_init.sh" ''
