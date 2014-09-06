@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
-, etcDir ? null
+, etcDir ? null, pkgs
 }:
 
 assert aclSupport -> acl != null;
@@ -19,7 +19,7 @@ let
       sha256 = "064f512185iysqqcvhnhaf3bfmzrvcgs7n405qsyp99zmfyl9amd";
     };
 
-    patches = [ ./help2man.patch ];
+    patches = [ "${pkgs.path}/pkgs/tools/misc/coreutils/help2man.patch" ];
 
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
