@@ -118,7 +118,7 @@ let
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { };
       #nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
       openssh = pkgs.openssh.override { etcDir = "${prefix}/etc/"; inherit pam; };
-      shadow = pkgs.shadow.override { inherit pam; };
+      #shadow = pkgs.shadow.override { inherit pam; glibcCross = pkgs.glibcCross; };
       coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { etcDir = "${prefix}/etc/"; };
     };
   };
