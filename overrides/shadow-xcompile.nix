@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
   crossAttrs = {
-    configureFlags = ["--disable-subordinate-ids"] ++ optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
+    configureFlags = ["--disable-subordinate-ids"] ++ pkgs.lib.optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
   };
 
   src = fetchurl {
