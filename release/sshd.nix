@@ -29,7 +29,7 @@ let
   source ${env}
   test -d ${prefix}/etc/ssh || ${sshd_init}
   mkdir -p ${prefix}/run
-  ${prefix}/sbin/sshd -f ${prefix}/etc/ssh/sshd_config
+  ${openssh}/sbin/sshd -f ${prefix}/etc/ssh/sshd_config
   '';
 
   sshd_kill = pkgs.writeScript "sshd_kill.sh" ''
