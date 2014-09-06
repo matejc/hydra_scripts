@@ -130,10 +130,11 @@ let
     utillinux = pkgs.utillinux.crossDrv;
     coreutils = pkgs.coreutils.crossDrv;
     openssl = pkgs.openssl.crossDrv;
+    environment = env;
     };
 
   essentials = [pkgs.bash.crossDrv pkgs.coreutils.crossDrv pkgs.utillinux.crossDrv];
-  paths = parsed_attrs ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]) ++ essentials;
+  paths = parsed_attrs ++ essentials;
 
   env = pkgs.writeScriptBin "environment" ''
   #!${pkgs.bash.crossDrv}/bin/bash
@@ -146,7 +147,7 @@ let
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = paths ++ [env];
+      paths = paths ++ [env] ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]);
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
