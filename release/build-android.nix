@@ -136,7 +136,7 @@ let
     environment = env;
     };
 
-  essentials = [pkgs.bash.crossDrv pkgs.coreutils.crossDrv pkgs.utillinux.crossDrv];
+  essentials = [pkgs.bash.crossDrv pkgs.busybox.crossDrv];
   paths = parsed_attrs ++ essentials;
 
   env = pkgs.writeScriptBin "environment" ''
