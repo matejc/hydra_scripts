@@ -120,7 +120,7 @@ let
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { };
       #nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
       openssh =  pkgs.stdenv.lib.overrideDerivation (pkgs.openssh.override { inherit etcDir; inherit pam; }) (oldAttrs : {
-        postPatch = stdenv.lib.optionalString (etcDir != "/etc") ''
+        postPatch = pkgs.lib.optionalString (etcDir != "/etc") ''
           echo "Rewriting /etc/passwd to ${etcDir}/passwd"
           ${pkgs.findutils}/bin/find . -type f -exec ${pkgs.gnused}/bin/sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
           echo "Rewriting /etc/group to ${etcDir}/group"
