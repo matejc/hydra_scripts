@@ -33,12 +33,16 @@ let
         ++ optional (stdenv.gccCross.libc ? libiconv)
           stdenv.gccCross.libc.libiconv.crossDrv;
 
-      buildPhase = /*stdenv.lib.optionalString (etcDir != null) ''
-        echo "Rewriting /etc/passwd to ${etcDir}/passwd"
-        ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
-        echo "Rewriting /etc/group to ${etcDir}/group"
-        ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
-      '' + */''
+      buildPhase = stdenv.lib.optionalString (etcDir != null) ''
+        #echo "Rewriting /etc/passwd to ${etcDir}/passwd"
+        #${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+
+        #echo "Rewriting /etc to ${etcDir}"
+        ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc|${etcDir}|g' {} \;
+
+        #echo "Rewriting /etc/group to ${etcDir}/group"
+        #${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+      '' + ''
         make || (
           pushd man
           for a in *.x; do
@@ -54,7 +58,7 @@ let
 
       # Needed for fstatfs()
       # I don't know why it is not properly detected cross building with glibc.
-      configureFlags = [ "fu_cv_sys_stat_statfs2_bsize=yes" ] ++ optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
+      configureFlags = [ "fu_cv_sys_stat_statfs2_bsize=yes" ]; #++ optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
       doCheck = false;
     };
 
