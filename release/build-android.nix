@@ -120,6 +120,7 @@ let
       openssh = pkgs.openssh.override { etcDir = "${prefix}/etc"; inherit pam; };
       shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; etcDir = "${prefix}/etc"; };
       coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { etcDir = "${prefix}/etc"; };
+      busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { etcDir = "${prefix}/etc"; };
     };
   };
 
