@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
-, etcDir ? null, pkgs, findutils, gperf, bison
+, etcDir ? null, pkgs, findutils
 }:
 
 assert aclSupport -> acl != null;
@@ -22,12 +22,12 @@ let
     patches = [ "${pkgs.path}/pkgs/tools/misc/coreutils/help2man.patch" ];
 
     nativeBuildInputs = [ perl ];
-    buildInputs = [ gmp gperf bison ]
+    buildInputs = [ gmp ]
       ++ optional aclSupport acl
       ++ optionals selinuxSupport [ libselinux libsepol ];
 
     crossAttrs = {
-      buildInputs = [ gmp gperf bison ]
+      buildInputs = [ gmp ]
         ++ optional aclSupport acl.crossDrv
         ++ optionals selinuxSupport [ libselinux.crossDrv libsepol.crossDrv ]
         ++ optional (stdenv.gccCross.libc ? libiconv)
