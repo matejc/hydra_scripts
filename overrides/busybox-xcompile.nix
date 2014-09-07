@@ -50,11 +50,10 @@ stdenv.mkDerivation rec {
     sha256 = "12v7nri79v8gns3inmz4k24q7pcnwi00hybs0wddfkcy1afh42xf";
   };
 
-  patchPhase = if (etcDir == null) then "" else ''
+  configurePhase = stdenv.lib.optionalString (etcDir != null) ''
+    echo "Rewriting /etc to ${etcDir}"
     ${findutils}/bin/find . -type f -exec sed -i -e 's/\/etc/${etcDir}/g' {} \;
-  '';
-
-  configurePhase = ''
+  '' + ''
     make defconfig
     ${configParser}
     cat << EOF | parseconfig
