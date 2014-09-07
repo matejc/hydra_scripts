@@ -8,7 +8,7 @@ let
     HostKey ${prefix}/etc/ssh/ssh_host_dsa_key
     UsePrivilegeSeparation no
     
-    UsePAM no
+    UsePAM yes
     PasswordAuthentication no
     PermitRootLogin no
     PermitEmptyPasswords no
