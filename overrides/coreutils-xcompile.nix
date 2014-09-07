@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
-, etcDir ? null, pkgs, findutils
+, etcDir ? null, pkgs, busybox
 }:
 
 assert aclSupport -> acl != null;
@@ -35,9 +35,9 @@ let
 
       preConfigure = stdenv.lib.optionalString (etcDir != null) ''
         echo "Rewriting /etc/passwd to ${etcDir}/passwd"
-        ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+        ${busybox}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
         echo "Rewriting /etc/group to ${etcDir}/group"
-        ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+        ${busybox}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
       '';
 
       buildPhase = ''
