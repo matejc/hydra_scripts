@@ -33,16 +33,12 @@ let
         ++ optional (stdenv.gccCross.libc ? libiconv)
           stdenv.gccCross.libc.libiconv.crossDrv;
 
-      buildPhase = stdenv.lib.optionalString (etcDir != null) ''
-        #echo "Rewriting /etc/passwd to ${etcDir}/passwd"
-        #${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
-
-        echo "Rewriting /etc to ${etcDir}"
-        ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc|${etcDir}|g' {} \;
-
-        #echo "Rewriting /etc/group to ${etcDir}/group"
-        #${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
-      '' + ''
+      buildPhase = /*stdenv.lib.optionalString (etcDir != null) ''
+        echo "Rewriting /etc/passwd to ${etcDir}/passwd"
+        ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+        echo "Rewriting /etc/group to ${etcDir}/group"
+        ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+      '' + */''
         make || (
           pushd man
           for a in *.x; do
