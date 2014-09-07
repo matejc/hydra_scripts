@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, cracklib, pkgs }:
+{ stdenv, fetchurl, flex, cracklib, pkgs, etcDir ? null }:
 
 stdenv.mkDerivation rec {
   name = "linux-pam-1.1.8";
@@ -23,7 +23,10 @@ stdenv.mkDerivation rec {
     ln -sv /var/setuid-wrappers/unix_chkpwd $out/sbin/unix_chkpwd
   '';
 
-  preConfigure = ''
+  preConfigure = stdenv.lib.optionalString (etcDir != null) ''
+    echo "Rewriting /etc to ${etcDir}"
+    ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc|${etcDir}|g' {} \;
+  '' + ''
     configureFlags="$configureFlags --includedir=$out/include/security"
   '';
 
