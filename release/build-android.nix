@@ -107,6 +107,8 @@ let
     inherit config;
   };
 
+  etcDir = "${prefix}/etc";
+
   config = {
     nix = {
       storeDir = prefix+"/store";
@@ -117,10 +119,17 @@ let
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { };
       #nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
-      openssh = pkgs.openssh.override { etcDir = "${prefix}/etc"; inherit pam; };
-      shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; etcDir = "${prefix}/etc"; };
-      coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { etcDir = "${prefix}/etc"; };
-      busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { etcDir = "${prefix}/etc"; };
+      openssh =  pkgs.stdenv.lib.overrideDerivation (pkgs.openssh.override { inherit etcDir; inherit pam; }) (oldAttrs : {
+        postPatch = stdenv.lib.optionalString (etcDir != "/etc") ''
+          echo "Rewriting /etc/passwd to ${etcDir}/passwd"
+          ${pkgs.findutils}/bin/find . -type f -exec ${pkgs.gnused}/bin/sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+          echo "Rewriting /etc/group to ${etcDir}/group"
+          ${pkgs.findutils}/bin/find . -type f -exec ${pkgs.gnused}/bin/sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+        '';
+      });
+      shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
+      coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { inherit etcDir; };
+      busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; };
     };
   };
 
