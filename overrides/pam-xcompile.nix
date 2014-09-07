@@ -25,10 +25,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = stdenv.lib.optionalString (etcDir != null) ''
     echo "Rewriting /etc to ${etcDir}"
-    ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc|${etcDir}|g' {} \;
-  '' + ''
-    configureFlags="$configureFlags --includedir=$out/include/security"
+    ${findutils}/bin/find ./modules/pam_unix -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
   '';
+  configureFlags = [ "--includedir=$out/include/security" "--sysconfdir=${etcDir}" ];
 
   meta = {
     homepage = http://ftp.kernel.org/pub/linux/libs/pam/;
