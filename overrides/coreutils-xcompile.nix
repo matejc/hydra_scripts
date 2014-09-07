@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
-, etcDir ? null, pkgs, findutils, gperf, bison
+, etcDir ? null, pkgs, findutils
 }:
 
 assert aclSupport -> acl != null;
@@ -26,20 +26,19 @@ let
       ++ optional aclSupport acl
       ++ optionals selinuxSupport [ libselinux libsepol ];
 
-    preConfigure = stdenv.lib.optionalString (etcDir != null) ''
-      echo "Rewriting /etc/passwd to ${etcDir}/passwd"
-      ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
-      echo "Rewriting /etc/group to ${etcDir}/group"
-      ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
-    '';
-    configureFlags = optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
-
     crossAttrs = {
       buildInputs = [ gmp ]
         ++ optional aclSupport acl.crossDrv
         ++ optionals selinuxSupport [ libselinux.crossDrv libsepol.crossDrv ]
         ++ optional (stdenv.gccCross.libc ? libiconv)
           stdenv.gccCross.libc.libiconv.crossDrv;
+
+      preConfigure = stdenv.lib.optionalString (etcDir != null) ''
+        echo "Rewriting /etc/passwd to ${etcDir}/passwd"
+        ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+        echo "Rewriting /etc/group to ${etcDir}/group"
+        ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+      '';
 
       buildPhase = ''
         make || (
