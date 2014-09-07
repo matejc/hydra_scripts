@@ -26,6 +26,11 @@ let
       ++ optional aclSupport acl
       ++ optionals selinuxSupport [ libselinux libsepol ];
 
+    postConfigure = stdenv.lib.optionalString (etcDir != null) ''
+      echo "Rewriting /etc to ${etcDir}"
+      ${findutils}/bin/find . -type f -exec ${gnused}/bin/sed -i -e 's|/etc|${etcDir}|g' {} \;
+    '';
+
     crossAttrs = {
       buildInputs = [ gmp ]
         ++ optional aclSupport acl.crossDrv
