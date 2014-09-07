@@ -129,8 +129,8 @@ let
       openssh =  pkgs.stdenv.lib.overrideDerivation (pkgs.openssh.override { inherit etcDir; inherit pam; }) (oldAttrs : {
         postPatch = pkgs.lib.optionalString (etcDir != "/etc") "
           echo 'Rewriting /etc to ${etcDir}'
-          sed -i -e 's|\\''${PKG_INSTALL_ROOT}/etc/passwd|${etcDir}/passwd|g' ./buildpkg.sh.in
-          sed -i -e 's|\\''${PKG_INSTALL_ROOT}/etc/group|${etcDir}/group|g' ./buildpkg.sh.in
+          sed -i -e 's|\\\$\{PKG_INSTALL_ROOT\}/etc/passwd|${etcDir}/passwd|g' ./buildpkg.sh.in
+          sed -i -e 's|\\\$\{PKG_INSTALL_ROOT\}/etc/group|${etcDir}/group|g' ./buildpkg.sh.in
           sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' ./openbsd-compat/port-uw.c
           sed -i -e 's|/etc/group|${etcDir}/group|g' ./contrib/aix/buildbff.sh
         ";
