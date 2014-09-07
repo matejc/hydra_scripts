@@ -126,8 +126,8 @@ let
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
       #nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
-      openssh = pkgs.lib.overrideDerivation (pkgs.openssh.override { inherit etcDir; inherit pam; }) (oldAttrs: {
-        postPatch = ''
+      openssh = pkgs.lib.overrideDerivation (pkgs.openssh.override { inherit pam; }) (oldAttrs: {
+        postConfigure = ''
           ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/pam|${etcDir}/pam|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
