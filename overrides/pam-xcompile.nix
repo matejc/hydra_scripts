@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ${findutils}/bin/find ./modules/pam_unix -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
     ${findutils}/bin/find ./modules/pam_unix -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
   '' + ''
-    configureFlags="$configureFlags --includedir=$out/include/security"
+    configureFlags="$configureFlags --includedir=$out/include/security" ${stdenv.lib.optionalString (etcDir != null) etcDir}
   '';
 
   meta = {
