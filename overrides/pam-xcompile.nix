@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, cracklib, pkgs, etcDir ? null }:
+{ stdenv, fetchurl, flex, cracklib, pkgs, etcDir ? null, findutils }:
 
 stdenv.mkDerivation rec {
   name = "linux-pam-1.1.8";
