@@ -1,5 +1,5 @@
 {stdenv, fetchurl, enableStatic ? false, extraConfig ? ""
-, etcDir ? null
+, etcDir ? null, findutils
 }:
 
 let
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = stdenv.lib.optionalString (etcDir != null) ''
     echo "Rewriting /etc to ${etcDir}"
-    find . -type f -exec sed -i -e 's|/etc|${etcDir}|g' {} \;
+    ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc|${etcDir}|g' {} \;
   '' + ''
     make defconfig
     ${configParser}
