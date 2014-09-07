@@ -33,6 +33,7 @@ let
   pam_sshd = pkgs.writeText "sshd" ''
     #%PAM-1.0
     auth       required     pam_unix.so
+    auth       required     pam_nologin.so
   '';
 
   sshd_init = pkgs.writeScript "sshd_init.sh" ''
