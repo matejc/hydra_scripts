@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
-, etcDir ? null, pkgs, findutils
+, etcDir ? null, pkgs
 }:
 
 assert aclSupport -> acl != null;
@@ -25,11 +25,6 @@ let
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
       ++ optionals selinuxSupport [ libselinux libsepol ];
-
-    postConfigure = stdenv.lib.optionalString (etcDir != null) ''
-      echo "Rewriting /etc to ${etcDir}"
-      ${findutils}/bin/find . -type f -exec ${gnused}/bin/sed -i -e 's|/etc|${etcDir}|g' {} \;
-    '';
 
     crossAttrs = {
       buildInputs = [ gmp ]
