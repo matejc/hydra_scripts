@@ -129,7 +129,7 @@ let
       openssh = pkgs.lib.overrideDerivation (pkgs.openssh.override { inherit etcDir; inherit pam; }) (oldAttrs: {
         postPatch = ''
           ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/pam|${etcDir}/pam|g' {} \;
-        '';'
+        '';
       });
       #shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
       coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { inherit etcDir; };
