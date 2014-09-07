@@ -25,12 +25,14 @@ stdenv.mkDerivation rec {
 
   preConfigure = stdenv.lib.optionalString (etcDir != null) ''
     echo "Rewriting /etc to ${etcDir}"
-    ${findutils}/bin/find ./modules -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
-    ${findutils}/bin/find ./modules -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
+    ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+    ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
+    ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+    ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/pam|${etcDir}/pam|g' {} \;
   '' + ''
-    configureFlags="$configureFlags --includedir=$out/include/security ${stdenv.lib.optionalString (etcDir != null) "--sysconfdir=${etcDir}"}"
+    configureFlags="$configureFlags --includedir=$out/include/security"
   '';
-
+    #${stdenv.lib.optionalString (etcDir != null) "--sysconfdir=${etcDir}"}"
   meta = {
     homepage = http://ftp.kernel.org/pub/linux/libs/pam/;
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
