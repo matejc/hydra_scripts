@@ -34,7 +34,6 @@ let
     '';
     configureFlags = optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
 
-
     crossAttrs = {
       buildInputs = [ gmp ]
         ++ optional aclSupport acl.crossDrv
