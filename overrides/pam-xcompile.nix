@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     echo "Rewriting /etc to ${etcDir}"
     ${findutils}/bin/find ./modules/pam_unix -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
   '';
-  configureFlags = [ "--includedir=$out/include/security" "--sysconfdir=${etcDir}" ];
+  configureFlags = [ "--includedir=$out/include/security" ];
 
   meta = {
     homepage = http://ftp.kernel.org/pub/linux/libs/pam/;
