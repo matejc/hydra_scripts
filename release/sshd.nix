@@ -30,6 +30,10 @@ let
   shadow = pkgs.writeText "shadow" ''
     builder:!:16117::::::
   '';
+  pam_sshd = pkgs.writeText "sshd" ''
+    #%PAM-1.0
+    auth       required     pam_unix.so
+  '';
 
   sshd_init = pkgs.writeScript "sshd_init.sh" ''
   #!${bash}/bin/bash
@@ -44,6 +48,8 @@ let
     openssl dsa -pubout -in ${prefix}/etc/ssh/ssh_host_dsa_key -out ${prefix}/etc/ssh/ssh_host_dsa_key.pub; }
   test -f ${prefix}/etc/ssh/sshd_config || cp -v ${sshd_config} ${prefix}/etc/ssh/sshd_config
   test -d ${prefix}/home/builder || mkdir -p ${prefix}/home/builder
+  test -d ${prefix}/etc/pam.d || mkdir -p ${prefix}/etc/pam.d
+  test -f ${prefix}/etc/pam.d/sshd || cp -v ${pam_sshd} ${prefix}/etc/pam.d/sshd
   test -f ${prefix}/etc/passwd || cp -v ${passwd} ${prefix}/etc/passwd
   test -f ${prefix}/etc/group || cp -v ${group} ${prefix}/etc/group
   test -f ${prefix}/etc/shadow || cp -v ${shadow} ${prefix}/etc/shadow
