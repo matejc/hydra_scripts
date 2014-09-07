@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
-, etcDir ? null, pkgs
+, etcDir ? null, pkgs, findutils
 }:
 
 assert aclSupport -> acl != null;
@@ -28,9 +28,9 @@ let
 
     preConfigure = stdenv.lib.optionalString (etcDir != null) ''
       echo "Rewriting /etc/passwd to ${etcDir}/passwd"
-      ${pkgs.busybox}/bin/find . -type f -exec ${pkgs.busybox}/bin/sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+      ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
       echo "Rewriting /etc/group to ${etcDir}/group"
-      ${pkgs.busybox}/bin/find . -type f -exec ${pkgs.busybox}/bin/sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+      ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
     '';
     configureFlags = optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
 
