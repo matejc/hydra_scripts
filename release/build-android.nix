@@ -127,9 +127,9 @@ let
           ${pkgs.findutils}/bin/find . -type f -exec ${pkgs.gnused}/bin/sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
         '';
       });
-      shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
+      #shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
       coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { inherit etcDir; };
-      busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; };
+      #busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; };
     };
   };
 
