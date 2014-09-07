@@ -128,10 +128,11 @@ let
       #nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
       openssh =  pkgs.stdenv.lib.overrideDerivation (pkgs.openssh.override { inherit etcDir; inherit pam; }) (oldAttrs : {
         postPatch = pkgs.lib.optionalString (etcDir != "/etc") ''
-          echo "Rewriting /etc/passwd to ${etcDir}/passwd"
-          ${pkgs.findutils}/bin/find . -type f -exec ${pkgs.gnused}/bin/sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
-          echo "Rewriting /etc/group to ${etcDir}/group"
-          ${pkgs.findutils}/bin/find . -type f -exec ${pkgs.gnused}/bin/sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+          echo "Rewriting /etc to ${etcDir}"
+          sed -i -e 's|\\\${PKG_INSTALL_ROOT}/etc/passwd|${etcDir}/passwd|g' ./buildpkg.sh.in
+          sed -i -e 's|\\\${PKG_INSTALL_ROOT}/etc/group|${etcDir}/group|g' ./buildpkg.sh.in
+          sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' ./openbsd-compat/port-uw.c
+          sed -i -e 's|/etc/group|${etcDir}/group|g' ./contrib/aix/buildbff.sh
         '';
       });
       #shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
