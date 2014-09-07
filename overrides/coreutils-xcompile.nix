@@ -37,7 +37,7 @@ let
         #echo "Rewriting /etc/passwd to ${etcDir}/passwd"
         #${findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
 
-        #echo "Rewriting /etc to ${etcDir}"
+        echo "Rewriting /etc to ${etcDir}"
         ${findutils}/bin/find . -type f -exec sed -i -e 's|/etc|${etcDir}|g' {} \;
 
         #echo "Rewriting /etc/group to ${etcDir}/group"
