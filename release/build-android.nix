@@ -112,7 +112,7 @@ let
     stateDir = prefix+"/var/nix";
   };
 
-  pkgsNoOverides = import nixpkgs {
+  pkgsNoOverrides = import nixpkgs {
     crossSystem = crosssystem;
     config = { nix = config_nix; };
   };
@@ -136,7 +136,7 @@ let
       });
       #shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
       coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { inherit etcDir; };
-      busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; findutils = pkgsNoOverides.findutils; };
+      busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
     };
   };
 
