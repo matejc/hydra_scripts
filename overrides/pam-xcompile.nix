@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = stdenv.lib.optionalString (etcDir != null) ''
     echo "Rewriting /etc to ${etcDir}"
-    ${findutils}/bin/find ./modules/pam_unix -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
-    ${findutils}/bin/find ./modules/pam_unix -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
+    ${findutils}/bin/find ./modules -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+    ${findutils}/bin/find ./modules -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
   '' + ''
     configureFlags="$configureFlags --includedir=$out/include/security ${stdenv.lib.optionalString (etcDir != null) "--sysconfdir=${etcDir}"}"
   '';
