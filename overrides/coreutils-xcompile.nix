@@ -21,7 +21,7 @@ let
 
     patches = [ "${pkgs.path}/pkgs/tools/misc/coreutils/help2man.patch" ];
 
-    nativeBuildInputs = [ perl gperf bison ];
+    nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
       ++ optionals selinuxSupport [ libselinux libsepol ];
