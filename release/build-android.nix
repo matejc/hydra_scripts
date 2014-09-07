@@ -112,7 +112,7 @@ let
     stateDir = prefix+"/var/nix";
   };
 
-  pkgsNoOverides = import nixpkgs {
+  pkgsNoOverrides = import nixpkgs {
     crossSystem = crosssystem;
     config = { nix = config_nix; };
   };
