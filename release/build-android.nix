@@ -124,7 +124,7 @@ let
     packageOverrides = pkgs : rec {
       python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
-      pam = pkgs.callPackage ../overrides/pam-xcompile.nix { inherit etcDir; };
+      pam = pkgs.callPackage ../overrides/pam-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
       #nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
       openssh =  pkgs.stdenv.lib.overrideDerivation (pkgs.openssh.override { inherit etcDir; inherit pam; }) (oldAttrs : {
         postPatch = pkgs.lib.optionalString (etcDir != "/etc") "
