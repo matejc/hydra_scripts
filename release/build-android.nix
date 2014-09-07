@@ -126,15 +126,7 @@ let
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
       #nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
-      openssh =  pkgs.stdenv.lib.overrideDerivation (pkgs.openssh.override { inherit etcDir; inherit pam; }) (oldAttrs : {
-        postPatch = pkgs.lib.optionalString (etcDir != "/etc") "
-          echo 'Rewriting /etc to ${etcDir}'
-          sed -i -e 's|\\\$\{PKG_INSTALL_ROOT\}/etc/passwd|${etcDir}/passwd|g' ./buildpkg.sh.in
-          sed -i -e 's|\\\$\{PKG_INSTALL_ROOT\}/etc/group|${etcDir}/group|g' ./buildpkg.sh.in
-          sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' ./openbsd-compat/port-uw.c
-          sed -i -e 's|/etc/group|${etcDir}/group|g' ./contrib/aix/buildbff.sh
-        ";
-      });
+      openssh = pkgs.openssh.override { inherit etcDir; inherit pam; };
       #shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
       coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { inherit etcDir; };
       busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
