@@ -147,6 +147,7 @@ let
     coreutils = pkgs.coreutils.crossDrv;
     openssl = pkgs.openssl.crossDrv;
     environment = env;
+    strace = pkgs.strace.crossDrv;
     };
 
   essentials = [pkgs.bash.crossDrv pkgs.coreutils.crossDrv];
