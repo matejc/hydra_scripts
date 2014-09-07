@@ -107,13 +107,20 @@ let
     inherit config;
   };
 
+  config_nix = {
+    storeDir = prefix+"/store";
+    stateDir = prefix+"/var/nix";
+  };
+
+  pkgsNoOverides = import nixpkgs {
+    crossSystem = crosssystem;
+    config = { nix = config_nix; };
+  };
+
   etcDir = "${prefix}/etc";
 
   config = {
-    nix = {
-      storeDir = prefix+"/store";
-      stateDir = prefix+"/var/nix";
-    };
+    nix = config_nix;
     packageOverrides = pkgs : rec {
       python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
@@ -129,7 +136,7 @@ let
       });
       #shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
       coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { inherit etcDir; };
-      #busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; };
+      busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; findutils = pkgsNoOverides.findutils; };
     };
   };
 
