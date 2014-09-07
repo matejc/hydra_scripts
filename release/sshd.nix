@@ -1,4 +1,4 @@
-{ pkgs, openssh, bash, utillinux, coreutils, openssl, environment, prefix }:
+{ pkgs, openssh, bash, utillinux, coreutils, openssl, environment, prefix, strace ? null }:
 let
 
   sshd_config = pkgs.writeText "sshd_config" ''
@@ -66,8 +66,7 @@ let
 
   sshd_debug = pkgs.writeScript "sshd_debug.sh" ''
   #!${bash}/bin/bash
-  source ${env}
-  ${openssh}/sbin/sshd -d -f ${prefix}/etc/ssh/sshd_config
+  ${pkgs.lib.optionalString (strace != null) "${strace}/bin/strace"} ${openssh}/sbin/sshd -d -f ${prefix}/etc/ssh/sshd_config
   '';
 
   sshd_kill = pkgs.writeScript "sshd_kill.sh" ''
