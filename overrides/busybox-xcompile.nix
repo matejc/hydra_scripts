@@ -1,4 +1,6 @@
-{stdenv, fetchurl, enableStatic ? false, extraConfig ? ""}:
+{stdenv, fetchurl, enableStatic ? false, extraConfig ? ""
+, etcDir ? null, findutils
+}:
 
 let
   configParser = ''
@@ -47,6 +49,10 @@ stdenv.mkDerivation rec {
     url = "http://busybox.net/downloads/${name}.tar.bz2";
     sha256 = "12v7nri79v8gns3inmz4k24q7pcnwi00hybs0wddfkcy1afh42xf";
   };
+
+  patchPhase = if (etcDir == null) then "" else ''
+    ${findutils}/bin/find . -type f -exec sed -i -e 's/\/etc/${etcDir}/g' {} \;
+  '';
 
   configurePhase = ''
     make defconfig
