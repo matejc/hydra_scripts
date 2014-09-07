@@ -26,6 +26,15 @@ let
       ++ optional aclSupport acl
       ++ optionals selinuxSupport [ libselinux libsepol ];
 
+    preConfigure = stdenv.lib.optionalString (etcDir != null) ''
+      echo "Rewriting /etc/passwd to ${etcDir}/passwd"
+      ${pkgs.busybox}/bin/find . -type f -exec ${pkgs.busybox}/bin/sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+      echo "Rewriting /etc/group to ${etcDir}/group"
+      ${pkgs.busybox}/bin/find . -type f -exec ${pkgs.busybox}/bin/sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+    '';
+    configureFlags = optionals (etcDir != null) ["--sysconfdir=${etcDir}"];
+
+
     crossAttrs = {
       buildInputs = [ gmp ]
         ++ optional aclSupport acl.crossDrv
