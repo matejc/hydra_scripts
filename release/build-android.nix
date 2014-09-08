@@ -134,7 +134,7 @@ let
           ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
         '' + oldAttrs.preConfigure;
       });
-      glibcCross = pkgs.forceNativeDrv (pkgs.makeOverridable (import ../override/glibc-xcompile.nix)
+      glibcCross = pkgs.forceNativeDrv (pkgs.makeOverridable (import ../overrides/glibc-xcompile.nix)
         (let crossGNU = pkgs.crossSystem != null && pkgs.crossSystem.config == "i586-pc-gnu";
          in {
            inherit (pkgs) stdenv fetchurl;
@@ -146,7 +146,7 @@ let
             inherit (pkgs.gnu) machHeaders hurdHeaders libpthreadHeaders mig;
             inherit (pkgs) fetchgit;
           }));
-      glibc = pkgs.callPackage ../override/glibc-xcompile.nix {
+      glibc = pkgs.callPackage ../overrides/glibc-xcompile.nix {
         kernelHeaders = pkgs.linuxHeaders;
         installLocales = pkgs.config.glibc.locales or false;
         machHeaders = null;
