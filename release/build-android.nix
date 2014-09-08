@@ -145,14 +145,14 @@ let
          // pkgs.lib.optionalAttrs crossGNU {
             inherit (pkgs.gnu) machHeaders hurdHeaders libpthreadHeaders mig;
             inherit (pkgs) fetchgit;
-          } // {inherit etcDir;}));
+          } // {inherit pkgs etcDir;}));
       glibc = pkgs.callPackage ../overrides/glibc-xcompile.nix {
         kernelHeaders = pkgs.linuxHeaders;
         installLocales = pkgs.config.glibc.locales or false;
         machHeaders = null;
         hurdHeaders = null;
         gccCross = null;
-        inherit etcDir;
+        inherit pkgs etcDir;
       };
       #shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
       coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { inherit etcDir; };
