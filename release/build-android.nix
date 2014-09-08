@@ -90,7 +90,7 @@ let
     arch = "arm";
     float = "hard";
     fpu = "vfp";
-    withTLS = true;
+    withTLS = false;  # true;
     libc = "glibc";
     platform = platform;
     openssl.system = "linux-generic32";
