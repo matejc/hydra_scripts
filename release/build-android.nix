@@ -134,8 +134,8 @@ let
           ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
         '' + oldAttrs.preConfigure;
       });
-      glibcCross = forceNativeDrv (makeOverridable (import ../override/glibc-xcompile.nix)
-        (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
+      glibcCross = pkgs.forceNativeDrv (pkgs.makeOverridable (import ../override/glibc-xcompile.nix)
+        with pkgs; (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
          in {
            inherit stdenv fetchurl;
            gccCross = gccCrossStageStatic;
@@ -147,8 +147,8 @@ let
             inherit fetchgit;
           }));
       glibc = pkgs.callPackage ../override/glibc-xcompile.nix {
-        kernelHeaders = linuxHeaders;
-        installLocales = config.glibc.locales or false;
+        kernelHeaders = pkgs.linuxHeaders;
+        installLocales = pkgs.config.glibc.locales or false;
         machHeaders = null;
         hurdHeaders = null;
         gccCross = null;
