@@ -62,7 +62,8 @@ let
     # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
     # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
     # and {Open,Free}BSD.
-    doCheck = stdenv ? glibc;
+    doCheck = false;
+    #doCheck = stdenv ? glibc;
 
     # Saw random failures like ‘help2man: can't get '--help' info from
     # man/sha512sum.td/sha512sum’.
