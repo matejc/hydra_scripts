@@ -6,7 +6,7 @@
 , gccCross ? null
 , debugSymbols ? false
 , withGd ? false, gd ? null, libpng ? null
-, pkgs
+, pkgs, etcDir
 }:
 
 assert stdenv.gcc.gcc != null;
