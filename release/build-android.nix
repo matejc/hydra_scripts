@@ -3,7 +3,7 @@ let
 
   platform = {
     name = "arm";
-    kernelMajor = "3.0";
+    kernelMajor = "2.6";
     kernelHeadersBaseConfig = "kirkwood_defconfig";
     kernelBaseConfig = "bcmrpi_defconfig";
     kernelArch = "arm";
