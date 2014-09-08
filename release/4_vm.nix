@@ -15,9 +15,9 @@ with pkgs;
 let
   pkgs = import <nixpkgs> { inherit system; };
   configVM = {
-    virtualisation.memorySize = 1024;
+    virtualisation.memorySize = 2048;
     virtualisation.graphics = false;
-    virtualisation.diskSize = 20000;
+    virtualisation.diskSize = 30000;
   };
 
   machine =
