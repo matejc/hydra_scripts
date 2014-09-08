@@ -134,13 +134,25 @@ let
           ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
         '' + oldAttrs.preConfigure;
       });
-      glibc = pkgs.lib.overrideDerivation (pkgs.glibc) (oldAttrs: {
-        postPatch = ''
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -iname "*.c" -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -iname "*.c" -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -iname "*.c" -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
-        '';
-      });
+      glibcCross = forceNativeDrv (makeOverridable (import ../override/glibc-xcompile.nix)
+        (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
+         in {
+           inherit stdenv fetchurl;
+           gccCross = gccCrossStageStatic;
+           kernelHeaders = if crossGNU then gnu.hurdHeaders else linuxHeadersCross;
+           installLocales = config.glibc.locales or false;
+         }
+         // lib.optionalAttrs crossGNU {
+            inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
+            inherit fetchgit;
+          }));
+      glibc = pkgs.callPackage ../override/glibc-xcompile.nix {
+        kernelHeaders = linuxHeaders;
+        installLocales = config.glibc.locales or false;
+        machHeaders = null;
+        hurdHeaders = null;
+        gccCross = null;
+      };
       #shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
       coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { inherit etcDir; };
       busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
