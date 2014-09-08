@@ -135,7 +135,7 @@ let
         '' + oldAttrs.preConfigure;
       });
       glibcCross = pkgs.forceNativeDrv (pkgs.makeOverridable (import ../overrides/glibc-xcompile.nix)
-        (let crossGNU = crosssysstem != null && crosssysstem.config == "i586-pc-gnu";
+        (let crossGNU = crosssystem != null && crosssystem.config == "i586-pc-gnu";
          in {
            inherit (pkgs) stdenv fetchurl;
            gccCross = pkgs.gccCrossStageStatic;
