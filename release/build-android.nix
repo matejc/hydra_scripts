@@ -136,9 +136,9 @@ let
       });
       glibc = pkgs.lib.overrideDerivation (pkgs.glibc) (oldAttrs: {
         preConfigure = ''
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find . -type f -iname "*.c" -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find . -type f -iname "*.c" -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find . -type f -iname "*.c" -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
         '' + oldAttrs.preConfigure;
       });
       #shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
