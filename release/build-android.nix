@@ -135,16 +135,16 @@ let
         '' + oldAttrs.preConfigure;
       });
       glibcCross = pkgs.forceNativeDrv (pkgs.makeOverridable (import ../override/glibc-xcompile.nix)
-        with pkgs; (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
+        (let crossGNU = pkgs.crossSystem != null && pkgs.crossSystem.config == "i586-pc-gnu";
          in {
-           inherit stdenv fetchurl;
-           gccCross = gccCrossStageStatic;
-           kernelHeaders = if crossGNU then gnu.hurdHeaders else linuxHeadersCross;
-           installLocales = config.glibc.locales or false;
+           inherit (pkgs) stdenv fetchurl;
+           gccCross = pkgs.gccCrossStageStatic;
+           kernelHeaders = if crossGNU then pkgs.gnu.hurdHeaders else pkgs.linuxHeadersCross;
+           installLocales = pkgs.config.glibc.locales or false;
          }
-         // lib.optionalAttrs crossGNU {
-            inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
-            inherit fetchgit;
+         // pkgs.lib.optionalAttrs crossGNU {
+            inherit (pkgs.gnu) machHeaders hurdHeaders libpthreadHeaders mig;
+            inherit (pkgs) fetchgit;
           }));
       glibc = pkgs.callPackage ../override/glibc-xcompile.nix {
         kernelHeaders = pkgs.linuxHeaders;
