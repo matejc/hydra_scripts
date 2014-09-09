@@ -77,6 +77,11 @@ in
   (if cross != null
    then {
       preConfigure = ''
+        echo "#################################################################################################"
+        ls -la ../$sourceRoot
+        echo "#################################################################################################"
+        ls -la .
+        echo "#################################################################################################"
         ${pkgs.findutils}/bin/find . -type f -iname "*.c" -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
         ${pkgs.findutils}/bin/find . -type f -iname "*.c" -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
         ${pkgs.findutils}/bin/find . -type f -iname "*.c" -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
