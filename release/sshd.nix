@@ -22,10 +22,10 @@ let
   '';
 
   passwd = pkgs.writeText "passwd" ''
-    builder:x:10000:10000::${prefix}/home/builder:${bash}/bin/bash
+    builder:x:@uid@:@gid@::${prefix}/home/builder:${bash}/bin/bash
   '';
   group = pkgs.writeText "group" ''
-    users:x:10000:
+    users:x:@uid@:
   '';
   shadow = pkgs.writeText "shadow" ''
     builder:x:16117::::::
@@ -51,8 +51,8 @@ let
   test -d ${prefix}/home/builder || mkdir -p ${prefix}/home/builder
   test -d ${prefix}/etc/pam.d || mkdir -p ${prefix}/etc/pam.d
   test -f ${prefix}/etc/pam.d/sshd || cp -v ${pam_sshd} ${prefix}/etc/pam.d/sshd
-  test -f ${prefix}/etc/passwd || cp -v ${passwd} ${prefix}/etc/passwd
-  test -f ${prefix}/etc/group || cp -v ${group} ${prefix}/etc/group
+  test -f ${prefix}/etc/passwd || sed -e "s|@uid@|`id -u`|g" -e "s|@gid@|`id -g`|g" ${passwd} > ${prefix}/etc/passwd
+  test -f ${prefix}/etc/group || sed -e "s|@uid@|`id -u`|g" ${group} > ${prefix}/etc/group
   test -f ${prefix}/etc/shadow || cp -v ${shadow} ${prefix}/etc/shadow
   '';
 
