@@ -61,11 +61,13 @@ let
   source ${env}
   test -d ${prefix}/etc/ssh || ${sshd_init}
   mkdir -p ${prefix}/run
+  chown -R `id -u`:`id -g` ${prefix}/home/builder || true
   ${openssh}/sbin/sshd -f ${prefix}/etc/ssh/sshd_config
   '';
 
   sshd_debug = pkgs.writeScript "sshd_debug.sh" ''
   #!${bash}/bin/bash
+  ${env} chown -R `id -u`:`id -g` ${prefix}/home/builder || true
   ${pkgs.lib.optionalString (strace != null) "${strace}/bin/strace"} ${openssh}/sbin/sshd -d -f ${prefix}/etc/ssh/sshd_config
   '';
 
