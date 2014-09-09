@@ -18,17 +18,17 @@ let
     PubkeyAuthentication yes
     AuthorizedKeysFile ${prefix}/etc/ssh/authorized_keys
 
-    ForceCommand ${environment} bash
+    ForceCommand ${environment}/bin/environment bash
   '';
 
   passwd = pkgs.writeText "passwd" ''
-    builder:x:20000:20000::${prefix}/home/builder:${bash}/bin/bash
+    builder:x:10000:10000::${prefix}/home/builder:${bash}/bin/bash
   '';
   group = pkgs.writeText "group" ''
-    users:x:20000:
+    users:x:10000:
   '';
   shadow = pkgs.writeText "shadow" ''
-    builder:!:16117::::::
+    builder:x:16117::::::
   '';
   pam_sshd = pkgs.writeText "sshd" ''
     #%PAM-1.0
