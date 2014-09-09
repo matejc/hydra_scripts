@@ -77,9 +77,9 @@ in
   (if cross != null
    then {
       preConfigure = ''
-        ${pkgs.findutils}/bin/find ../$sourceRoot -type f -iname "*.c" -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
-        ${pkgs.findutils}/bin/find ../$sourceRoot -type f -iname "*.c" -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
-        ${pkgs.findutils}/bin/find ../$sourceRoot -type f -iname "*.c" -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
+        ${pkgs.findutils}/bin/find ../$sourceRoot -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+        ${pkgs.findutils}/bin/find ../$sourceRoot -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+        ${pkgs.findutils}/bin/find ../$sourceRoot -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
 
         sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
