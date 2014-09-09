@@ -1,4 +1,4 @@
-{ pkgs, openssh, bash, utillinux, coreutils, openssl, environment, prefix, strace ? null }:
+{ pkgs, openssh, bash, openssl, busybox, environment, prefix, strace ? null }:
 let
 
   sshd_config = pkgs.writeText "sshd_config" ''
@@ -79,7 +79,7 @@ let
   
   env = pkgs.writeScript "env.sh" ''
   #!${bash}/bin/bash
-  export PATH="${utillinux}/bin:${bash}/bin:${openssh}/bin:${openssh}/sbin:${coreutils}/bin:${openssl}/bin"
+  export PATH="${bash}/bin:${openssh}/bin:${openssh}/sbin:${openssl}/bin:${busybox}/bin"
 
   "$@"
   '';
