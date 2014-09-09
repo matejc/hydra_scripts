@@ -77,12 +77,12 @@ in
   (if cross != null
    then {
       preConfigure = ''
-        ${pkgs.findutils}/bin/find ../$sourceRoot/nss -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
-        ${pkgs.findutils}/bin/find ../$sourceRoot/nss -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
-        ${pkgs.findutils}/bin/find ../$sourceRoot/nss -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
-        ${pkgs.findutils}/bin/find ../$sourceRoot/nis -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
-        ${pkgs.findutils}/bin/find ../$sourceRoot/nis -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
-        ${pkgs.findutils}/bin/find ../$sourceRoot/nis -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
+        ${pkgs.findutils}/bin/find ../$sourceRoot/nss -type f -iname "*.c" -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+        ${pkgs.findutils}/bin/find ../$sourceRoot/nss -type f -iname "*.c" -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+        ${pkgs.findutils}/bin/find ../$sourceRoot/nss -type f -iname "*.c" -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
+        ${pkgs.findutils}/bin/find ../$sourceRoot/nis -type f -iname "*.c" -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+        ${pkgs.findutils}/bin/find ../$sourceRoot/nis -type f -iname "*.c" -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+        ${pkgs.findutils}/bin/find ../$sourceRoot/nis -type f -iname "*.c" -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
         sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' ../$sourceRoot/nss/db-Makefile
         sed -i -e 's|/etc/group|${etcDir}/group|g' ../$sourceRoot/nss/db-Makefile
         sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' ../$sourceRoot/nss/db-Makefile
