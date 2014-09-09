@@ -87,7 +87,7 @@ in
         sed -i -e 's|/etc/group|${etcDir}/group|g' ../$sourceRoot/nss/db-Makefile
         sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' ../$sourceRoot/nss/db-Makefile
         #${pkgs.findutils}/bin/find ../$sourceRoot/nss/nss_files -type f -iname "*.c" -exec sed -i -e "s|\"/etc/\"|\"${etcDir}/\"|g" {} \;
-        ${pkgs.findutils}/bin/find ../$sourceRoot -type f -exec sed -i -e "s|\"/etc/|\"${etcDir}/|g" {} \;
+        ${pkgs.findutils}/bin/find ../$sourceRoot -type f \( -iname '*.c' -o -iname '*.h' \) -exec sed -i -e "s|\"/etc/|\"${etcDir}/|g" {} \;
 
         sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
