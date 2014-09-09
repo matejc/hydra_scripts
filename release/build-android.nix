@@ -166,14 +166,13 @@ let
     inherit pkgs prefix;
     bash = pkgs.bash.crossDrv;
     openssh = pkgs.openssh.crossDrv;
-    utillinux = pkgs.utillinux.crossDrv;
-    coreutils = pkgs.coreutils.crossDrv;
+    busybox = pkgs.busybox.crossDrv;
     openssl = pkgs.openssl.crossDrv;
     environment = env;
     strace = pkgs.strace.crossDrv;
     };
 
-  essentials = [pkgs.bash.crossDrv pkgs.coreutils.crossDrv];
+  essentials = [pkgs.bash.crossDrv pkgs.busybox.crossDrv];
   paths = parsed_attrs ++ essentials;
 
   env = pkgs.writeScriptBin "environment" ''
