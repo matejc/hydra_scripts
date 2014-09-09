@@ -8,7 +8,7 @@ let
     HostKey ${prefix}/etc/ssh/ssh_host_dsa_key
     UsePrivilegeSeparation no
     
-    UsePAM yes
+    UsePAM no
     PasswordAuthentication no
     PermitRootLogin no
     PermitEmptyPasswords no
@@ -18,7 +18,7 @@ let
     PubkeyAuthentication yes
     AuthorizedKeysFile ${prefix}/etc/ssh/authorized_keys
 
-    ForceCommand ${environment}/bin/environment bash
+    ForceCommand source ${environment}/bin/environment
   '';
 
   passwd = pkgs.writeText "passwd" ''
