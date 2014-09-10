@@ -182,9 +182,12 @@ let
 
   mybash = pkgs.writeScriptBin "mybash" ''
   #!${pkgs.bash.crossDrv}/bin/bash
-  ${pkgs.busybox.crossDrv}/bin/busybox tty -s && ${pkgs.bash.crossDrv}/bin/bash --rcfile ${bashrc} $@ || /system/bin/sh $@
+  ${pkgs.bash.crossDrv}/bin/bash --rcfile ${bashrc} $@
   '';
   bashrc = pkgs.writeText "bashrc" ''
+  ${pkgs.busybox.crossDrv}/bin/busybox tty -s
+  if [ $? -ne 0 ]; then return; fi
+
   PATH="${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) paths)}"
   export PATH="$PATH:${pkgs.lib.makeSearchPath "sbin" (map (a: a.outPath) paths)}"
   export PS1="\$ "
