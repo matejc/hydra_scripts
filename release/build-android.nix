@@ -181,6 +181,7 @@ let
   paths = parsed_attrs ++ essentials;
 
   mybash = pkgs.writeScriptBin "mybash" ''
+  #!${pkgs.bash.crossDrv}/bin/bash
   ${pkgs.bash.crossDrv}/bin/bash --rcfile ${bashrc} $@
   '';
   bashrc = pkgs.writeText "bashrc" ''
