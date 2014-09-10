@@ -47,13 +47,13 @@ let
     openssl dsaparam -out ${prefix}/etc/ssh/dsaparam.pem 2048 && \
     openssl gendsa -out ${prefix}/etc/ssh/ssh_host_dsa_key ${prefix}/etc/ssh/dsaparam.pem && \
     openssl dsa -pubout -in ${prefix}/etc/ssh/ssh_host_dsa_key -out ${prefix}/etc/ssh/ssh_host_dsa_key.pub; }
-  test -f ${prefix}/etc/ssh/sshd_config || cp -v ${sshd_config} ${prefix}/etc/ssh/sshd_config
-  test -d ${prefix}/home/builder/.ssh || mkdir -p ${prefix}/home/builder/.ssh
-  test -d ${prefix}/etc/pam.d || mkdir -p ${prefix}/etc/pam.d
-  test -f ${prefix}/etc/pam.d/sshd || cp -v ${pam_sshd} ${prefix}/etc/pam.d/sshd
-  test -f ${prefix}/etc/passwd || sed -e "s|@uid@|`id -u`|g" -e "s|@gid@|`id -g`|g" ${passwd} > ${prefix}/etc/passwd
-  test -f ${prefix}/etc/group || sed -e "s|@uid@|`id -u`|g" ${group} > ${prefix}/etc/group
-  test -f ${prefix}/etc/shadow || cp -v ${shadow} ${prefix}/etc/shadow
+  cp -v ${sshd_config} ${prefix}/etc/ssh/sshd_config
+  mkdir -p ${prefix}/home/builder/.ssh
+  mkdir -p ${prefix}/etc/pam.d
+  cp -v ${pam_sshd} ${prefix}/etc/pam.d/sshd
+  sed -e "s|@uid@|`id -u`|g" -e "s|@gid@|`id -g`|g" ${passwd} > ${prefix}/etc/passwd
+  sed -e "s|@uid@|`id -u`|g" ${group} > ${prefix}/etc/group
+  cp -v ${shadow} ${prefix}/etc/shadow
   '';
 
   sshd_run = pkgs.writeScript "sshd_run.sh" ''
