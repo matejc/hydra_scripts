@@ -192,7 +192,7 @@ let
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = paths ++ [mybash];
+      paths = paths;
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
