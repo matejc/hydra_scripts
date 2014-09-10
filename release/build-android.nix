@@ -168,6 +168,7 @@ let
     openssh = pkgs.openssh.crossDrv;
     busybox = pkgs.busybox.crossDrv;
     openssl = pkgs.openssl.crossDrv;
+    forceCommand = "${prefix}/result/bin/environment bash";
     strace = pkgs.strace.crossDrv;
     };
 
