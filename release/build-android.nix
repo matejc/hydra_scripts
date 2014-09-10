@@ -192,7 +192,7 @@ let
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = paths ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]) ++ (pkgs.lib.optionals (replaceme_url != "") [replaceme]);
+      paths = paths ++ [mybash] ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]) ++ (pkgs.lib.optionals (replaceme_url != "") [replaceme]);
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
