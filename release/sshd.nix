@@ -13,7 +13,7 @@ let
     PermitRootLogin no
     PermitEmptyPasswords no
     StrictModes no
-    PermitTTY no
+    PermitTTY yes
 
     PubkeyAuthentication yes
     AuthorizedKeysFile ${prefix}/home/builder/.ssh/authorized_keys
