@@ -9,15 +9,13 @@ let
   replaceme = pkgs.writeScriptBin "replaceme" ''
   #!${shell}
   export PATH="${path}"
-  busybox test -f ${prefix}/etc/resolv.conf || cp -v ${resolv_conf} ${prefix}/etc/resolv.conf
-  busybox test -d ${prefix}/tmp || mkdir -p ${prefix}/tmp
+  mkdir -p ${prefix}/tmp
   url="${url}"
   domain=`echo $url | busybox sed 's-^[^/]*/*\([^/]*\)/\?.*$-\1-'`
   ipaddr=`ping -c 1 $domain | busybox sed -n 's@^.*(\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*$@\1@p' | busybox head -1`
   req_url=`echo $url | busybox sed "s-/[^/]\+-/$ipaddr-"`
   busybox wget $req_url -O ${prefix}/tmp/out.tar.xx
   rm -rf ${prefix}/store || true
-  rm -rf ${prefix}/etc || true
   rm ${prefix}/result || true
   busybox tar xvf ${prefix}/tmp/out.tar.xx -C /
   '';
