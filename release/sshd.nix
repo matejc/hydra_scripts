@@ -16,7 +16,7 @@ let
     PermitTTY no
 
     PubkeyAuthentication yes
-    AuthorizedKeysFile ${prefix}/etc/ssh/authorized_keys
+    AuthorizedKeysFile ${prefix}/home/builder/.ssh/authorized_keys
 
     ForceCommand ${forceCommand}
   '';
@@ -48,7 +48,7 @@ let
     openssl gendsa -out ${prefix}/etc/ssh/ssh_host_dsa_key ${prefix}/etc/ssh/dsaparam.pem && \
     openssl dsa -pubout -in ${prefix}/etc/ssh/ssh_host_dsa_key -out ${prefix}/etc/ssh/ssh_host_dsa_key.pub; }
   test -f ${prefix}/etc/ssh/sshd_config || cp -v ${sshd_config} ${prefix}/etc/ssh/sshd_config
-  test -d ${prefix}/home/builder || mkdir -p ${prefix}/home/builder
+  test -d ${prefix}/home/builder/.ssh || mkdir -p ${prefix}/home/builder/.ssh
   test -d ${prefix}/etc/pam.d || mkdir -p ${prefix}/etc/pam.d
   test -f ${prefix}/etc/pam.d/sshd || cp -v ${pam_sshd} ${prefix}/etc/pam.d/sshd
   test -f ${prefix}/etc/passwd || sed -e "s|@uid@|`id -u`|g" -e "s|@gid@|`id -g`|g" ${passwd} > ${prefix}/etc/passwd
