@@ -187,7 +187,7 @@ let
   bashrc = pkgs.writeText "bashrc" ''
   PATH="${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) paths)}"
   export PATH="$PATH:${pkgs.lib.makeSearchPath "sbin" (map (a: a.outPath) paths)}"
-  export PS1="\$\ "
+  export PS1="\$ "
   '';
 
   build = {
