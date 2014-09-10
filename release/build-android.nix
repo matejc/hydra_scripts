@@ -182,7 +182,7 @@ let
 
   mybash = pkgs.writeScriptBin "mybash" ''
   #!${pkgs.bash.crossDrv}/bin/bash
-  ${pkgs.bash.crossDrv}/bin/bash --rcfile ${bashrc} $@
+  ${pkgs.bash.crossDrv}/bin/bash --rcfile ${bashrc} "$@"
   '';
   bashrc = pkgs.writeText "bashrc" ''
   ${pkgs.busybox.crossDrv}/bin/busybox tty -s
