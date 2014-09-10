@@ -168,7 +168,7 @@ let
     openssh = pkgs.openssh.crossDrv;
     busybox = pkgs.busybox.crossDrv;
     openssl = pkgs.openssl.crossDrv;
-    forceCommand = "${prefix}/result/bin/environment bash";
+    shell = "${mybash}/bin/mybash";
     strace = pkgs.strace.crossDrv;
     };
 
@@ -180,19 +180,19 @@ let
   essentials = [pkgs.bash.crossDrv pkgs.busybox.crossDrv];
   paths = parsed_attrs ++ essentials ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]) ++ (pkgs.lib.optionals (replaceme_url != "") [replaceme]);
 
-  env = pkgs.writeScriptBin "environment" ''
-  #!${pkgs.bash.crossDrv}/bin/bash
-  PATH="$out/bin:${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) paths)}"
+  mybash = pkgs.writeScriptBin "mybash" ''
+  ${pkgs.bash.crossDrv} --rcfile ${bashrc} "$@"
+  '';
+  bashrc = pkgs.writeText "bashrc" ''
+  PATH="${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) paths)}"
   export PATH="$PATH:${pkgs.lib.makeSearchPath "sbin" (map (a: a.outPath) paths)}"
   export PS1=\$
-
-  "$@"
   '';
 
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = paths ++ [env];
+      paths = paths ++ [mybash];
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
