@@ -181,7 +181,7 @@ let
   paths = parsed_attrs ++ essentials ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]) ++ (pkgs.lib.optionals (replaceme_url != "") [replaceme]);
 
   mybash = pkgs.writeScriptBin "mybash" ''
-  ${pkgs.bash.crossDrv} --rcfile ${bashrc} "$@"
+  ${pkgs.bash.crossDrv} --rcfile ${bashrc} $@
   '';
   bashrc = pkgs.writeText "bashrc" ''
   PATH="${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) paths)}"
