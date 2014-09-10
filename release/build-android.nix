@@ -182,12 +182,7 @@ let
 
   mybash = pkgs.writeScriptBin "mybash" ''
   #!${pkgs.bash.crossDrv}/bin/bash
-  if [[ $- =~ "i" ]]; then
-    export INPUTRC=${inputrc}
-    ${pkgs.bash.crossDrv}/bin/bash --rcfile ${bashrc} $@
-  else
-    ${pkgs.bash.crossDrv}/bin/bash $@
-  fi
+  ${pkgs.bash.crossDrv}/bin/bash --rcfile ${bashrc} $@
   '';
   inputrc = pkgs.writeText "inputrc" ''
   # /etc/inputrc - global inputrc for libreadline
@@ -258,6 +253,8 @@ let
   $endif
   '';
   bashrc = pkgs.writeText "bashrc" ''
+  if [[ ! $- =~ "i" ]]; then return; fi
+  export INPUTRC=${inputrc}
   PATH="${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) paths)}"
   export PATH="$PATH:${pkgs.lib.makeSearchPath "sbin" (map (a: a.outPath) paths)}"
   export PS1="\$ "
