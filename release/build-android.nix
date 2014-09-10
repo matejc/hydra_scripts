@@ -168,7 +168,7 @@ let
     openssh = pkgs.openssh.crossDrv;
     busybox = pkgs.busybox.crossDrv;
     openssl = pkgs.openssl.crossDrv;
-    forceCommand = "source ${env}/bin/environment";
+    forceCommand = "source ${prefix}/result/bin/environment";
     strace = pkgs.strace.crossDrv;
     };
 
