@@ -1,4 +1,4 @@
-{ pkgs, openssh, bash, openssl, busybox, forceCommand ? "export PATH=/data/nix/result/bin && bash", prefix, strace ? null }:
+{ pkgs, openssh, bash, openssl, busybox, forceCommand ? "", prefix, strace ? null }:
 let
 
   sshd_config = pkgs.writeText "sshd_config" ''
@@ -18,7 +18,7 @@ let
     PubkeyAuthentication yes
     AuthorizedKeysFile ${prefix}/home/builder/.ssh/authorized_keys
 
-    ForceCommand ${forceCommand}
+    ${pkgs.lib.optionalString (forceCommand != "") "ForceCommand ${forceCommand}"}
   '';
 
   passwd = pkgs.writeText "passwd" ''
