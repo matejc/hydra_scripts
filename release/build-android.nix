@@ -178,7 +178,7 @@ let
     };
 
   essentials = [pkgs.bash.crossDrv pkgs.busybox.crossDrv];
-  paths = parsed_attrs ++ essentials ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]) ++ (pkgs.lib.optionals (replaceme_url != "") [replaceme]);
+  paths = parsed_attrs ++ essentials;
 
   mybash = pkgs.writeScriptBin "mybash" ''
   ${pkgs.bash.crossDrv} --rcfile ${bashrc} $@
@@ -192,7 +192,7 @@ let
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = paths;
+      paths = paths ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]) ++ (pkgs.lib.optionals (replaceme_url != "") [replaceme]);
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
