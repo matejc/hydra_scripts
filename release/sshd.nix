@@ -1,4 +1,4 @@
-{ pkgs, openssh, bash, openssl, busybox, environment, prefix, strace ? null }:
+{ pkgs, openssh, bash, openssl, busybox, forceCommand ? "export PATH=/data/nix/result/bin", prefix, strace ? null }:
 let
 
   sshd_config = pkgs.writeText "sshd_config" ''
@@ -18,7 +18,7 @@ let
     PubkeyAuthentication yes
     AuthorizedKeysFile ${prefix}/etc/ssh/authorized_keys
 
-    ForceCommand source ${environment}/bin/environment
+    ForceCommand ${forceCommand}
   '';
 
   passwd = pkgs.writeText "passwd" ''
