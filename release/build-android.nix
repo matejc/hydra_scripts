@@ -182,7 +182,7 @@ let
 
   mybash = pkgs.writeScriptBin "mybash" ''
   #!${pkgs.bash.crossDrv}/bin/bash
-  ${pkgs.busybox.crossDrv}/bin/busybox tty -s && ${pkgs.bash.crossDrv}/bin/bash --rcfile ${bashrc} $@ || /system/bin/sh
+  ${pkgs.busybox.crossDrv}/bin/busybox tty -s && ${pkgs.bash.crossDrv}/bin/bash --rcfile ${bashrc} $@ || /system/bin/sh $@
   '';
   bashrc = pkgs.writeText "bashrc" ''
   PATH="${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) paths)}"
