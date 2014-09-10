@@ -182,7 +182,15 @@ let
 
   mybash = pkgs.writeScriptBin "mybash" ''
   #!${pkgs.bash.crossDrv}/bin/bash
-  ${pkgs.bash.crossDrv}/bin/bash --rcfile ${bashrc} $@
+  case $- in
+    *i*) echo This is safe since the shell is interactive
+    export INPUTRC=${inputrc}
+    ${pkgs.bash.crossDrv}/bin/bash --rcfile ${bashrc} $@
+    ;;
+    *) ${pkgs.bash.crossDrv}/bin/bash
+    ;;
+  esac
+  
   '';
   inputrc = pkgs.writeText "inputrc" ''
   # /etc/inputrc - global inputrc for libreadline
@@ -253,8 +261,6 @@ let
   $endif
   '';
   bashrc = pkgs.writeText "bashrc" ''
-  if [[ ! $- =~ "i" ]]; then return; fi
-  export INPUTRC=${inputrc}
   PATH="${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) paths)}"
   export PATH="$PATH:${pkgs.lib.makeSearchPath "sbin" (map (a: a.outPath) paths)}"
   export PS1="\$ "
