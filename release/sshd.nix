@@ -1,4 +1,4 @@
-{ pkgs, openssh, bash, openssl, busybox, forceCommand ? "export PATH=/data/nix/result/bin", prefix, strace ? null }:
+{ pkgs, openssh, bash, openssl, busybox, forceCommand ? "export PATH=/data/nix/result/bin && bash", prefix, strace ? null }:
 let
 
   sshd_config = pkgs.writeText "sshd_config" ''
