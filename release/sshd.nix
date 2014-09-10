@@ -1,4 +1,4 @@
-{ pkgs, openssh, bash, openssl, busybox, forceCommand ? "", prefix, strace ? null }:
+{ pkgs, openssh, bash, openssl, busybox, forceCommand ? "", shell ? "", prefix, strace ? null }:
 let
 
   sshd_config = pkgs.writeText "sshd_config" ''
@@ -22,7 +22,7 @@ let
   '';
 
   passwd = pkgs.writeText "passwd" ''
-    builder:x:@uid@:@gid@::${prefix}/home/builder:${bash}/bin/bash
+    builder:x:@uid@:@gid@::${prefix}/home/builder:${if shell == "" then "${bash}/bin/bash" else ${shell}}
   '';
   group = pkgs.writeText "group" ''
     users:x:@uid@:
