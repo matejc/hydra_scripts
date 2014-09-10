@@ -22,7 +22,7 @@ let
   '';
 
   passwd = pkgs.writeText "passwd" ''
-    builder:x:@uid@:@gid@::${prefix}/home/builder:${if shell == "" then "${bash}/bin/bash" else ${shell}}
+    builder:x:@uid@:@gid@::${prefix}/home/builder:${if shell == "" then "${bash}/bin/bash" else shell}
   '';
   group = pkgs.writeText "group" ''
     users:x:@uid@:
