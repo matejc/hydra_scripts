@@ -163,6 +163,11 @@ let
       libxslt.crossDrv = pkgs.libxslt.crossDrv.override {
         configureFlags = "--with-libxml-prefix=${pkgs.libxml2.crossDrv} --without-python --without-crypto --without-debug --without-mem-debug --without-debugger";
       };
+      tmux = pkgs.tmux.override (oldAttrs: {
+        preConfigure = ''
+          ${pkgsNoOverrides.findutils}/bin/find . -type f -name "compat.h" -exec sed -i -e 's|/tmp/|${etcDir}/tmp/|g' {} \;
+        '' + oldAttrs.preConfigure;
+      });
     };
   };
 
