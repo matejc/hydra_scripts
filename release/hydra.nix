@@ -75,7 +75,7 @@ let
             CatalystXScriptServerStarman
             CatalystActionREST
             CryptRandPasswd
-            DBDPg
+            #DBDPg
             DBDSQLite
             DataDump
             DateTime
