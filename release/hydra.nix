@@ -17,6 +17,7 @@ let
       name = "hydra-tarball";
       src = hydraSrc;
       version = hydraSrc.rev;
+      versionSuffix = "";
 
       buildInputs =
         [ perl libxslt dblatex tetex nukeReferences pkgconfig boehmgc git openssl ];
