@@ -165,8 +165,8 @@ let
       };
       tmux = pkgs.lib.overrideDerivation pkgs.tmux (oldAttrs: {
         postInstall = oldAttrs.postInstall + ''
-          source ${pkgs.makeWrapper}
-          wrapProgram $out/bin/tmux --set TMUX_TMPDIR ${prefix}/tmp
+          source "${pkgs.makeWrapper}/nix-support/setup-hook"
+          wrapProgram $out/bin/tmux --set TMUX_TMPDIR "${prefix}/tmp"
         '';
       });
     };
