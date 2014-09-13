@@ -122,6 +122,7 @@ let
   config = {
     nix = config_nix;
     packageOverrides = pkgs : rec {
+      bash = pkgs.bash.override { interactive = true; readline = pkgs.readline.crossDrv; };
       python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
