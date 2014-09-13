@@ -7,7 +7,7 @@ let
   };
 
   tarball =
-    with import <nixpkgs> { };
+    with pkgs;
 
     releaseTools.makeSourceTarball {
       name = "hydra-tarball";
@@ -143,7 +143,6 @@ let
       meta.description = "Build of Hydra on ${system}";
       passthru.perlDeps = perlDeps;
     });
-  });
 
 in
   build
