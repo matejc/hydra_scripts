@@ -162,7 +162,7 @@ let
       });
       libxslt = pkgs.lib.overrideDerivation (pkgs.libxslt) (oldAttrs: {
         crossAttrs = {configureFlags = [
-          "--with-libxml-prefix=${libxml2.crossDrv}"
+          "--with-libxml-prefix=${pkgs.libxml2.crossDrv}"
           "--without-python"
           "--without-crypto"
           "--without-debug"
