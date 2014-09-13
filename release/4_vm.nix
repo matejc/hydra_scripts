@@ -18,6 +18,7 @@ let
     virtualisation.memorySize = 2048;
     virtualisation.graphics = false;
     virtualisation.diskSize = 30000;
+    virtualisation.qemu.options = "-smp cores=2,threads=1,sockets=1";
   };
 
   machine =
