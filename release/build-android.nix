@@ -168,7 +168,7 @@ let
           "--without-debug"
           "--without-mem-debug"
           "--without-debugger"
-        ]};
+        ];};
       });
     };
   };
