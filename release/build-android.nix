@@ -122,7 +122,7 @@ let
   config = {
     nix = config_nix;
     packageOverrides = pkgs : rec {
-      bash = pkgs.bash.override { interactive = true; readline = pkgs.readline; };
+      bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
       python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
@@ -194,13 +194,13 @@ let
     inherit pkgs prefix;
     }).armv7l-linux;
 
-  essentials = [pkgs.bash.crossDrv pkgs.busybox.crossDrv];
+  essentials = [pkgs.bashInteractive.crossDrv pkgs.busybox.crossDrv];
   paths = parsed_attrs ++ essentials;
 
   mybash = pkgs.writeScriptBin "mybash" ''
-  #!${pkgs.bash.crossDrv}/bin/bash
+  #!${pkgs.bashInteractive.crossDrv}/bin/bash
   cd /
-  ${pkgs.bash.crossDrv}/bin/bash --rcfile ${bashrc} "$@"
+  ${pkgs.bashInteractive.crossDrv}/bin/bash --rcfile ${bashrc} "$@"
   '';
   bashrc = pkgs.writeText "bashrc" ''
   ${pkgs.busybox.crossDrv}/bin/busybox tty -s
