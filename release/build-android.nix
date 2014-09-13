@@ -122,7 +122,10 @@ let
   config = {
     nix = config_nix;
     packageOverrides = pkgs : rec {
-      nix.crossDrv = pkgs.nix.crossDrv.override { perl = pkgs.perl.crossDrv; };
+      nix.crossDrv = pkgs.lib.overrideDerivation pkgs.nix.crossDrv (oldAttrs: {
+        nativeBuildInputs = [ pkgs.pkgconfig ];
+        buildInputs = with pkgs; [ perl curl openssl boehmgc sqlite ];
+      };
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
       python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
