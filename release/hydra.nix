@@ -1,4 +1,4 @@
-{ pkgs, prefix }:
+{ pkgs, prefix, doCross }:
 let
   hydraSrc = pkgs.fetchgit {
     url = https://github.com/NixOS/hydra;
@@ -6,9 +6,9 @@ let
     sha256 = "18x053x5im7dv86syw1v15729w5ywhrfw7v7psfwfn3fazzj2vcr"; # 8c748a6b5b24c118f24e6e13222ae28ab375bb1f225976f0f4b04f57c85b3bb2
   };
 
-  crossDrvs = list: map (i: if (i ? "crossDrv") then builtins.getAttr "crossDrv" i else i) list;
+  crossDrvs = list: map (i: if (doCross && (i ? "crossDrv")) then builtins.getAttr "crossDrv" i else i) list;
 
-  genAttrs' = pkgs.lib.genAttrs [ "x86_64-linux" "armv7l-linux" ];
+  genAttrsSys = pkgs.lib.genAttrs [ "x86_64-linux" "armv7l-linux" ];
 
   tarball =
     with pkgs;
@@ -48,7 +48,7 @@ let
     };
 
 
-  build = genAttrs' (system:
+  build = genAttrsSys (system:
 
     with pkgs;
 
