@@ -165,7 +165,7 @@ let
       };
       tmux = pkgs.lib.overrideDerivation pkgs.tmux (oldAttrs: {
         preConfigure = ''
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -name "compat.h" -exec sed -i -e 's|/tmp/|${etcDir}/tmp/|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/tmp|${etcDir}/tmp|g' {} \;
         '';
       });
     };
