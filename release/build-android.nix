@@ -1,4 +1,4 @@
-{ nixpkgs, hydra_scripts, prefix, system, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv", build_sshd ? "", replaceme_url ? "" }:
+{ nixpkgs, hydra_scripts, prefix, system, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv", build_sshd ? "", replaceme_url ? "", build_hydra ? "" }:
 let
 
   platform = {
@@ -177,6 +177,10 @@ let
     url = replaceme_url;
     };
 
+  hydra = import "${hydra_scripts}/release/hydra.nix" {
+    inherit pkgs prefix;
+    };
+
   essentials = [pkgs.bash.crossDrv pkgs.busybox.crossDrv];
   paths = parsed_attrs ++ essentials;
 
@@ -197,7 +201,7 @@ let
   build = {
     vmEnvironment = pkgs.buildEnv {
       name = "vm-environment";
-      paths = paths ++ [mybash] ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]) ++ (pkgs.lib.optionals (replaceme_url != "") [replaceme]);
+      paths = paths ++ [mybash] ++ (pkgs.lib.optionals (build_hydra == "1") [hydra]) ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]) ++ (pkgs.lib.optionals (replaceme_url != "") [replaceme]);
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
     };
