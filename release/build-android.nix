@@ -160,8 +160,16 @@ let
       apr = pkgs.lib.overrideDerivation (pkgs.apr) (oldAttrs: {
         configureFlags = [ "ac_cv_file__dev_zero=yes" "ac_cv_func_setpgrp_void=yes" ] ++ oldAttrs.configureFlags;
       });
-      libxslt = (pkgs.lib.addPassthru pkgs.libxslt) {
-        crossAttrs = {configureFlags = "--with-libxml-prefix=${pkgs.libxml2.crossDrv} --without-python --without-crypto --without-debug --without-mem-debug --without-debugger";};
+      openssh = pkgs.lib.overrideDerivation (pkgs.openssh.override { inherit pam; }) (oldAttrs: {
+        preConfigure = ''
+          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/pam|${etcDir}/pam|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
+        '' + oldAttrs.preConfigure;
+      });
+      libxslt.crossDrv = pkgs.libxslt.crossDrv.override {
+        configureFlags = "--with-libxml-prefix=${pkgs.libxml2.crossDrv} --without-python --without-crypto --without-debug --without-mem-debug --without-debugger";
       };
     };
   };
