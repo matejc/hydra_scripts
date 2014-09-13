@@ -177,9 +177,9 @@ let
     url = replaceme_url;
     };
 
-  hydra = import "${hydra_scripts}/release/hydra.nix" {
+  hydra = (import "${hydra_scripts}/release/hydra.nix" {
     inherit pkgs prefix;
-    };
+    }).armv7l-linux;
 
   essentials = [pkgs.bash.crossDrv pkgs.busybox.crossDrv];
   paths = parsed_attrs ++ essentials;
