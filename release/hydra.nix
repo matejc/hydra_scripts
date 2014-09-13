@@ -18,8 +18,6 @@ let
       buildInputs =
         [ perl libxslt dblatex tetex nukeReferences pkgconfig boehmgc git openssl ];
 
-      version = "${hydraSrc.gitTag}";
-
       preHook = ''
         # TeX needs a writable font cache.
         export VARTEXFONTS=$TMPDIR/texfonts
