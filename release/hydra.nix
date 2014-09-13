@@ -6,6 +6,8 @@ let
     sha256 = "18x053x5im7dv86syw1v15729w5ywhrfw7v7psfwfn3fazzj2vcr"; # 8c748a6b5b24c118f24e6e13222ae28ab375bb1f225976f0f4b04f57c85b3bb2
   };
 
+  crossDrvs = list: map (i: builtins.getAttr "crossDrv" i) list;
+
   genAttrs' = pkgs.lib.genAttrs [ "x86_64-linux" "armv7l-linux" ];
 
   tarball =
@@ -111,14 +113,14 @@ let
       buildInputs =
         [ makeWrapper libtool unzip nukeReferences pkgconfig boehmgc sqlite
           gitAndTools.topGit mercurial darcs subversion bazaar openssl bzip2
-          guile # optional, for Guile + Guix support
+          #guile # optional, for Guile + Guix support
           perlDeps perl
         ];
 
       hydraPath = lib.makeSearchPath "bin" (
-        [ libxslt sqlite subversion openssh nix coreutils findutils
+        crossDrvs [ libxslt sqlite subversion openssh nix coreutils findutils
           gzip bzip2 lzma gnutar unzip git gitAndTools.topGit mercurial darcs gnused graphviz bazaar
-        ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
+        ] /*++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ]*/ );
 
       preCheck = ''
         patchShebangs .
