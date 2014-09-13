@@ -164,8 +164,9 @@ let
         configureFlags = "--with-libxml-prefix=${pkgs.libxml2.crossDrv} --without-python --without-crypto --without-debug --without-mem-debug --without-debugger";
       };
       tmux = pkgs.lib.overrideDerivation pkgs.tmux (oldAttrs: {
-        preConfigure = ''
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/tmp|${etcDir}/tmp|g' {} \;
+        postInstall = oldAttrs.postInstall + ''
+          source ${pkgs.makeWrapper}
+          wrapProgram $out/bin/tmux --set TMUX_TMPDIR ${prefix}/tmp
         '';
       });
     };
