@@ -18,7 +18,6 @@ let
     virtualisation.memorySize = 2048;
     virtualisation.graphics = false;
     virtualisation.diskSize = 30000;
-    virtualisation.qemu.options = "-smp cores=2,threads=1,sockets=1";
   };
 
   machine =
@@ -93,6 +92,7 @@ let
     mkdir -p /var/images
     touch /var/images/$HASH.lock
     export NIX_DISK_IMAGE=/var/images/$HASH.img
+    export QEMU_OPTS="-smp cores=2,threads=1,sockets=1"
     timeout ${vm_timeout} ${vm.config.system.build.vm}/bin/run-*-vm
     rm /var/images/$HASH.lock
 
