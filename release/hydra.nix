@@ -14,6 +14,7 @@ let
     releaseTools.makeSourceTarball rec {
       name = "hydra-tarball";
       src = hydraSrc;
+      version = hydraSrc.rev;
 
       buildInputs =
         [ perl libxslt dblatex tetex nukeReferences pkgconfig boehmgc git openssl ];
