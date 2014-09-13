@@ -58,7 +58,7 @@ let
       perlDeps = buildEnv {
         name = "hydra-perl-deps";
         paths = with perlPackages;
-          [ ModulePluggable
+          crossDrvs [ ModulePluggable
             CatalystAuthenticationStoreDBIxClass
             CatalystDispatchTypeRegex
             CatalystPluginAccessLog
