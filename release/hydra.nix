@@ -18,7 +18,7 @@ let
       buildInputs =
         [ perl libxslt dblatex tetex nukeReferences pkgconfig boehmgc git openssl ];
 
-      version = "pre${toString hydraSrc.revCount}-${hydraSrc.gitTag}";
+      version = "${hydraSrc.gitTag}";
 
       preHook = ''
         # TeX needs a writable font cache.
