@@ -11,7 +11,7 @@ let
   tarball =
     with pkgs;
 
-    releaseTools.makeSourceTarball {
+    releaseTools.makeSourceTarball rec {
       name = "hydra-tarball";
       src = hydraSrc;
       version = builtins.readFile "${src}/version";
