@@ -123,7 +123,7 @@ let
     nix = config_nix;
     packageOverrides = pkgs : rec {
       nix.crossDrv = pkgs.lib.overrideDerivation pkgs.nix.crossDrv (oldAttrs: {
-        nativeBuildInputs = [ perl pkgs.pkgconfig ];
+        nativeBuildInputs = with pkgs; [ perl pkgconfig ];
         buildInputs = with pkgs; [ perl.crossDrv curl openssl boehmgc sqlite ];
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
