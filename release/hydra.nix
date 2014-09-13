@@ -6,6 +6,8 @@ let
     sha256 = "18x053x5im7dv86syw1v15729w5ywhrfw7v7psfwfn3fazzj2vcr"; # 8c748a6b5b24c118f24e6e13222ae28ab375bb1f225976f0f4b04f57c85b3bb2
   };
 
+  genAttrs' = pkgs.lib.genAttrs [ "x86_64-linux" "armv7l-linux" ];
+
   tarball =
     with pkgs;
 
