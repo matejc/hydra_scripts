@@ -14,13 +14,12 @@ let
     releaseTools.makeSourceTarball {
       name = "hydra-tarball";
       src = hydraSrc;
-      inherit officialRelease;
       version = builtins.readFile ./version;
 
       buildInputs =
         [ perl libxslt dblatex tetex nukeReferences pkgconfig boehmgc git openssl ];
 
-      versionSuffix = if officialRelease then "" else "pre${toString hydraSrc.revCount}-${hydraSrc.gitTag}";
+      versionSuffix = "pre${toString hydraSrc.revCount}-${hydraSrc.gitTag}";
 
       preHook = ''
         # TeX needs a writable font cache.
