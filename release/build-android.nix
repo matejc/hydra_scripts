@@ -160,7 +160,7 @@ let
       apr = pkgs.lib.overrideDerivation (pkgs.apr) (oldAttrs: {
         configureFlags = [ "ac_cv_file__dev_zero=yes" "ac_cv_func_setpgrp_void=yes" ] ++ oldAttrs.configureFlags;
       });
-      libxslt = pkgs.libxslt.override {
+      libxslt = (pkgs.lib.addPassthru pkgs.libxslt) {
         crossAttrs = {configureFlags = "--with-libxml-prefix=${pkgs.libxml2.crossDrv} --without-python --without-crypto --without-debug --without-mem-debug --without-debugger";};
       };
     };
