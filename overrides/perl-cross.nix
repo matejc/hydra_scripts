@@ -7,7 +7,7 @@ let
   };
 
 in
-  stdenv.mkDrivation  {
+  stdenv.mkDrivation rec {
     name = "perl-5.20.0";
 
     src = fetchurl {
