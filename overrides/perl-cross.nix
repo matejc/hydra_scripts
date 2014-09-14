@@ -15,10 +15,10 @@ in
       sha256 = "00ndpgw4bjing9gy2y6jvs3q46mv2ll6zrxjkhpr12fcdsnji32f";
     };
 
+    buildInputs = [ stdenv.gcc ];
+
     preConfigure = ''
       cp -rv ${perlCrossSrc}/* .
-
-      export CC=${stdenv.gcc}/bin/cc
 
       substituteInPlace ./configure --replace "/bin/bash" "${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
