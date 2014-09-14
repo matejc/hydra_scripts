@@ -21,7 +21,7 @@ in
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
 
-      export CFLAGS=" $CFLAGS -I${glibcCross}/include "
+      export CPATH="${glibcCross}/include"
 
       ./configure ${toString configureFlags}
     '';
@@ -36,7 +36,7 @@ in
     preBuild = ''
       substituteInPlace ./Makefile.config.SH --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./miniperl_top --replace "#!/bin/bash" "#!${stdenv.shell}"
-      unset CFLAGS
+      export CPATH=""
     '';
 
     installPhase = ''
