@@ -36,8 +36,8 @@ in
     configureFlags = [
       "--prefix=$out"
       "--target=${stdenv.cross.config}"
-      ''--host-set-libc="${glibcCross}/lib/libc.so"''
-      ''-Dlibc="${glibcCross}/lib/libc.so"''
+      ''--host-set-ccflags="-I${glibcCross}/include"''
+      ''-Dccflags="-I${glibcCross}/include"''
     ];
 
     preBuild = ''
