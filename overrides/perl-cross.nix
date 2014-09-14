@@ -21,9 +21,9 @@ in
       substituteInPlace ./configure --replace "/bin/bash" "${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
 
-      export CFLAGS=" $CFLAGS -I${stdenv.glibc}/include "
-      export CPPFLAGS=" $CPPFLAGS -I${stdenv.glibc}/include "
-      export NIX_CFLAGS_COMPILE=" $NIX_CFLAGS_COMPILE -I${stdenv.glibc}/include "
+      export CFLAGS=" $CFLAGS -I${glibcCross}/include "
+      export CPPFLAGS=" $CPPFLAGS -I${glibcCross}/include "
+      export NIX_CFLAGS_COMPILE=" $NIX_CFLAGS_COMPILE -I${glibcCross}/include "
 
       ./configure ${toString configureFlags}
     '';
