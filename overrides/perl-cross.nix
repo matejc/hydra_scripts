@@ -36,7 +36,6 @@ in
     preBuild = ''
       substituteInPlace ./Makefile.config.SH --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./miniperl_top --replace "#!/bin/bash" "#!${stdenv.shell}"
-      export CPATH="${stdenv.glibc}/include"
     '';
 
     installPhase = ''
