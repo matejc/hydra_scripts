@@ -21,6 +21,8 @@ in
       substituteInPlace ./configure --replace "/bin/bash" "${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
 
+      export CFLAGS="$CFLAGS -I${stdenv.glibc}/include "
+
       ./configure ${toString configureFlags}
     '';
 
