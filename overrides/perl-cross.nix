@@ -18,11 +18,10 @@ in
     configurePhase = ''
       cp -rv ${perlCrossSrc}/* .
 
-      substituteInPlace ./configure --replace "/bin/bash" "${stdenv.shell}"
-      substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
+      substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
+      substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
 
       export CFLAGS=" $CFLAGS -I${glibcCross}/include "
-      export LDFLAGS=" $LDFLAGS -L${glibcCross}/lib "
 
       ./configure ${toString configureFlags}
     '';
@@ -32,12 +31,11 @@ in
     configureFlags = [
       "--prefix=$out"
       "--target=${stdenv.cross.config}"
-      "--with-libs=memchr"
     ];
 
     preBuild = ''
-      substituteInPlace ./Makefile.config.SH --replace "/bin/bash" "${stdenv.shell}"
-      substituteInPlace ./miniperl_top --replace "/bin/bash" "${stdenv.shell}"
+      substituteInPlace ./Makefile.config.SH --replace "#!/bin/bash" "#!${stdenv.shell}"
+      substituteInPlace ./miniperl_top --replace "#!/bin/bash" "#!${stdenv.shell}"
     '';
 
     installPhase = ''
