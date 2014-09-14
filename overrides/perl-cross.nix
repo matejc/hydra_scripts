@@ -29,7 +29,6 @@ in
 
       ./configure ${toString configureFlags}
 
-      export CPATH=""
     '';
 
     buildInputs = [ gccCrossStageStatic binutils stdenv.gcc which ];
@@ -37,8 +36,8 @@ in
     configureFlags = [
       "--prefix=$out"
       "--target=${stdenv.cross.config}"
-      "--host-set-incpth=${stdenv.glibc}/include"
-      "-Dincpth=${glibcCross}/include"
+      "--host-set-libpth=${glibcCross}/lib"
+      "-Dlibpth=${glibcCross}/lib"
     ];
 
     preBuild = ''
