@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, prefix ? "" }:
+{ stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic }:
 let
   perlCrossSrc = fetchgit {
     url = https://github.com/arsv/perl-cross;
@@ -25,7 +25,7 @@ in
       
       echo "########################################################################"
       ls -lah ${toString stdenv.gcc.gcc}/bin
-      echo $PATH
+      ls -lah ${toString gccCrossStageStatic}/bin
       exit 1
     '';
 
