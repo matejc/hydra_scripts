@@ -166,9 +166,9 @@ let
       apr = pkgs.lib.overrideDerivation (pkgs.apr) (oldAttrs: {
         configureFlags = [ "ac_cv_file__dev_zero=yes" "ac_cv_func_setpgrp_void=yes" ] ++ oldAttrs.configureFlags;
       });
-      libxslt.crossDrv = pkgs.lib.overrideDerivation pkgs.libxslt.crossDrv {
-        configureFlags = "--with-libxml-prefix=${pkgs.libxml2.crossDrv} --without-python --without-crypto --without-debug --without-mem-debug --without-debugger";
-      };
+      #libxslt.crossDrv = pkgs.lib.overrideDerivation pkgs.libxslt.crossDrv {
+      #  configureFlags = "--with-libxml-prefix=${pkgs.libxml2.crossDrv} --without-python --without-crypto --without-debug --without-mem-debug --without-debugger";
+      #};
       tmux = pkgs.lib.overrideDerivation pkgs.tmux (oldAttrs: {
         postInstall = oldAttrs.postInstall + ''
           source "${pkgs.makeWrapper}/nix-support/setup-hook"
