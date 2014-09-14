@@ -18,6 +18,8 @@ in
     preConfigure = ''
       cp -rv ${perlCrossSrc}/* .
 
+      export CC=${stdenv.gcc}/bin/cc
+
       substituteInPlace ./configure --replace "/bin/bash" "${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
     '';
