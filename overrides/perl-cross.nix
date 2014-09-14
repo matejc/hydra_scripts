@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl520, lib, prefix ? "" }:
+{ stdenv, fetchgit, fetchurl, perl520, lib, prefix ? "" }:
 let
   perlCrossSrc = fetchgit {
     url = https://github.com/arsv/perl-cross;
