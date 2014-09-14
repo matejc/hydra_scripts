@@ -8,14 +8,14 @@ let
 
 in
   stdenv.mkDerivation rec {
-    name = "perl-5.20.0";
+    name = "perl-cross";
 
     src = fetchurl {
-      url = "mirror://cpan/src/${name}.tar.gz";
+      url = "mirror://cpan/src/perl-5.20.0.tar.gz";
       sha256 = "00ndpgw4bjing9gy2y6jvs3q46mv2ll6zrxjkhpr12fcdsnji32f";
     };
 
-    preConfigure = ''
+    configurePhase = ''
       cp -rv ${perlCrossSrc}/* .
 
       substituteInPlace ./configure --replace "/bin/bash" "${stdenv.shell}"
@@ -28,11 +28,14 @@ in
 
 
       export LD=${binutils}/bin/ld
+      
+      ./configure ${toString configureFlags}
     '';
 
     buildInputs = [ gccCrossStageStatic binutils stdenv.gcc which ];
 
     configureFlags = [
+      "--prefix=$out"
       "--mode=cross"
       "--target=${stdenv.cross.config}"
       "--target-tools-prefix=${stdenv.cross.config}-"
