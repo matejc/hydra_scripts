@@ -23,7 +23,6 @@ in
       cp -rv ${perlCrossSrc}/* .
 
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
-      substituteInPlace ./configure --replace '. $base/configure_func.sh' 'ccflags="-I${stdenv.glibc}/include" source $base/configure_func.sh'
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
 
       #export CFLAGS="-I${glibcCross}/include"
