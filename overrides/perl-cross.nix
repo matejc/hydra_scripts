@@ -24,11 +24,10 @@ in
       echo "########################################################################"
       ls -lah ${toString binutils}/bin
       ls -lah ${toString stdenv.gcc}/bin
-      ls -lah ${toString stdenv.gcc.gcc}/bin
       ls -lah ${toString gccCrossStageStatic}/bin
     '';
 
-    buildInputs = [ gccCrossStageStatic binutils stdenv.gcc stdenv.gcc.gcc which ];
+    buildInputs = [ gccCrossStageStatic binutils stdenv.gcc which ];
 
     configureFlags = [
       "--target=${stdenv.cross.config}"
