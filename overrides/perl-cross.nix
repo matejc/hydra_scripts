@@ -24,6 +24,7 @@ in
       echo "########################################################################"
       ls -lah ${toString stdenv.gcc.gcc}/bin
       ls -lah ${toString gccCrossStageStatic}/bin
+      ls -lah ${stdenv.gcc.gcc}/bin/gcc
     '';
 
     configureFlags = [
