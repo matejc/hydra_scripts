@@ -25,6 +25,9 @@ in
       ls -lah ${toString binutils}/bin
       ls -lah ${toString stdenv.gcc}/bin
       ls -lah ${toString gccCrossStageStatic}/bin
+
+
+      export LD=${binutils}/bin/ld
     '';
 
     buildInputs = [ gccCrossStageStatic binutils stdenv.gcc which ];
