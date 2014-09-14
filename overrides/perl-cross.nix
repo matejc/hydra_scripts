@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils }:
+{ stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross }:
 let
   perlCrossSrc = fetchgit {
     url = https://github.com/arsv/perl-cross;
@@ -21,7 +21,7 @@ in
       substituteInPlace ./configure --replace "/bin/bash" "${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
 
-      export CFLAGS="$CFLAGS -I${stdenv.glibc}/include "
+      export CFLAGS=" $CFLAGS -I${stdenv.glibc}/include "
 
       ./configure ${toString configureFlags}
     '';
