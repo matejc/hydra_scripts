@@ -22,6 +22,7 @@ in
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
 
       export CFLAGS=" $CFLAGS -I${stdenv.glibc}/include "
+      export NIX_CFLAGS_COMPILE=" $NIX_CFLAGS_COMPILE -I${stdenv.glibc}/include "
 
       ./configure ${toString configureFlags}
     '';
@@ -30,10 +31,7 @@ in
 
     configureFlags = [
       "--prefix=$out"
-      "--mode=cross"
       "--target=${stdenv.cross.config}"
-      "--with-cc=${stdenv.cross.config}-gcc"
-      "--with-cpp=${stdenv.cross.config}-g++"
     ];
 
     installPhase = ''
