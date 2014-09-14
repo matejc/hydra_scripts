@@ -25,7 +25,7 @@ in
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
 
-      export CFLAGS="-I${glibcCross}/include"
+      #export CFLAGS="-I${glibcCross}/include"
 
       ./configure ${toString configureFlags}
 
