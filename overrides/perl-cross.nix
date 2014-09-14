@@ -36,8 +36,7 @@ in
       "--prefix=$out"
       "--target=${stdenv.cross.config}"
       "--host-set-incpth=${glibcCross}/include"
-      "-Dincpth=${glibcCross}/include"
-      "-Dlibpth=${glibcCross}/lib"
+      "-Dincpth=${stdenv.glibc}/include"
     ];
 
     preBuild = ''
