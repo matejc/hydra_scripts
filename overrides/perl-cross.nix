@@ -19,4 +19,4 @@ in
       "-Dlocincpth=${prefix}/usr/include"
       "-Dloclibpth=${prefix}/usr/lib"
     ];
-  });
+  })
