@@ -7,10 +7,18 @@ let
   };
 
 in
-  lib.overrideDerivation perl520 (oldAttrs: {
+  stdenv.mkDrivation  {
+    name = "perl-5.20.0";
+
+    src = fetchurl {
+      url = "mirror://cpan/src/${name}.tar.gz";
+      sha256 = "00ndpgw4bjing9gy2y6jvs3q46mv2ll6zrxjkhpr12fcdsnji32f";
+    };
+
     preConfigure = ''
       cp -rv ${perlCrossSrc}/* .
-    '' + oldAttrs.preConfigure;
+    '';
+
     configureFlags = [
       "--target=${stdenv.cross.config}"
       "-Uinstallusrbinperl"
@@ -18,5 +26,11 @@ in
       "-Duseshrplib"
       "-Dlocincpth=${prefix}/usr/include"
       "-Dloclibpth=${prefix}/usr/lib"
+      "-Dman1dir=$out/share/man/man1"
+      "-Dman3dir=$out/share/man/man3"
     ];
-  })
+
+    installPhase = ''
+      make DESTDIR=$out install
+    '';
+  }
