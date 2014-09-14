@@ -33,6 +33,7 @@ in
     buildInputs = [ gccCrossStageStatic binutils stdenv.gcc which ];
 
     configureFlags = [
+      "--host-define-ld" "--host-set-ld=${binutils}/bin/ld"
       "--target=${stdenv.cross.config}"
       "--target-tools-prefix=${stdenv.cross.config}-"
       "--with-cc=${stdenv.cross.config}-gcc"
