@@ -35,8 +35,8 @@ in
     configureFlags = [
       "--prefix=$out"
       "--target=${stdenv.cross.config}"
-      "--host-set-incpth=${glibcCross}/include"
-      "-Dincpth=${stdenv.glibc}/include"
+      "--host-set-incpth=${stdenv.glibc}/include"
+      "-Dincpth=${glibcCross}/include"
     ];
 
     preBuild = ''
