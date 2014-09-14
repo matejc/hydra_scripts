@@ -22,6 +22,11 @@ in
 
       substituteInPlace ./configure --replace "/bin/bash" "${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
+      
+      echo "########################################################################"
+      ls -lah ${stdenv.gcc}/bin
+      ls -lah ${stdenv.cross.gcc}/bin
+      exit 1
     '';
 
     configureFlags = [
