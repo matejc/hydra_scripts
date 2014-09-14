@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic }:
+{ stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which }:
 let
   perlCrossSrc = fetchgit {
     url = https://github.com/arsv/perl-cross;
@@ -27,7 +27,7 @@ in
       ls -lah ${stdenv.gcc.gcc}/bin/gcc
     '';
 
-    buildInputs = [ gccCrossStageStatic stdenv.gcc.gcc ];
+    buildInputs = [ gccCrossStageStatic stdenv.gcc.gcc which ];
 
     configureFlags = [
       "--target=${stdenv.cross.config}"
