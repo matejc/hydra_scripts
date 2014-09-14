@@ -27,10 +27,12 @@ in
       ls -lah ${stdenv.gcc.gcc}/bin/gcc
     '';
 
+    buildInputs = [ gccCrossStageStatic stdenv.gcc.gcc ];
+
     configureFlags = [
       "--target=${stdenv.cross.config}"
-      "--with-cc=${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc"
-      "--host-cc=${stdenv.gcc.gcc}/bin/gcc"
+      "--with-cc=${stdenv.cross.config}-gcc"
+      "--host-cc=gcc"
       "-Uinstallusrbinperl"
       "-Dinstallstyle=lib/perl5"
       "-Duseshrplib"
