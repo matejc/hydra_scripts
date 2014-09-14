@@ -33,18 +33,11 @@ in
     buildInputs = [ gccCrossStageStatic binutils stdenv.gcc which ];
 
     configureFlags = [
-      "--host-define-ld" "--host-set-ld=${binutils}/bin/ld"
+      "--mode=cross"
       "--target=${stdenv.cross.config}"
       "--target-tools-prefix=${stdenv.cross.config}-"
       "--with-cc=${stdenv.cross.config}-gcc"
       "--host-cc=gcc"
-      "-Uinstallusrbinperl"
-      "-Dinstallstyle=lib/perl5"
-      "-Duseshrplib"
-      "-Dlocincpth=${prefix}/usr/include"
-      "-Dloclibpth=${prefix}/usr/lib"
-      "-Dman1dir=$out/share/man/man1"
-      "-Dman3dir=$out/share/man/man3"
     ];
 
     installPhase = ''
