@@ -22,12 +22,13 @@ in
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
       
       echo "########################################################################"
+      ls -lah ${toString stdenv}/bin
       ls -lah ${toString stdenv.gcc}/bin
       ls -lah ${toString stdenv.gcc.gcc}/bin
       ls -lah ${toString gccCrossStageStatic}/bin
     '';
 
-    buildInputs = [ gccCrossStageStatic stdenv.gcc.gcc which ];
+    buildInputs = [ gccCrossStageStatic stdenv.gcc stdenv.gcc.gcc which ];
 
     configureFlags = [
       "--target=${stdenv.cross.config}"
