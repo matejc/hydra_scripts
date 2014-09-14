@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross }:
+{ pkgs, stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross }:
 let
   perlCrossSrc = fetchgit {
     url = https://github.com/arsv/perl-cross;
@@ -14,6 +14,10 @@ in
       url = "mirror://cpan/src/perl-5.20.0.tar.gz";
       sha256 = "00ndpgw4bjing9gy2y6jvs3q46mv2ll6zrxjkhpr12fcdsnji32f";
     };
+
+    patches = [
+      "${pkgs.path}/pkgs/development/interpreters/perl/5.20/no-sys-dirs.patch"
+    ];
 
     configurePhase = ''
       cp -rv ${perlCrossSrc}/* .
