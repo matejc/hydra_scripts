@@ -122,7 +122,7 @@ let
   config = {
     nix = config_nix;
     packageOverrides = pkgs : rec {
-      perlCross = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix; };
+      perlCross = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; };
       nix.crossDrv = pkgs.lib.overrideDerivation pkgs.nix.crossDrv (oldAttrs: {
         nativeBuildInputs = with pkgs; [ perl pkgconfig ];
         buildInputs = with pkgs; [ perlCross curl openssl boehmgc sqlite ];
