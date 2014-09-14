@@ -15,8 +15,6 @@ in
       sha256 = "00ndpgw4bjing9gy2y6jvs3q46mv2ll6zrxjkhpr12fcdsnji32f";
     };
 
-    configureScript = " ./configure";
-
     preConfigure = ''
       cp -rv ${perlCrossSrc}/* .
 
