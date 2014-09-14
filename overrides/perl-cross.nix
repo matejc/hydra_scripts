@@ -22,9 +22,9 @@ in
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
       
       echo "########################################################################"
+      ls -lah ${toString stdenv.gcc}/bin
       ls -lah ${toString stdenv.gcc.gcc}/bin
       ls -lah ${toString gccCrossStageStatic}/bin
-      ls -lah ${stdenv.gcc.gcc}/bin/gcc
     '';
 
     buildInputs = [ gccCrossStageStatic stdenv.gcc.gcc which ];
