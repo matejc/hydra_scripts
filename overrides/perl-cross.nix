@@ -22,6 +22,7 @@ in
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
 
       export CFLAGS=" $CFLAGS -I${glibcCross}/include "
+      export LDFLAGS=" $LDFLAGS -L${glibcCross}/lib64 "
 
       ./configure ${toString configureFlags}
     '';
