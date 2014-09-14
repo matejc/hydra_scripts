@@ -34,6 +34,7 @@ in
 
     configureFlags = [
       "--target=${stdenv.cross.config}"
+      "--target-tools-prefix=${stdenv.cross.config}-"
       "--with-cc=${stdenv.cross.config}-gcc"
       "--host-cc=gcc"
       "-Uinstallusrbinperl"
