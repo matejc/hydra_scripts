@@ -24,8 +24,8 @@ in
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
       
       echo "########################################################################"
-      ls -lah ${toString stdenv.gcc}/bin
-      ls -lah ${toString stdenv.cross.gcc}/bin
+      ls -lah ${toString stdenv.gcc.gcc}/bin
+      echo $PATH
       exit 1
     '';
 
