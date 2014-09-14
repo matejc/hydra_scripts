@@ -32,6 +32,7 @@ in
     configureFlags = [
       "--prefix=$out"
       "--target=${stdenv.cross.config}"
+      "--with-libs=memchr"
     ];
 
     preBuild = ''
