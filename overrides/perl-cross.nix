@@ -35,8 +35,8 @@ in
     configureFlags = [
       "--prefix=$out"
       "--target=${stdenv.cross.config}"
-      "-Dlocincpth=${stdenv.gcc.libc}/include"
-      "-Dloclibpth=${stdenv.gcc.libc}/lib"
+      "-Dlocincpth=${glibcCross}/include"
+      "-Dloclibpth=${glibcCross}/lib"
     ];
 
     preBuild = ''
