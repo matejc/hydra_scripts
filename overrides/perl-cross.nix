@@ -15,8 +15,6 @@ in
       sha256 = "00ndpgw4bjing9gy2y6jvs3q46mv2ll6zrxjkhpr12fcdsnji32f";
     };
 
-    buildInputs = [ stdenv.gcc.gcc gccCrossStageStatic ];
-
     preConfigure = ''
       cp -rv ${perlCrossSrc}/* .
 
@@ -30,7 +28,8 @@ in
 
     configureFlags = [
       "--target=${stdenv.cross.config}"
-      "--target-tools-prefix=${stdenv.cross.config}-"
+      "--with-cc=${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc"
+      "--host-cc=${stdenv.gcc.gcc}/bin/gcc"
       "-Uinstallusrbinperl"
       "-Dinstallstyle=lib/perl5"
       "-Duseshrplib"
