@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl ? perl520, lib, prefix ? "" }:
+{ stdenv, fetchgit, perl520, lib, prefix ? "" }:
 let
   perlCrossSrc = fetchgit {
     url = https://github.com/arsv/perl-cross;
@@ -7,7 +7,7 @@ let
   };
 
 in
-  lib.overrideDerivation perl (oldAttrs: {
+  lib.overrideDerivation perl520 (oldAttrs: {
     preConfigure = ''
       cp -rv ${perlCrossSrc}/* .
     '' + oldAttrs.preConfigure;
