@@ -20,15 +20,7 @@ in
 
       substituteInPlace ./configure --replace "/bin/bash" "${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
-      
-      echo "########################################################################"
-      ls -lah ${toString binutils}/bin
-      ls -lah ${toString stdenv.gcc}/bin
-      ls -lah ${toString gccCrossStageStatic}/bin
 
-
-      export LD=${binutils}/bin/ld
-      
       ./configure ${toString configureFlags}
     '';
 
@@ -38,9 +30,8 @@ in
       "--prefix=$out"
       "--mode=cross"
       "--target=${stdenv.cross.config}"
-      "--target-tools-prefix=${stdenv.cross.config}-"
       "--with-cc=${stdenv.cross.config}-gcc"
-      "--host-cc=gcc"
+      "--with-cpp=${stdenv.cross.config}-g++"
     ];
 
     installPhase = ''
