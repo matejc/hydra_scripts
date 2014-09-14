@@ -22,8 +22,6 @@ in
       substituteInPlace ./cnf/configure --replace "/bin/bash" "${stdenv.shell}"
 
       export CFLAGS=" $CFLAGS -I${glibcCross}/include "
-      export CPPFLAGS=" $CPPFLAGS -I${glibcCross}/include "
-      export NIX_CFLAGS_COMPILE=" $NIX_CFLAGS_COMPILE -I${glibcCross}/include "
 
       ./configure ${toString configureFlags}
     '';
@@ -34,6 +32,10 @@ in
       "--prefix=$out"
       "--target=${stdenv.cross.config}"
     ];
+
+    preBuild = ''
+      substituteInPlace ./Makefile.config.SH --replace "/bin/bash" "${stdenv.shell}"
+    '';
 
     installPhase = ''
       make DESTDIR=$out install
