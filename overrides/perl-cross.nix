@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross }:
+{ pkgs, stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross, file }:
 let
   perlCrossSrc = fetchgit {
     url = https://github.com/arsv/perl-cross;
@@ -23,7 +23,8 @@ in
       cp -rv ${perlCrossSrc}/* .
 
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
-      substituteInPlace ./cnf/configure__f.sh --replace 'run $cc $ccflags -o try$_e try.c $* >> $cfglog 2>&1' 'run $cc $ccflags -o try$_e try.c $* | tee -a $cfglog 2>&1'
+      substituteInPlace ./cnf/configure \
+        --replace '. $base/configure_func.sh' '. $base/configure_func.sh; cat $cfglog'
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
 
       #export CFLAGS="-I${glibcCross}/include"
