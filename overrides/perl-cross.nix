@@ -25,15 +25,18 @@ in
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       
-      export WRAPGCC=`pwd`/bin/gcc
-      mkdir -p `pwd`/bin
-      makeWrapper ${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc $WRAPGCC \
-        --set CPATH "${glibcCross}/include"
+      export GCCBIN=`pwd`/bin
+      mkdir -p $GCCBIN
+      for i in ${gccCrossStageStatic}/bin/*; do
+          makeWrapper $i $GCCBIN/`basename $i` \
+            --set CPATH "${glibcCross}/include"
+      done
+      export PATH="$GCCBIN:$PATH"
 
-      ./configure ${toString configureFlags} --with-cc=$WRAPGCC
+      ./configure ${toString configureFlags}
     '';
 
-    buildInputs = [ gccCrossStageStatic binutils stdenv.gcc which makeWrapper ];
+    buildInputs = [ binutils stdenv.gcc which makeWrapper ];
 
     configureFlags = [
       "--prefix=$out"
