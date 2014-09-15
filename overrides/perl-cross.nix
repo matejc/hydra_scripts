@@ -42,14 +42,12 @@ in
       substituteInPlace ./Makefile.config.SH --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./miniperl_top --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -B${glibcCross}/lib'
-
-      #substituteInPlace ./miniperl_top --replace '-I$top/lib\' '-I$top/lib -I${glibcCross}/include\'
       substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${glibcCross}/include"; exec $top/miniperl'
-      export CPATH="${glibcCross}/include"
+
       echo "#####################################"
-      ${pkgs.busybox}/bin/find .
+      #${pkgs.busybox}/bin/find .
       echo "#####################################"
-      cat ./miniperl_top
+      ${pkgs.busybox}/bin/grep -Iirn '../../lib/auto/B/B.so' .
       echo "#####################################"
     '';
 
