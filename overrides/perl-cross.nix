@@ -47,7 +47,7 @@ in
       echo "#####################################"
       #${pkgs.busybox}/bin/find .
       echo "#####################################"
-      ${pkgs.busybox}/bin/grep -Iirn '../../lib/auto/B/B.so' .
+      ${pkgs.busybox}/bin/grep -Iirn 'lib/auto/B/B.so' .
       echo "#####################################"
     '';
 
