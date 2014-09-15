@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross, file }:
+{ pkgs, stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross, file,  makeWrapper }:
 let
   perlCrossSrc = fetchgit {
     url = https://github.com/arsv/perl-cross;
@@ -24,12 +24,16 @@ in
 
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
+      
+      export WRAPGCC=`pwd`/bin/gcc
+      mkdir -p `pwd`/bin
+      makeWrapper ${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc $WRAPGCC \
+        --set CPATH "${glibcCross}/include"
 
-      ./configure ${toString configureFlags}
-
+      ./configure ${toString configureFlags} --with-cc=$WRAPGCC
     '';
 
-    buildInputs = [ gccCrossStageStatic binutils stdenv.gcc which ];
+    buildInputs = [ gccCrossStageStatic binutils stdenv.gcc which makeWrapper ];
 
     configureFlags = [
       "--prefix=$out"
