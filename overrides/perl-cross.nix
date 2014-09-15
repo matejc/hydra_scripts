@@ -45,6 +45,7 @@ in
 
       #substituteInPlace ./miniperl_top --replace '-I$top/lib\' '-I$top/lib -I${glibcCross}/include\'
       substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${glibcCross}/include"; exec $top/miniperl'
+      export CPATH="${glibcCross}/include"
       echo "#####################################"
       ${pkgs.busybox}/bin/find .
       echo "#####################################"
