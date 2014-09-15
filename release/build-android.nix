@@ -124,9 +124,10 @@ let
     packageOverrides = pkgs : rec {
       perlCross = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; };
       nix.crossDrv = pkgs.lib.overrideDerivation pkgs.nix.crossDrv (oldAttrs: {
-        postInstall = ''
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|${pkgs.perl}|${perlCross}|g' {} \;
-        '';
+        perl = perlCross;
+        #postInstall = ''
+        #  ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|${pkgs.perl}|${perlCross}|g' {} \;
+        #'';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
       python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
