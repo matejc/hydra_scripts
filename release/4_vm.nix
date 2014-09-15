@@ -50,10 +50,10 @@ let
       INCLUDE_PATHS=`nix-store -qR ./result ${pkgs.lib.optionalString (tarInclude != "") "| grep ${tarInclude}"}`
       INCLUDE_PATHS=`echo $INCLUDE_PATHS | xargs find`
       RESULT_PATHS=`find -L ${prefixDir}/result | xargs realpath`
-      MERGED_PATHS=`echo "$INCLUDE_PATHS\n$RESULT_PATHS" | uniq`
+      echo "$INCLUDE_PATHS\n$RESULT_PATHS" | uniq > ./merged_paths
       echo "$INCLUDE_PATHS\n$RESULT_PATHS" | wc -l
       echo "$MERGED_PATHS" | wc -l
-      ${gnutar}/bin/tar cvf /tmp/xchg/out.tar $MERGED_PATHS --mode=u+rw
+      ${gnutar}/bin/tar cvf /tmp/xchg/out.tar --files-from ./merged_paths --mode=u+rw
       ${bzip2}/bin/bzip2 /tmp/xchg/out.tar
     else
       echo "BUILD FAILED!"
