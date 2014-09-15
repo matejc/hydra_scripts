@@ -44,7 +44,7 @@ in
       substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -B${glibcCross}/lib'
 
       #substituteInPlace ./miniperl_top --replace '-I$top/lib\' '-I$top/lib -I${glibcCross}/include\'
-      substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${stdenv.glibc}/include"; exec $top/miniperl'
+      substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${glibcCross}/include"; exec $top/miniperl'
       echo "#####################################"
       ${pkgs.busybox}/bin/find .
       echo "#####################################"
