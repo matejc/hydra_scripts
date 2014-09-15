@@ -44,19 +44,13 @@ in
       substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -B${glibcCross}/lib'
       substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${glibcCross}/include"; exec $top/miniperl'
       substituteInPlace ./x2p/Makefile --replace '$(LDFLAGS)' '-B${glibcCross}/lib'
-
-      set -e
-      function readlog {
-        echo "######################### LOG START"
-        tail ./config.log*
-        echo "######################### TAILEND"
-        cat ./config.log*
-        echo "######################### LOG END"
-      }
-      trap readlog EXIT
     '';
 
-    doCheck = true;
+    checkPhase = ''
+      echo "######################################################## TEST BEGIN"
+      make test
+      echo "######################################################## TEST END"
+    '';
 
     installPhase = ''
       make DESTDIR=$out install
