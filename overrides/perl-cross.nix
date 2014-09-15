@@ -42,6 +42,8 @@ in
       substituteInPlace ./Makefile.config.SH --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./miniperl_top --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -B${glibcCross}/lib'
+      
+      ${pkgs.busybox}/bin/find .
     '';
 
     installPhase = ''
