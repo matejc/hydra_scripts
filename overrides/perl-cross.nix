@@ -60,8 +60,7 @@ in
       substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -B${glibcCross}/lib'
       substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${glibcCross}/include"; exec $top/miniperl'
 
-      echo >> ./Makefile.config
-      echo 'export LDFLAGS=" -B${glibcCross}/lib $LDFLAGS "' >> ./Makefile.config
+      substituteInPlace ./x2p/Makefile --replace '$(LDFLAGS)' '-B${glibcCross}/lib'
 
       set -e
       function readlog {
