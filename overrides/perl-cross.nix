@@ -44,9 +44,9 @@ in
       substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -B${glibcCross}/lib'
       
       echo "#####################################"
-      cat ./xconfig.sh
+      ${pkgs.busybox}/bin/find -D 3 .
       echo "#####################################"
-      ${pkgs.busybox}/bin/find . -iname "makefile*"
+      cat ./miniperl_top
       echo "#####################################"
     '';
 
