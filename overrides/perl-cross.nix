@@ -49,7 +49,6 @@ in
             --prefix CPATH ":" "${stdenv.glibc}/include" \
             --prefix LIBRARY_PATH ":" "${stdenv.glibc}/lib" \
             --prefix LD_LIBRARY_PATH ":" "${stdenv.glibc}/lib" \
-            --set LDFLAGS " -L${stdenv.glibc}/lib $LDFLAGS "
       done
       export PATH="$GCCBIN:$PATH"
 
