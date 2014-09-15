@@ -124,7 +124,7 @@ let
     packageOverrides = pkgs : rec {
       perlCross = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; };
       nix.crossDrv = pkgs.lib.overrideDerivation pkgs.nix.crossDrv (oldAttrs: {
-        buildInputs = oldAttrs.buildInputs ++ perlCross;
+        buildInputs = oldAttrs.buildInputs ++ [perlCross];
         postInstall = ''
           ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|${pkgs.perl}|${perlCross}|g' {} \;
         '';
