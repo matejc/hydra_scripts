@@ -126,7 +126,7 @@ let
       nix.crossDrv = pkgs.lib.overrideDerivation pkgs.nix.crossDrv (oldAttrs: {
         buildInputs = oldAttrs.buildInputs ++ [perlCross];
         postInstall = ''
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|${pkgs.perl}|${perlCross}|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl}|${perlCross}|g' {} \;
         '';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
