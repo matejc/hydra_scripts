@@ -40,9 +40,7 @@ in
           makeWrapper $i $GCCBIN/`basename $i` \
             --prefix CPATH ":" "${glibcCross}/include" \
             --prefix LIBRARY_PATH ":" "${glibcCross}/lib" \
-            --prefix LD_LIBRARY_PATH ":" "${glibcCross}/lib" \
-            --set CCFLAGS " -I${glibcCross}/include -B${glibcCross}/lib $CCFLAGS " \
-            --set LDFLAGS " -L${glibcCross}/lib $LDFLAGS "
+            --prefix LD_LIBRARY_PATH ":" "${glibcCross}/lib"
       done
       for i in ${stdenv.gcc}/bin/*; do
           makeWrapper $i $GCCBIN/`basename $i` \
