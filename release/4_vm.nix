@@ -48,7 +48,6 @@ let
     if [[ "0" -eq "$EXITSTATUSCODE" ]]; then
       test -L ./result && cp -Pv ./result ${prefixDir}
       INCLUDE_PATHS=`nix-store -qR ./result ${pkgs.lib.optionalString (tarInclude != "") "| grep ${tarInclude}"}`
-      echo $INCLUDE_PATHS
       ${gnutar}/bin/tar cvf /tmp/xchg/out.tar "${prefixDir}/result" $INCLUDE_PATHS --mode=u+rw
       ${bzip2}/bin/bzip2 /tmp/xchg/out.tar
     else
