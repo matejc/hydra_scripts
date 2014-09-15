@@ -74,6 +74,8 @@ in
       set -e
       function readlog {
         echo "######################### LOG START"
+        tail ./config.log*
+        echo "######################### TAILEND"
         cat ./config.log*
         echo "######################### LOG END"
       }
