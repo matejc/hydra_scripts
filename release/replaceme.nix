@@ -16,7 +16,7 @@ let
   req_url=`echo $url | busybox sed "s-/[^/]\+-/$ipaddr-"`
   busybox wget $req_url -O ${prefix}/tmp/out.tar.xx
   rm -rf ${prefix}/store || true
-  rm ${prefix}/result || true
+  rm -rf ${prefix}/result || true
   busybox tar xvf ${prefix}/tmp/out.tar.xx -C /
   '';
 
