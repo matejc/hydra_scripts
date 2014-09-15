@@ -29,7 +29,8 @@ in
       mkdir -p $GCCBIN
       for i in ${gccCrossStageStatic}/bin/*; do
           makeWrapper $i $GCCBIN/`basename $i` \
-            --set CPATH "${glibcCross}/include"
+            --set CPATH "${glibcCross}/include" \
+            --set LIBRARY_PATH "${glibcCross}/lib"
       done
       export PATH="$GCCBIN:$PATH"
 
