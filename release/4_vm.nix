@@ -50,7 +50,7 @@ let
       INCLUDE_PATHS=`nix-store -qR ./result ${pkgs.lib.optionalString (tarInclude != "") "| grep ${tarInclude}"}`
       INCLUDE_PATHS=`echo $INCLUDE_PATHS | xargs find`
       RESULT_PATHS=`find -L ${prefixDir}/result | xargs realpath`
-      echo -e "$INCLUDE_PATHS\n$RESULT_PATHS" | uniq > ./merged_paths
+      echo -e "$INCLUDE_PATHS\n$RESULT_PATHS" | sort | uniq > ./merged_paths
 
       echo -e "$INCLUDE_PATHS\n$RESULT_PATHS" | wc -l
       cat ./merged_paths | wc -l
