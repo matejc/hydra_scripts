@@ -25,9 +25,6 @@ in
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
 
-
-
-
       export GCCBIN=`pwd`/bin
       mkdir -p $GCCBIN
       for i in ${gccCrossStageStatic}/bin/*; do
@@ -42,12 +39,12 @@ in
             --prefix LIBRARY_PATH ":" "${stdenv.glibc}/lib" \
             --prefix LD_LIBRARY_PATH ":" "${stdenv.glibc}/lib"
       done
-      export PATH="$GCCBIN:$PATH"
+      #export PATH="$GCCBIN:$PATH"
 
       ./configure ${toString configureFlags}
     '';
 
-    buildInputs = [ which makeWrapper ];
+    buildInputs = [ which makeWrapper binutils stdenv.gcc gccCrossStageStatic ];
 
     configureFlags = [
       "--prefix=$out"
@@ -55,7 +52,6 @@ in
       ''--host-set-ccflags="-I${stdenv.glibc}/include"''
       ''-Dccflags="-I${glibcCross}/include -B${glibcCross}/lib"''
       ''-Dlddlflags="-shared -I${glibcCross}/include -B${glibcCross}/lib "''
-      "--with-objdump=${binutils}/bin/objdump"
     ];
 
     preBuild = ''
@@ -64,14 +60,6 @@ in
       substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -B${glibcCross}/lib'
       substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${glibcCross}/include"; exec $top/miniperl'
 
-      echo "#####################################"
-      ${pkgs.busybox}/bin/find $GCCBIN
-      echo "#####################################"
-      ${pkgs.busybox}/bin/find ${stdenv.gcc}/bin
-      echo "#####################################"
-      ${pkgs.busybox}/bin/find ${gccCrossStageStatic}/bin
-      echo "#####################################"
-      
       set -e
       function readlog {
         echo "######################### LOG START"
