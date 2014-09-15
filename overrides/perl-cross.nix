@@ -46,8 +46,7 @@ in
       substituteInPlace ./x2p/Makefile --replace '$(LDFLAGS)' '-B${glibcCross}/lib'
     '';
 
-    doCheck = true;
-    checkPhase = ''
+    postBuild = ''
       echo "######################################################## TEST BEGIN"
       make test
       echo "######################################################## TEST END"
