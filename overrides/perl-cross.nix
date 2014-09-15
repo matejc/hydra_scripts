@@ -40,8 +40,7 @@ in
       "--prefix=$out"
       "--target=${stdenv.cross.config}"
       ''--host-set-ccflags="-I${stdenv.glibc}/include"''
-      ''-Dccflags="-I${glibcCross}/include"''
-      ''-Dldflags="-L${glibcCross}/lib"''
+      ''-Dccflags="-I${glibcCross}/include -B${glibcCross}/lib"''
     ];
 
     preBuild = ''
