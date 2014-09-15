@@ -28,6 +28,7 @@ in
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
 
       #export CFLAGS="-I${glibcCross}/include"
+      ${pkgs.busybox}/bin/find ${glibcCross}
 
       ./configure ${toString configureFlags}
 
