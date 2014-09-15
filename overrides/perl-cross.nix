@@ -8,7 +8,7 @@ let
 
 in
   stdenv.mkDerivation rec {
-    name = "perl-cross";
+    name = "perl-cross-${stdenv.cross.config}";
 
     src = fetchurl {
       url = "mirror://cpan/src/perl-5.20.0.tar.gz";
