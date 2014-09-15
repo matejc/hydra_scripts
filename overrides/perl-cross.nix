@@ -46,12 +46,6 @@ in
       substituteInPlace ./x2p/Makefile --replace '$(LDFLAGS)' '-B${glibcCross}/lib'
     '';
 
-    postBuild = ''
-      echo "######################################################## TEST BEGIN"
-      make test
-      echo "######################################################## TEST END"
-    '';
-
     installPhase = ''
       make DESTDIR=$out install
     '';
