@@ -42,7 +42,9 @@ in
       substituteInPlace ./Makefile.config.SH --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./miniperl_top --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -B${glibcCross}/lib'
-      
+
+      #substituteInPlace ./miniperl_top --replace '-I$top/lib\' '-I$top/lib -I\'
+      substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'exec $top/miniperl --help; exit 1; exec $top/miniperl'
       echo "#####################################"
       ${pkgs.busybox}/bin/find .
       echo "#####################################"
