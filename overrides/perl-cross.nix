@@ -31,7 +31,7 @@ in
           makeWrapper $i $GCCBIN/`basename $i` \
             --set CPATH "${glibcCross}/include"
       done
-      export PATH="$GCCBIN:$PATH"
+      export PATH="$GCCBIN:${binutils}/bin:$PATH"
 
       ./configure ${toString configureFlags}
     '';
