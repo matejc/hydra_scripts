@@ -24,7 +24,16 @@ in
 
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
-      
+
+      set -e
+      function cleanup {
+        echo "######################### CLEANUP START"
+        cat ./config.log*
+        echo "######################### CLEANUP END"
+      }
+      trap cleanup EXIT
+
+
       export GCCBIN=`pwd`/bin
       mkdir -p $GCCBIN
       for i in ${gccCrossStageStatic}/bin/*; do
