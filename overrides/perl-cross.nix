@@ -31,7 +31,7 @@ in
           makeWrapper $i $GCCBIN/`basename $i` \
             --set CPATH "${glibcCross}/include"
       done
-      export PATH="$GCCBIN:${binutils}/bin:$PATH"
+      export PATH="$GCCBIN:$PATH"
 
       ./configure ${toString configureFlags}
     '';
@@ -43,6 +43,7 @@ in
       "--target=${stdenv.cross.config}"
       ''--host-set-ccflags="-I${stdenv.glibc}/include"''
       ''-Dccflags="-I${glibcCross}/include -B${glibcCross}/lib"''
+      "--with-objdump=${binutils}/bin/objdump"
     ];
 
     preBuild = ''
