@@ -25,22 +25,6 @@ in
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
 
-      export GCCBIN=`pwd`/bin
-      mkdir -p $GCCBIN
-      for i in ${gccCrossStageStatic}/bin/*; do
-          makeWrapper $i $GCCBIN/`basename $i` \
-            --prefix CPATH ":" "${glibcCross}/include" \
-            --prefix LIBRARY_PATH ":" "${glibcCross}/lib" \
-            --prefix LD_LIBRARY_PATH ":" "${glibcCross}/lib"
-      done
-      for i in ${stdenv.gcc}/bin/*; do
-          makeWrapper $i $GCCBIN/`basename $i` \
-            --prefix CPATH ":" "${stdenv.glibc}/include" \
-            --prefix LIBRARY_PATH ":" "${stdenv.glibc}/lib" \
-            --prefix LD_LIBRARY_PATH ":" "${stdenv.glibc}/lib"
-      done
-      #export PATH="$GCCBIN:$PATH"
-
       ./configure ${toString configureFlags}
     '';
 
@@ -59,7 +43,6 @@ in
       substituteInPlace ./miniperl_top --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -B${glibcCross}/lib'
       substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${glibcCross}/include"; exec $top/miniperl'
-
       substituteInPlace ./x2p/Makefile --replace '$(LDFLAGS)' '-B${glibcCross}/lib'
 
       set -e
@@ -72,6 +55,8 @@ in
       }
       trap readlog EXIT
     '';
+
+    doCheck = true;
 
     installPhase = ''
       make DESTDIR=$out install
