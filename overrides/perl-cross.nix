@@ -29,8 +29,10 @@ in
       mkdir -p $GCCBIN
       for i in ${gccCrossStageStatic}/bin/*; do
           makeWrapper $i $GCCBIN/`basename $i` \
-            --set CPATH "${glibcCross}/include" \
-            --set LIBRARY_PATH "${glibcCross}/lib"
+            --prefix CPATH ":" "${glibcCross}/include" \
+            --prefix LIBRARY_PATH ":" "${glibcCross}/lib" \
+            --prefix LD_LIBRARY_PATH ":" "${glibcCross}/lib" \
+            --set LDFLAGS " -L${glibcCross}/lib $LDFLAGS "
       done
       export PATH="$GCCBIN:$PATH"
 
@@ -54,8 +56,9 @@ in
       substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${glibcCross}/include"; exec $top/miniperl'
 
       echo "#####################################"
-      #${pkgs.busybox}/bin/find .
+      ${pkgs.busybox}/bin/find ./bin
       echo "#####################################"
+      ${pkgs.busybox}/bin/find ./
       echo "#####################################"
     '';
 
