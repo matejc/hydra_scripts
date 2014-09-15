@@ -39,14 +39,14 @@ in
     configureFlags = [
       "--prefix=$out"
       "--target=${stdenv.cross.config}"
-      ''--host-set-ccflags="-I${stdenv.glibc}/include"''
+      ''--host-ccflags="-I${stdenv.glibc}/include"''
       ''-Dccflags="-I${glibcCross}/include -B${glibcCross}/lib"''
     ];
 
     preBuild = ''
       substituteInPlace ./Makefile.config.SH --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./miniperl_top --replace "#!/bin/bash" "#!${stdenv.shell}"
-      substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -I${stdenv.glibc}/include -B${glibcCross}/lib'
+      substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -B${glibcCross}/lib'
     '';
 
     installPhase = ''
