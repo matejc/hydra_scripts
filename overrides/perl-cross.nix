@@ -32,6 +32,7 @@ in
             --prefix CPATH ":" "${glibcCross}/include" \
             --prefix LIBRARY_PATH ":" "${glibcCross}/lib" \
             --prefix LD_LIBRARY_PATH ":" "${glibcCross}/lib" \
+            --set CCFLAGS " -I${glibcCross}/include $CCFLAGS " \
             --set LDFLAGS " -L${glibcCross}/lib $LDFLAGS "
       done
       export PATH="$GCCBIN:$PATH"
