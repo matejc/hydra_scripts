@@ -25,13 +25,7 @@ in
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
 
-      set -e
-      function readlog {
-        echo "######################### LOG START"
-        cat ./config.log*
-        echo "######################### LOG END"
-      }
-      trap readlog EXIT
+
 
 
       export GCCBIN=`pwd`/bin
@@ -76,6 +70,14 @@ in
       echo "#####################################"
       ${pkgs.busybox}/bin/find ${gccCrossStageStatic}/bin
       echo "#####################################"
+      
+      set -e
+      function readlog {
+        echo "######################### LOG START"
+        cat ./config.log*
+        echo "######################### LOG END"
+      }
+      trap readlog EXIT
     '';
 
     installPhase = ''
