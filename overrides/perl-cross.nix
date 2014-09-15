@@ -48,7 +48,7 @@ in
           makeWrapper $i $GCCBIN/`basename $i` \
             --prefix CPATH ":" "${stdenv.glibc}/include" \
             --prefix LIBRARY_PATH ":" "${stdenv.glibc}/lib" \
-            --prefix LD_LIBRARY_PATH ":" "${stdenv.glibc}/lib" \
+            --prefix LD_LIBRARY_PATH ":" "${stdenv.glibc}/lib"
       done
       export PATH="$GCCBIN:$PATH"
 
