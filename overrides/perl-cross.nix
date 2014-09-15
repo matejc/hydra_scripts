@@ -23,12 +23,7 @@ in
       cp -rv ${perlCrossSrc}/* .
 
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
-      substituteInPlace ./cnf/configure \
-        --replace '. $base/configure_func.sh' '. $base/configure_func.sh; cat $cfglog'
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
-
-      #export CFLAGS="-I${glibcCross}/include"
-      ${pkgs.busybox}/bin/find ${glibcCross}
 
       ./configure ${toString configureFlags}
 
@@ -39,7 +34,7 @@ in
     configureFlags = [
       "--prefix=$out"
       "--target=${stdenv.cross.config}"
-      ''--host-ccflags="-I${stdenv.glibc}/include"''
+      ''--host-set-ccflags="-I${stdenv.glibc}/include"''
       ''-Dccflags="-I${glibcCross}/include -B${glibcCross}/lib"''
     ];
 
