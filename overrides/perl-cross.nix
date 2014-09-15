@@ -26,12 +26,12 @@ in
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
 
       set -e
-      function cleanup {
-        echo "######################### CLEANUP START"
+      function readlog {
+        echo "######################### LOG START"
         cat ./config.log*
-        echo "######################### CLEANUP END"
+        echo "######################### LOG END"
       }
-      trap cleanup EXIT
+      trap readlog EXIT
 
 
       export GCCBIN=`pwd`/bin
