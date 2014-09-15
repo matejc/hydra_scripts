@@ -65,9 +65,11 @@ in
       substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${glibcCross}/include"; exec $top/miniperl'
 
       echo "#####################################"
-      ${pkgs.busybox}/bin/find ./bin
+      ${pkgs.busybox}/bin/find $GCCBIN
       echo "#####################################"
-      ${pkgs.busybox}/bin/find ./
+      ${pkgs.busybox}/bin/find ${stdenv.gcc}/bin
+      echo "#####################################"
+      ${pkgs.busybox}/bin/find ${gccCrossStageStatic}/bin
       echo "#####################################"
     '';
 
