@@ -23,6 +23,7 @@ in
       cp -rv ${perlCrossSrc}/* .
 
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
+      substituteInPlace ./cnf/configure__f.sh --replace 'run $cc $ccflags -o try$_e try.c $* >> $cfglog 2>&1' 'run $cc $ccflags -o try$_e try.c $* | tee -a $cfglog 2>&1'
       substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
 
       #export CFLAGS="-I${glibcCross}/include"
