@@ -47,12 +47,12 @@ let
 
     if [[ "0" -eq "$EXITSTATUSCODE" ]]; then
       test -L ./result && cp -Pv ./result ${prefixDir}
-      INCLUDE_PATHS=`nix-store -qR ./result ${pkgs.lib.optionalString (tarInclude != "") "| grep ${tarInclude}"}`
-      INCLUDE_PATHS=`echo $INCLUDE_PATHS | xargs find`
-      RESULT_PATHS=`find -L ${prefixDir}/result | xargs realpath`
-      echo -e "$INCLUDE_PATHS\n$RESULT_PATHS" | sort | uniq > ./merged_paths
+      STORE_PATHS=`nix-store -qR ./result ${pkgs.lib.optionalString (tarInclude != "") "| grep ${tarInclude}"}`
+      RESULT_PATHS="`find ${prefixDir}/result/* -type l | xargs realpath`\n${prefixDir}/result"
 
-      echo -e "$INCLUDE_PATHS\n$RESULT_PATHS" | wc -l
+      echo -e "$STORE_PATHS\n$RESULT_PATHS" | sort | uniq > ./merged_paths
+
+      echo -e "$STORE_PATHS\n$RESULT_PATHS" | wc -l
       cat ./merged_paths | wc -l
 
       ${gnutar}/bin/tar cvf /tmp/xchg/out.tar --files-from ./merged_paths --mode=u+rw
