@@ -49,7 +49,11 @@ let
       test -L ./result && cp -Pv ./result ${prefixDir}
       INCLUDE_PATHS=`nix-store -qR ./result ${pkgs.lib.optionalString (tarInclude != "") "| grep ${tarInclude}"}`
       INCLUDE_PATHS=`echo $INCLUDE_PATHS | xargs find`
-      ${gnutar}/bin/tar cvf /tmp/xchg/out.tar ./result `find ${prefixDir}/result/* -type l | xargs realpath` $INCLUDE_PATHS --mode=u+rw
+      RESULT_PATHS=`find -L ${prefixDir}/result | xargs realpath`
+      MERGED_PATHS=`echo "$INCLUDE_PATHS\n$RESULT_PATHS" | uniq`
+      echo "$INCLUDE_PATHS\n$RESULT_PATHS" | wc -l
+      echo "$MERGED_PATHS" | wc -l
+      ${gnutar}/bin/tar cvf /tmp/xchg/out.tar $MERGED_PATHS --mode=u+rw
       ${bzip2}/bin/bzip2 /tmp/xchg/out.tar
     else
       echo "BUILD FAILED!"
