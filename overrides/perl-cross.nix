@@ -35,12 +35,20 @@ in
             --set CCFLAGS " -I${glibcCross}/include -B${glibcCross}/lib $CCFLAGS " \
             --set LDFLAGS " -L${glibcCross}/lib $LDFLAGS "
       done
+      for i in ${stdenv.gcc}/bin/*; do
+          makeWrapper $i $GCCBIN/`basename $i` \
+            --prefix CPATH ":" "${stdenv.glibc}/include" \
+            --prefix LIBRARY_PATH ":" "${stdenv.glibc}/lib" \
+            --prefix LD_LIBRARY_PATH ":" "${stdenv.glibc}/lib" \
+            --set CCFLAGS " -I${stdenv.glibc}/include -B${stdenv.glibc}/lib $CCFLAGS " \
+            --set LDFLAGS " -L${stdenv.glibc}/lib $LDFLAGS "
+      done
       export PATH="$GCCBIN:$PATH"
 
       ./configure ${toString configureFlags}
     '';
 
-    buildInputs = [ binutils stdenv.gcc which makeWrapper ];
+    buildInputs = [ which makeWrapper ];
 
     configureFlags = [
       "--prefix=$out"
