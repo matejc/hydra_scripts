@@ -137,12 +137,9 @@ let
         buildInputs = oldAttrs.buildInputs ++ [perlCross];
         postInstall = ''
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl}|${perlCross}|g' {} \;
-          echo "###################################################################"
-          echo "${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}/lib/perl5/site_perl"
-          exit 1
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}/lib/perl5/site_perl|`realpath ${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}/lib/perl5/site_perl/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}/lib/perl5/site_perl|`realpath ${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}/lib/perl5/site_perl/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}/lib/perl5/site_perl|`realpath ${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}/lib/perl5/site_perl/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}|`realpath ${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}|`realpath ${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}|`realpath ${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
         '';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
