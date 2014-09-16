@@ -131,12 +131,12 @@ let
         gold = false;
         cross = crosssystem;
       }));
-      perl_xcompile = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; binutils = binutils_xcompile; };
+      #perl_xcompile = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; binutils = binutils_xcompile; };
       perlCross = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; };
       nix.crossDrv = pkgs.lib.overrideDerivation pkgs.nix.crossDrv (oldAttrs: {
-        buildInputs = oldAttrs.buildInputs ++ [perl_xcompile.crossDrv];
+        buildInputs = oldAttrs.buildInputs ++ [perlCross];
         postInstall = ''
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl}|${perl_xcompile.crossDrv}|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl}|${perlCross}|g' {} \;
         '';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
