@@ -55,10 +55,10 @@ in
         ln -sv $i $GCCBIN
       done
 
-      rm $GCCBIN/gcc
-      echo -e "#!${stdenv.shell} -x\n\
-      ${stdenv.gcc}/bin/gcc -Wl,-dynamic-linker,$INTERPRETER \$@" > $GCCBIN/gcc
-      chmod +x $GCCBIN/gcc
+      #rm $GCCBIN/gcc
+      #echo -e "#!${stdenv.shell} -x\n\
+      #${stdenv.gcc}/bin/gcc -Wl,-dynamic-linker,$INTERPRETER \$@" > $GCCBIN/gcc
+      #chmod +x $GCCBIN/gcc
       
       rm $GCCBIN/${stdenv.cross.config}-gcc
       echo -e "#!${stdenv.shell} -x\n\
