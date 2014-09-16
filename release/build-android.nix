@@ -133,9 +133,9 @@ let
       perl_xcompile = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; };
       perlCross = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; };
       nix.crossDrv = pkgs.lib.overrideDerivation pkgs.nix.crossDrv (oldAttrs: {
-        buildInputs = oldAttrs.buildInputs ++ [perlCross];
+        buildInputs = oldAttrs.buildInputs ++ [perl_xcompile.crossDrv];
         postInstall = ''
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl}|${perlCross}|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl}|${perl_xcompile.crossDrv}|g' {} \;
         '';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
