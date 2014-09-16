@@ -137,7 +137,9 @@ let
         buildInputs = oldAttrs.buildInputs ++ [perlCross];
         postInstall = ''
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl}|${perlCross}|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|/lib/perl5/site_perl|/lib/perl5/site_perl/5.16.3/x86_64-linux-thread-multi/|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}/lib/perl5/site_perl|`realpath ${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}/lib/perl5/site_perl/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}/lib/perl5/site_perl|`realpath ${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}/lib/perl5/site_perl/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}/lib/perl5/site_perl|`realpath ${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}/lib/perl5/site_perl/*/*/`|g" {} \;
         '';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
