@@ -56,16 +56,16 @@ in
       done
 
       rm $GCCBIN/gcc
-      echo -e "#!${stdenv.shell}\n\
+      echo -e "#!${stdenv.shell} -x\n\
       ${stdenv.gcc}/bin/gcc -Wl,-dynamic-linker,$INTERPRETER $@" > $GCCBIN/gcc
       chmod +x $GCCBIN/gcc
       
       rm $GCCBIN/${stdenv.cross.config}-gcc
-      echo -e "#!${stdenv.shell}\n\
+      echo -e "#!${stdenv.shell} -x\n\
       ${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER $@" > $GCCBIN/${stdenv.cross.config}-gcc
       chmod +x $GCCBIN/${stdenv.cross.config}-gcc
       
-      export PATH=`echo $PATH | sed -e "s|${gccCrossStageStatic}/bin|$GCCBIN|g" -e "s|${stdenv.gcc}/bin|$GCCBIN|g"`
+      export PATH=`echo $PATH | sed -e "s|${gccCrossStageStatic}/bin|$GCCBIN|g" -e "s|${gccCrossStageStatic.gcc}/bin||g" -e "s|${stdenv.gcc}/bin||g"`
       echo "####################################### LALALA $PATH"
     '';
 
