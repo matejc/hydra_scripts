@@ -15,9 +15,9 @@ in
       sha256 = "00ndpgw4bjing9gy2y6jvs3q46mv2ll6zrxjkhpr12fcdsnji32f";
     };
 
-    #patches = [
-    #  "${pkgs.path}/pkgs/development/interpreters/perl/5.20/no-sys-dirs.patch"
-    #];
+    patches = [
+      "${pkgs.path}/pkgs/development/interpreters/perl/5.20/no-sys-dirs.patch"
+    ];
 
     configurePhase = ''
       cp -rv ${perlCrossSrc}/* .
