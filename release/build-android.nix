@@ -123,13 +123,13 @@ let
     nix = config_nix;
     packageOverrides = pkgs : rec {
       binutils_xcompile = pkgs.callPackage ../overrides/binutils-xcompile.nix { };
-      binutilsCross = pkgs.lib.overrideDerivation pkgs.binutilsCross (oldAttrs: { gold = false; });
-      # binutilsCross = (pkgs.forceNativeDrv (import "${pkgs.path}/pkgs/development/tools/misc/binutils" {
-      #   inherit (pkgs) stdenv fetchurl zlib;
-      #   noSysDirs = true;
-      #   gold = false;
-      #   cross = crosssystem;
-      # }));
+      #binutilsCross = pkgs.lib.overrideDerivation pkgs.binutilsCross (oldAttrs: { gold = false; });
+      binutilsCross = (pkgs.forceNativeDrv (import "${pkgs.path}/pkgs/development/tools/misc/binutils" {
+        inherit (pkgs) stdenv fetchurl zlib;
+        noSysDirs = true;
+        gold = false;
+        cross = crosssystem;
+      }));
       perl_xcompile = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; };
       perlCross = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; };
       nix.crossDrv = pkgs.lib.overrideDerivation pkgs.nix.crossDrv (oldAttrs: {
