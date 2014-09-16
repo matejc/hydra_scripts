@@ -69,7 +69,8 @@ in
       EOF
       chmod +x $GCCBIN/${stdenv.cross.config}-gcc
       
-      export PATH="${which}/bin:${makeWrapper}/bin:${binutils}/bin:$GCCBIN"
+      export PATH=`echo $PATH | sed -e "s|${gccCrossStageStatic}/bin|$GCCBIN|g" -e "s|${stdenv.gcc}/bin|$GCCBIN|g"`
+      echo "####################################### LALALA $PATH"
     '';
 
     #postInstall = ''
