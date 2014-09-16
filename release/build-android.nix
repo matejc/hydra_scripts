@@ -122,10 +122,10 @@ let
   config = {
     nix = config_nix;
     packageOverrides = pkgs : rec {
-      binutilsCross = (forceNativeDrv (import ../development/tools/misc/binutils {
+      binutilsCross = (pkgs.forceNativeDrv (import ../development/tools/misc/binutils {
         inherit (pkgs) stdenv fetchurl;
         zlib = pkgs.zlib.crossDrv;
-        bison = bison3;
+        bison = bison3.crossDrv;
         noSysDirs = true;
         cross = crosssystem;
       }));
