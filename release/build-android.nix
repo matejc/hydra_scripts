@@ -122,7 +122,7 @@ let
   config = {
     nix = config_nix;
     packageOverrides = pkgs : rec {
-      binutils.crossDrv = pkgs.callPackage ../overrides/binutils-xcompile.nix { };
+      binutils = pkgs.callPackage ../overrides/binutils-xcompile.nix { };
       # binutilsCross = (pkgs.forceNativeDrv (import "${pkgs.path}/pkgs/development/tools/misc/binutils" {
       #   inherit (pkgs) stdenv fetchurl zlib;
       #   noSysDirs = true;
