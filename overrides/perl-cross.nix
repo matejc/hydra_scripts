@@ -46,4 +46,8 @@ in
       substituteInPlace ./x2p/Makefile --replace '$(LDFLAGS)' '-B${glibcCross}/lib'
     '';
 
+    postInstall = ''
+      patchelf --set-interpreter "${glibcCross}/lib/ld-*.so" `find $out` || echo "(couldn't set interpreter)"
+    '';
+
   }
