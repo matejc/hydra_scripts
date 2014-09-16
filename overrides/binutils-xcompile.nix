@@ -11,7 +11,7 @@ in
 with { inherit (stdenv.lib) optional optionals optionalString; };
 
 stdenv.mkDerivation rec {
-  name = basename;
+  name = basename + "-xcompile";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
