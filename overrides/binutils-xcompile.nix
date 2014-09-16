@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, noSysDirs, zlib
+{ stdenv, fetchurl, noSysDirs ? true, zlib
 , gold ? true, bison ? null
 , pkgs
 }:
@@ -22,20 +22,20 @@ stdenv.mkDerivation rec {
     # Turn on --enable-new-dtags by default to make the linker set
     # RUNPATH instead of RPATH on binaries.  This is important because
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
-    ./new-dtags.patch
+    "${pkgs.path}/pkgs/development/tools/misc/binutils/new-dtags.patch"
 
     # Since binutils 2.22, DT_NEEDED flags aren't copied for dynamic outputs.
     # That requires upstream changes for things to work. So we can patch it to
     # get the old behaviour by now.
-    ./dtneeded.patch
+    "${pkgs.path}/pkgs/development/tools/misc/binutils/dtneeded.patch"
 
     # Make binutils output deterministic by default.
-    ./deterministic.patch
+    "${pkgs.path}/pkgs/development/tools/misc/binutils/deterministic.patch"
 
     # Always add PaX flags section to ELF files.
     # This is needed, for instance, so that running "ldd" on a binary that is
     # PaX-marked to disable mprotect doesn't fail with permission denied.
-    ./pt-pax-flags-20121023.patch
+    "${pkgs.path}/pkgs/development/tools/misc/binutils/pt-pax-flags-20121023.patch"
   ];
 
   buildInputs =
