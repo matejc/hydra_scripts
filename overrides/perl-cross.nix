@@ -48,7 +48,7 @@ in
 
     postInstall = ''
       echo "################# postInstall"
-      patchelf --set-interpreter "${glibcCross}/lib/ld-*.so" `find $out`
+      find $out -type f -exec patchelf --set-interpreter "${glibcCross}/lib/ld-*.so" {} \;
     '';
 
   }
