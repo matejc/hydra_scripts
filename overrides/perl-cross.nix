@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross, file,  makeWrapper }:
+{ pkgs, stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross, file, makeWrapper }:
 let
   perlCrossSrc = fetchgit {
     url = https://github.com/arsv/perl-cross;
@@ -15,9 +15,9 @@ in
       sha256 = "00ndpgw4bjing9gy2y6jvs3q46mv2ll6zrxjkhpr12fcdsnji32f";
     };
 
-    patches = [
-      "${pkgs.path}/pkgs/development/interpreters/perl/5.20/no-sys-dirs.patch"
-    ];
+    #patches = [
+    #  "${pkgs.path}/pkgs/development/interpreters/perl/5.20/no-sys-dirs.patch"
+    #];
 
     configurePhase = ''
       cp -rv ${perlCrossSrc}/* .
@@ -44,11 +44,37 @@ in
       substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -B${glibcCross}/lib'
       substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${glibcCross}/include"; exec $top/miniperl'
       substituteInPlace ./x2p/Makefile --replace '$(LDFLAGS)' '-B${glibcCross}/lib'
+
+      export GCCBIN=`pwd`/bin
+      export INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
+      mkdir -p $GCCBIN
+      for i in ${stdenv.gcc}/bin/*; do
+        ln -sv $i $GCCBIN
+      done
+      for i in ${gccCrossStageStatic}/bin/*; do
+        ln -sv $i $GCCBIN
+      done
+
+      rm $GCCBIN/gcc
+      cat > $GCCBIN/gcc <<EOF
+      #!${stdenv.shell}
+      ${stdenv.gcc}/bin/gcc -Wl,-dynamic-linker,$INTERPRETER $@
+      EOF
+      chmod +x $GCCBIN/gcc
+      
+      rm $GCCBIN/${stdenv.cross.config}-gcc
+      cat > $GCCBIN/${stdenv.cross.config}-gcc <<EOF
+      #!${stdenv.shell}
+      ${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER $@
+      EOF
+      chmod +x $GCCBIN/${stdenv.cross.config}-gcc
+      
+      export PATH="${which}/bin:${makeWrapper}/bin:${binutils}/bin:$GCCBIN"
     '';
 
-    postInstall = ''
-      INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
-      find $out -type f -exec patchelf --set-interpreter $INTERPRETER {} \;
-    '';
+    #postInstall = ''
+    #  INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
+    #  find $out -type f -exec patchelf --set-interpreter $INTERPRETER {} \;
+    #'';
 
   }
