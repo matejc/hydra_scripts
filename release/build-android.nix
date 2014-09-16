@@ -129,6 +129,7 @@ let
       #   gold = false;
       #   cross = crosssystem;
       # }));
+      perl_xcompile = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; };
       perlCross = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; };
       nix.crossDrv = pkgs.lib.overrideDerivation pkgs.nix.crossDrv (oldAttrs: {
         buildInputs = oldAttrs.buildInputs ++ [perlCross];
