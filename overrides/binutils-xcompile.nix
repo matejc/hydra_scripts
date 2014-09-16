@@ -5,7 +5,7 @@
 
 let
   basename = "binutils-2.23.1";
-  cross = stdenv.cross.config;
+  cross = if stdenv ? "cross" then stdenv.cross else null;
 in
 
 with { inherit (stdenv.lib) optional optionals optionalString; };
