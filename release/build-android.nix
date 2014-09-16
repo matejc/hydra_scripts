@@ -202,6 +202,8 @@ let
   replaceme = import "${hydra_scripts}/release/replaceme.nix" {
     inherit pkgs prefix;
     url = replaceme_url;
+    shell = "${mybash}/bin/mybash";
+    path = "${pkgs.busybox.crossDrv}/bin";
     };
 
   hydra = (import "${hydra_scripts}/release/hydra.nix" {
