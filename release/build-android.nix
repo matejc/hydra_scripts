@@ -125,6 +125,7 @@ let
       binutilsCross = (pkgs.forceNativeDrv (import "${pkgs.path}/pkgs/development/tools/misc/binutils" {
         inherit (pkgs) stdenv fetchurl zlib;
         noSysDirs = true;
+        gold = false;
         cross = crosssystem;
       }));
       perlCross = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; };
