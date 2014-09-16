@@ -1,5 +1,5 @@
 { stdenv, fetchurl, noSysDirs ? true, zlib
-, gold ? true, bison ? null
+, gold ? false, bison ? null
 , pkgs
 }:
 
