@@ -56,12 +56,12 @@ in
       done
 
       rm $GCCBIN/gcc
-      echo "#!${stdenv.shell}\n\
+      echo -e "#!${stdenv.shell}\n\
       ${stdenv.gcc}/bin/gcc -Wl,-dynamic-linker,$INTERPRETER $@" > $GCCBIN/gcc
       chmod +x $GCCBIN/gcc
       
       rm $GCCBIN/${stdenv.cross.config}-gcc
-      echo "#!${stdenv.shell}\n\
+      echo -e "#!${stdenv.shell}\n\
       ${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER $@" > $GCCBIN/${stdenv.cross.config}-gcc
       chmod +x $GCCBIN/${stdenv.cross.config}-gcc
       
