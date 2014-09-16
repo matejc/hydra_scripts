@@ -33,9 +33,9 @@ in
     configureFlags = [
       "--prefix=$out"
       "--target=${stdenv.cross.config}"
-      ''--host-set-ccflags="-I${stdenv.glibc}/include"''
-      ''-Dccflags="-I${glibcCross}/include -B${glibcCross}/lib"''
-      ''-Dlddlflags="-shared -I${glibcCross}/include -B${glibcCross}/lib "''
+      "--host-set-ccflags='-I${stdenv.glibc}/include'"
+      "-Dccflags='-I${glibcCross}/include -B${glibcCross}/lib'"
+      "-Dlddlflags='-shared -I${glibcCross}/include -B${glibcCross}/lib '"
     ];
 
     preBuild = ''
