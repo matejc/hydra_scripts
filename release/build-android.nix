@@ -141,7 +141,7 @@ let
         };
         overrides = (p: rec {
           DBDSQLite = import "${pkgs.path}/pkgs/development/perl-modules/DBD-SQLite" {
-            inherit (p) stdenv fetchurl;
+            inherit (p) stdenv fetchurl subversion;
             buildPerlPackage = buildPerlCrossPackage;
             DBI = DBI157;
             inherit (p) sqlite;
