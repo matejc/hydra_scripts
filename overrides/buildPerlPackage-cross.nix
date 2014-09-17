@@ -1,4 +1,4 @@
-perl, perlCross, pkgs:
+perl: perlCross: pkgs:
 
 { buildInputs ? [], ... } @ attrs:
 
