@@ -152,7 +152,9 @@ let
               url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.57.tar.gz;
               sha256 = "1bi78b7zcrfckmk9x396mhwqw2a10xqcznslqw1np7nh5zn9ll7c";
             };
-            nativeBuildInputs = [p.subversion];
+            preConfigure = ''
+              sed -i -e 's|$(PERL) dbixs_rev.pl|echo|g' ./Makefile.PL
+            '';
           };
         }) pkgs;
       };
