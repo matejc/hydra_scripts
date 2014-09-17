@@ -20,8 +20,13 @@ perlCross.stdenv.mkDerivation (
   attrs
   //
   {
-    name = "perl-" + attrs.name;
+    name = "perl-cross-" + attrs.name;
     builder = "${pkgs.path}/pkgs/development/perl-modules/generic/builder.sh";
-    buildInputs = buildInputs ++ [ perl ];
+    buildInputs = buildInputs [ perl ];
+    preBuild = ''
+      echo "############################################### gccCrossStageStatic"
+      ls -lah ${gccCrossStageStatic}/bin
+      exit 1
+    '';
   }
 )
