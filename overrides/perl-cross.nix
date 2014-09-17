@@ -1,8 +1,9 @@
-{ pkgs, stdenv, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross, file, makeWrapper }:
+{ pkgs, stdenv, fetchurl, fetchgit, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross, file, makeWrapper }:
 let
-  perlCrossSrc = fetchurl {
-    url = "https://github.com/arsv/perl-cross/blob/releases/perl-5.16.3-cross-0.7.4.tar.gz";
-    sha256 = "1a76lc9djl2ksnmicprcgcp9i71vb1372qia4m0dirx4dvri78r8";
+  perlCrossSrc = fetchgit {
+    url = "git://github.com/arsv/perl-cross";
+    rev = "refs/tags/v0.7.4";
+    sha256 = "94ee791e1874133875e82fc5b98a77859313ab98b3aa1a3136f31cf0979fb6bd";
   };
 
 in
@@ -11,7 +12,7 @@ in
 
     src = fetchurl {
       url = "http://www.cpan.org/src/5.0/perl-5.16.3.tar.gz";
-      sha256 = "68732b270864cb0fc04c5790a594fc3ca420459a0555084cdd65bec9d9674d4a";
+      sha256 = "0e096c0745e0e8a2adedf1a2fabe22439c11a4018272f6f8d07906b0c9cf1c3b";
     };
 
     patches = [
