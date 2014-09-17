@@ -1,4 +1,4 @@
-perl: perlCross: glibc: glibcCross: pkgs: busybox:
+perl: perlCross: glibcCross: pkgs: busybox:
 
 { buildInputs ? [], ... } @ attrs:
 let
