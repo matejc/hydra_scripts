@@ -44,5 +44,9 @@ perlCross.stdenv.mkDerivation (
       ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER \$(echo \$@ | sed -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g')" > $GCCBIN/gcc
       chmod +x $GCCBIN/gcc
     '';
+    
+    postInstall = ''
+      ${busybox}/bin/find $out -type f -exec sed -i -e 's|${perl}|${perlCross}|g' {} \;
+    '';
   }
 )
