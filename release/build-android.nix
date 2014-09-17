@@ -136,7 +136,7 @@ let
       perlCrossPackages = import "${pkgs.path}/pkgs/top-level/perl-packages.nix" {
         pkgs = pkgs // {
           perl = pkgs.perl520;
-          buildPerlPackage = import ../overrides/buildPerlPackage-cross.nix pkgs.perl520 glibcCross perlCross pkgs busybox;
+          buildPerlPackage = import ../overrides/buildPerlPackage-cross.nix pkgs.perl520 glibc glibcCross perlCross pkgs busybox;
         };
         overrides = (p: {}) pkgs;
       };
