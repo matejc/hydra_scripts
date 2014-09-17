@@ -39,7 +39,7 @@ perlCross.stdenv.mkDerivation (
       export PATH="$GCCBIN:$PATH"
       export INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
       export PERLLIBDIR=`realpath ${perl}/lib/perl5/*/${pkgs.stdenv.system}-*/`
-      export PERLCROSSLIBDIR=`realpath ${perlCross}/lib/perl5/*/${pkgs.stdenv.system}-*/`
+      export PERLCROSSLIBDIR=`realpath ${perlCross}/lib/perl5/*/*-*/`
 
       rm $GCCBIN/gcc
       echo -e "#!${pkgs.stdenv.shell} -x\n\
