@@ -141,7 +141,7 @@ let
         };
         overrides = (p: rec {
           DBDSQLite = import "${pkgs.path}/pkgs/development/perl-modules/DBD-SQLite" {
-            inherit (p) stdenv fetchurl subversion;
+            inherit (p) stdenv fetchurl;
             buildPerlPackage = buildPerlCrossPackage;
             DBI = DBI157;
             inherit (p) sqlite;
@@ -152,6 +152,7 @@ let
               url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.57.tar.gz;
               sha256 = "1bi78b7zcrfckmk9x396mhwqw2a10xqcznslqw1np7nh5zn9ll7c";
             };
+            nativeBuildInputs = [subversion];
           };
         }) pkgs;
       };
