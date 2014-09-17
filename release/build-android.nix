@@ -133,9 +133,9 @@ let
       }));
       #perl_xcompile = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; binutils = binutils_xcompile; };
       perlCross = pkgs.forceNativeDrv (pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; });
-      perlDBICross = pkgs.lib.overrideDerivation pkgs.perlPackages.DBI (oldAttrs: { stdenv = pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal; });
-      perlDBDSQLiteCross = pkgs.lib.overrideDerivation pkgs.perlPackages.DBDSQLite (oldAttrs: { stdenv = pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal; });
-      perlWWWCurlCross = pkgs.lib.overrideDerivation pkgs.perlPackages.WWWCurl (oldAttrs: { stdenv = pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal; });
+      perlDBICross = pkgs.makeOverridable pkgs.perlPackages.DBI { stdenv = pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal; };
+      perlDBDSQLiteCross = pkgs.makeOverridable pkgs.perlPackages.DBDSQLite { stdenv = pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal; };
+      perlWWWCurlCross = pkgs.makeOverridable pkgs.perlPackages.WWWCurl { stdenv = pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal; };
       nix.crossDrv = pkgs.lib.overrideDerivation pkgs.nix.crossDrv (oldAttrs: {
         buildInputs = oldAttrs.buildInputs ++ [perlCross];
         postInstall = ''
