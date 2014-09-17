@@ -25,6 +25,7 @@ in
 
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       sed -i -e 's|#!/bin/bash|#!${stdenv.shell}|g' ./cnf/configure
+      substituteInPlace ./Makefile.config.SH --replace "#!/bin/bash" "#!${stdenv.shell}"
 
       ./configure ${toString configureFlags}
     '';
@@ -40,7 +41,6 @@ in
     ];
 
     preBuild = ''
-      substituteInPlace ./Makefile.config.SH --replace "#!/bin/bash" "#!${stdenv.shell}"
       substituteInPlace ./miniperl_top --replace "#!/bin/bash" "#!${stdenv.shell}"
       #substituteInPlace ./Makefile --replace 'perl$x: LDFLAGS += -Wl,-E' 'perl$x: LDFLAGS += -Wl,-E -B${glibcCross}/lib'
       substituteInPlace ./Makefile --replace 'cd $(dir $@) && $(top)miniperl_top -I$(top)lib Makefile.PL' 'echo "$@ > > > $(dir $@)" && cd $(dir $@) && $(top)miniperl_top -I$(top)lib Makefile.PL'
