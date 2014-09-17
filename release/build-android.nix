@@ -134,13 +134,15 @@ let
       #perl_xcompile = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; binutils = binutils_xcompile; };
       perlCross = pkgs.forceNativeDrv (pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; });
       perlDBICross = pkgs.lib.overrideDerivation pkgs.perlPackages.DBI (oldAttrs: { stdenv = pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal; });
+      perlDBDSQLiteCross = pkgs.lib.overrideDerivation pkgs.perlPackages.DBDSQLite (oldAttrs: { stdenv = pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal; });
+      perlWWWCurlCross = pkgs.lib.overrideDerivation pkgs.perlPackages.WWWCurl (oldAttrs: { stdenv = pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal; });
       nix.crossDrv = pkgs.lib.overrideDerivation pkgs.nix.crossDrv (oldAttrs: {
         buildInputs = oldAttrs.buildInputs ++ [perlCross];
         postInstall = ''
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl}|${perlCross}|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}|`realpath ${perlDBICross}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}|`realpath ${pkgs.perlPackages.DBDSQLite.crossDrv}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}|`realpath ${pkgs.perlPackages.WWWCurl.crossDrv}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}|`realpath ${perlDBDSQLiteCross}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}|`realpath ${perlWWWCurlCross}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
         '';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
