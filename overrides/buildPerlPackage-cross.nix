@@ -1,7 +1,9 @@
 perl: perlCross: pkgs:
 
 { buildInputs ? [], ... } @ attrs:
-
+let
+  crossDrvs = list: map (i: if (doCross && (i ? "crossDrv")) then builtins.getAttr "crossDrv" i else i) list;
+in
 perlCross.stdenv.mkDerivation (
   {
     doCheck = false;
@@ -20,11 +22,20 @@ perlCross.stdenv.mkDerivation (
   {
     name = "perl-cross-" + attrs.name;
     builder = "${pkgs.path}/pkgs/development/perl-modules/generic/builder.sh";
-    buildInputs = buildInputs ++ [ perl ];
+    buildInputs = (crossDrvs buildInputs) ++ [ perl ];
     preBuild = ''
-      echo "############################################### gccCrossStageStatic"
-      ls -lah ${pkgs.gccCrossStageStatic}/bin
-      exit 1
+      export GCCBIN=`pwd`/bin
+      mkdir -p $GCCBIN
+      ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ar $GCCBIN/bin/ar
+      ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-as $GCCBIN/bin/as
+      ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-c++ $GCCBIN/bin/c++
+      ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-cpp $GCCBIN/bin/cpp
+      ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-f77 $GCCBIN/bin/f77
+      ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-gcc $GCCBIN/bin/gcc
+      ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ld $GCCBIN/bin/ld
+      ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-nm $GCCBIN/bin/nm
+      ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-strip $GCCBIN/bin/strip
+      export PATH="$GCCBIN:$PATH"
     '';
   }
 )
