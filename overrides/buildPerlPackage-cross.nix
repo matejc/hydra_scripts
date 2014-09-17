@@ -4,10 +4,8 @@ perl: perlCross: pkgs:
 
 perlCross.stdenv.mkDerivation (
   {
-    doCheck = true;
-    
-    checkTarget = "test";
-    
+    doCheck = false;
+
     # Prevent CPAN downloads.
     PERL_AUTOINSTALL = "--skipdeps";
 
