@@ -37,7 +37,7 @@ perlCross.stdenv.mkDerivation (
       ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-strip $GCCBIN/strip
       export PATH="$GCCBIN:$PATH"
       #export CFLAGS="${glibcCross}/include"
-      ${busybox}/bin/find . -type f -exec sed -i -e 's|${glibc}|${glibcCross}|g' {} \;
+      ${busybox}/bin/find . -type f -exec sed -i -e 's|${pkgs.glibc}|${glibcCross}|g' {} \;
     '';
   }
 )
