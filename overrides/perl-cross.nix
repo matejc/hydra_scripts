@@ -48,11 +48,6 @@ in
       substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${glibcCross}/include"; exec $top/miniperl'
       #substituteInPlace ./x2p/Makefile --replace '$(LDFLAGS)' '-B${glibcCross}/lib'
 
-      echo "##########################################################################"
-      cat ./ext/SDBM_File/Makefile
-      echo "##########################################################################"
-
-
       export GCCBIN=`pwd`/bin
       export INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
       mkdir -p $GCCBIN
