@@ -2,7 +2,7 @@ perl: perlCross: pkgs:
 
 { buildInputs ? [], ... } @ attrs:
 let
-  crossDrvs = list: map (i: if (doCross && (i ? "crossDrv")) then builtins.getAttr "crossDrv" i else i) list;
+  crossDrvs = list: map (i: if (i ? "crossDrv") then builtins.getAttr "crossDrv" i else i) list;
 in
 perlCross.stdenv.mkDerivation (
   {
