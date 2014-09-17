@@ -148,7 +148,7 @@ let
           };
           DBI157 = buildPerlCrossPackage {
             name = "DBI-1.57";
-            src = fetchurl {
+            src = p.fetchurl {
               url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.57.tar.gz;
               sha256 = "991ff6b0598978dab7e058d3ab8dd2da82424daf8a780ba48d5e1b64be045470";
             };
