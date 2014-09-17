@@ -23,7 +23,7 @@ perlCross.stdenv.mkDerivation (
     buildInputs = buildInputs [ perl ];
     preBuild = ''
       echo "############################################### gccCrossStageStatic"
-      ls -lah ${gccCrossStageStatic}/bin
+      ls -lah ${pkgs.gccCrossStageStatic}/bin
       exit 1
     '';
   }
