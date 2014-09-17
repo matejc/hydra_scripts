@@ -135,8 +135,8 @@ let
       perlCross = pkgs.forceNativeDrv (pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; });
       perlCrossPackages = import "${pkgs.path}/pkgs/top-level/perl-packages.nix" {
         pkgs = pkgs // {
-          perl = perl520;
-          buildPerlPackage = import ../overrides/buildPerlPackage-cross.nix perl520 perlCross pkgs;
+          perl = pkgs.perl520;
+          buildPerlPackage = import ../overrides/buildPerlPackage-cross.nix pkgs.perl520 perlCross pkgs;
         };
         overrides = (p: {}) pkgs;
       };
