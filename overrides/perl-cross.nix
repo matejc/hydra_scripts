@@ -21,6 +21,8 @@ in
     ];
 
     configurePhase = ''
+      ls -la ${perlCrossSrc}
+      ls -la .
       cp -rv ${perlCrossSrc}/* .
 
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
