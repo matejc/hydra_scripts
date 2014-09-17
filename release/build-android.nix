@@ -150,7 +150,7 @@ let
             name = "DBI-1.57";
             src = p.fetchurl {
               url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.57.tar.gz;
-              sha256 = "991ff6b0598978dab7e058d3ab8dd2da82424daf8a780ba48d5e1b64be045470";
+              sha256 = "1bi78b7zcrfckmk9x396mhwqw2a10xqcznslqw1np7nh5zn9ll7c";
             };
           };
         }) pkgs;
