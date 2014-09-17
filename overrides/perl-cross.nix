@@ -2,7 +2,7 @@
 let
   perlCrossSrc = fetchurl {
     url = "https://github.com/arsv/perl-cross/blob/releases/perl-5.16.3-cross-0.7.4.tar.gz";
-    sha256 = "050l7h63rk32j3qmgpsf8z9s0cskq4fp4n0gs9439rg0qw8cwkp0";
+    sha256 = "1a76lc9djl2ksnmicprcgcp9i71vb1372qia4m0dirx4dvri78r8";
   };
 
 in
