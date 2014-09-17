@@ -133,12 +133,27 @@ let
       }));
       #perl_xcompile = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; binutils = binutils_xcompile; };
       perlCross = pkgs.forceNativeDrv (pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; });
+      buildPerlCrossPackage = import ../overrides/buildPerlPackage-cross.nix pkgs.perl520 perlCross glibc glibcCross pkgs busybox;
       perlCrossPackages = import "${pkgs.path}/pkgs/top-level/perl-packages.nix" {
         pkgs = pkgs // {
           perl = pkgs.perl520;
-          buildPerlPackage = import ../overrides/buildPerlPackage-cross.nix pkgs.perl520 perlCross glibc glibcCross pkgs busybox;
+          buildPerlPackage = buildPerlCrossPackage;
         };
-        overrides = (p: {}) pkgs;
+        overrides = (p: {
+          DBDSQLite = import "${pkgs.path}/pkgs/development/perl-modules/DBD-SQLite" {
+            inherit (p) stdenv fetchurl;
+            buildPerlPackage = buildPerlCrossPackage;
+            DBI = DBI157;
+            inherit (p) sqlite;
+          };
+          DBI157 = buildPerlCrossPackage {
+            name = "DBI-1.57";
+            src = fetchurl {
+              url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.57.tar.gz;
+              sha256 = "991ff6b0598978dab7e058d3ab8dd2da82424daf8a780ba48d5e1b64be045470";
+            };
+          };
+        }) pkgs;
       };
       #perlDBICross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBI));
       #perlDBDSQLiteCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBDSQLite));
