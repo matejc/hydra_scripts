@@ -38,7 +38,7 @@ perlCross.stdenv.mkDerivation (
       export PATH="$GCCBIN:$PATH"
       export INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
       rm $GCCBIN/gcc
-      echo -e "#!${stdenv.shell} -x\n\
+      echo -e "#!${pkgs.stdenv.shell} -x\n\
       ${pkgs.gccCrossStageStatic}/bin/gcc -Wl,-dynamic-linker,$INTERPRETER `echo '$@' | sed -e 's|${pkgs.stdenv.gcc.libc}|${glibcCross}|g'`" > $GCCBIN/gcc
       chmod +x $GCCBIN/gcc
     '';
