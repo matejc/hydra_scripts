@@ -25,8 +25,6 @@ in
 
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       sed -i -e 's|#!/bin/bash|#!${stdenv.shell}|g' ./cnf/configure
-      #sed -i -e "s|cwd()|\`pwd\`|g" ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
-      #sed -i -e "s|chdir \$dir|\`cd \$dir\`|g" ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
 
       ./configure ${toString configureFlags}
     '';
@@ -48,6 +46,10 @@ in
       substituteInPlace ./Makefile --replace 'cd $(dir $@) && $(top)miniperl_top -I$(top)lib Makefile.PL' 'echo "$@ > > > $(dir $@)" && cd $(dir $@) && $(top)miniperl_top -I$(top)lib Makefile.PL'
       substituteInPlace ./miniperl_top --replace 'exec $top/miniperl' 'export CPATH="${glibcCross}/include"; exec $top/miniperl'
       #substituteInPlace ./x2p/Makefile --replace '$(LDFLAGS)' '-B${glibcCross}/lib'
+
+      #sed -i -e "s|cwd()|\`pwd\`|g" ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+      #sed -i -e "s|chdir \$dir|\`cd \$dir\`|g" ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+      sed -i -e 's! || die "Can't figure out your cwd!"!!g' ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
 
       export GCCBIN=`pwd`/bin
       export INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
