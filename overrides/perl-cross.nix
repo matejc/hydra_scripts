@@ -1,9 +1,8 @@
 { pkgs, stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross, file, makeWrapper }:
 let
   perlCrossSrc = fetchgit {
-    url = https://github.com/arsv/perl-cross;
-    rev = "refs/tags/0.9.1";
-    sha256 = "1icw7rkp0n12dzk8cjjcca824acjkxjw4bvd93fbkhjb0qgpnzdx";
+    url = https://github.com/arsv/perl-cross/blob/releases/perl-5.16.3-cross-0.7.4.tar.gz;
+    sha256 = "991ff6b0598978dab7e058d3ab8dd2da82424daf8a780ba48d5e1b64be045470";
   };
 
 in
@@ -11,12 +10,12 @@ in
     name = "perl-cross-${stdenv.cross.config}";
 
     src = fetchurl {
-      url = "mirror://cpan/src/perl-5.20.0.tar.gz";
-      sha256 = "00ndpgw4bjing9gy2y6jvs3q46mv2ll6zrxjkhpr12fcdsnji32f";
+      url = "mirror://cpan/src/perl-5.16.3.tar.gz";
+      sha256 = "1dpd9lhc4723wmsn4dsn4m320qlqgyw28bvcbhnfqp2nl3f0ikv9";
     };
 
     patches = [
-      "${pkgs.path}/pkgs/development/interpreters/perl/5.20/no-sys-dirs.patch"
+      "${pkgs.path}/pkgs/development/interpreters/perl/5.16/no-sys-dirs.patch"
     ];
 
     configurePhase = ''
@@ -66,7 +65,6 @@ in
       chmod +x $GCCBIN/${stdenv.cross.config}-gcc
       
       export PATH=`echo $PATH | sed -e "s|${gccCrossStageStatic}/bin|$GCCBIN|g" -e "s|${gccCrossStageStatic.gcc}/bin||g" -e "s|${stdenv.gcc}/bin||g"`
-      echo "####################################### LALALA $PATH"
     '';
 
     #postInstall = ''
