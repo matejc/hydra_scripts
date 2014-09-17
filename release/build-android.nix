@@ -139,7 +139,7 @@ let
           perl = pkgs.perl520;
           buildPerlPackage = buildPerlCrossPackage;
         };
-        overrides = (p: {
+        overrides = (p: rec {
           DBDSQLite = import "${pkgs.path}/pkgs/development/perl-modules/DBD-SQLite" {
             inherit (p) stdenv fetchurl;
             buildPerlPackage = buildPerlCrossPackage;
