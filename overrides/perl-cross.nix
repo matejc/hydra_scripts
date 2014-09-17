@@ -25,6 +25,7 @@ in
 
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       sed -i -e 's|#!/bin/bash|#!${stdenv.shell}|g' ./cnf/configure
+      sed -i -e "s|cwd()|\`pwd\`|g" ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
 
       ./configure ${toString configureFlags}
     '';
