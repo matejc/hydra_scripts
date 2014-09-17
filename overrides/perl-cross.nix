@@ -49,7 +49,7 @@ in
 
       #sed -i -e "s|cwd()|\`pwd\`|g" ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
       #sed -i -e "s|chdir \$dir|\`cd \$dir\`|g" ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
-      substituteInPlace ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm --replace " \|\| die \"Can\'t figure out your cwd!\"" ""
+      substituteInPlace ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm --replace " || die \"Can't figure out your cwd\!\"" ""
 
       export GCCBIN=`pwd`/bin
       export INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
