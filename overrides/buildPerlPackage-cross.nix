@@ -1,4 +1,4 @@
-perl: perlCross: pkgs:
+perl: perlCross: glibcCross: pkgs:
 
 { buildInputs ? [], ... } @ attrs:
 let
@@ -36,7 +36,7 @@ perlCross.stdenv.mkDerivation (
       ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-nm $GCCBIN/nm
       ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-strip $GCCBIN/strip
       export PATH="$GCCBIN:$PATH"
-      export CFLAGS="${pkgs.gccCrossStageStatic.libc}/include"
+      export CFLAGS="${glibcCross}/include"
     '';
   }
 )
