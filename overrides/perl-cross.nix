@@ -2,8 +2,8 @@
 let
   perlCrossSrc = fetchgit {
     url = "git://github.com/arsv/perl-cross";
-    rev = "refs/tags/0.7.4";
-    sha256 = "1h37knc2fhgvkj8y7xafg396d145dgcbvg7y51mvai9f4fiic951";
+    rev = "refs/tags/0.9.1";
+    sha256 = "509da48471bc1a2737dde3b2c84598bee838ab4dc17a71e9af1d16f0255fbdb2";
   };
 
 in
@@ -12,12 +12,12 @@ in
 
     src = fetchgit {
       url = "git://github.com/Perl/perl5";
-      rev = "refs/tags/v5.16.3";
-      sha256 = "1xhszndh6l9siqp6wmm6nj1bwhyixif8lphfk8psnp622sp1zzy6";
+      rev = "refs/tags/v5.20.0";
+      sha256 = "68732b270864cb0fc04c5790a594fc3ca420459a0555084cdd65bec9d9674d4a";
     };
 
     patches = [
-      "${pkgs.path}/pkgs/development/interpreters/perl/5.16/no-sys-dirs.patch"
+      "${pkgs.path}/pkgs/development/interpreters/perl/5.20/no-sys-dirs.patch"
     ];
 
     configurePhase = ''
@@ -50,7 +50,7 @@ in
       #sed -i -e "s|cwd()|\`pwd\`|g" ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
       #sed -i -e "s|chdir \$dir|\`cd \$dir\`|g" ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
       #substituteInPlace ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm --replace " || die \"Can't figure out your cwd\!\"" ""
-      sed -i -e "s/ || die \"Can't figure out your cwd\!\"//g" ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+      #sed -i -e "s/ || die \"Can't figure out your cwd\!\"//g" ./cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
 
       export GCCBIN=`pwd`/bin
       export INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
