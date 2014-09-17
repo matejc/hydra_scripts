@@ -37,12 +37,17 @@ perlCross.stdenv.mkDerivation (
       ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-strip $GCCBIN/strip
       export PATH="$GCCBIN:$PATH"
       export LDSHARED=$GCCBIN/ld
+      export LD_ALTEXEC=$GCCBIN/ld
+      
       export INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
+
+      #-Wl,-dynamic-linker,$INTERPRETER
 
       rm $GCCBIN/gcc
       echo -e "#!${pkgs.stdenv.shell} -x\n\
       export LDSHARED=$GCCBIN/ld\n\
-      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER \$(echo \$@ | sed -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g')" > $GCCBIN/gcc
+      export LD_ALTEXEC=$GCCBIN/ld\n\
+      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-gcc  \$(echo \$@ | sed -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g')" > $GCCBIN/gcc
       chmod +x $GCCBIN/gcc
 
       echo "perlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCross"
