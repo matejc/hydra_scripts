@@ -212,7 +212,7 @@ let
     inherit pkgs prefix;
     url = replaceme_url;
     shell = "${mybash}/bin/mybash";
-    path = "${pkgs.busybox.crossDrv}/bin";
+    path = "/system/bin:${prefix}/result/bin";
     };
 
   hydra = (import "${hydra_scripts}/release/hydra.nix" {
