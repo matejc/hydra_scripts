@@ -10,8 +10,8 @@ in
     name = "perl-cross-${stdenv.cross.config}";
 
     src = fetchurl {
-      url = "mirror://cpan/src/perl-5.16.3.tar.gz";
-      sha256 = "1dpd9lhc4723wmsn4dsn4m320qlqgyw28bvcbhnfqp2nl3f0ikv9";
+      url = "http://www.cpan.org/src/5.0/perl-5.16.3.tar.gz";
+      sha256 = "68732b270864cb0fc04c5790a594fc3ca420459a0555084cdd65bec9d9674d4a";
     };
 
     patches = [
