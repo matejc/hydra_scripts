@@ -51,8 +51,7 @@ perlCross.stdenv.mkDerivation (
       chmod +x $GCCBIN/gcc
 
       echo "perlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCross"
-      echo "${perlCross.stdenv.gcc.libc}"
-      cat $GCCBIN/gcc
+      cat ./Makefile
       echo "perlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCrossperlCross"
     '';
   }
