@@ -1,6 +1,6 @@
-{ pkgs, stdenv, fetchgit, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross, file, makeWrapper }:
+{ pkgs, stdenv, fetchurl, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross, file, makeWrapper }:
 let
-  perlCrossSrc = fetchgit {
+  perlCrossSrc = fetchurl {
     url = https://github.com/arsv/perl-cross/blob/releases/perl-5.16.3-cross-0.7.4.tar.gz;
     sha256 = "991ff6b0598978dab7e058d3ab8dd2da82424daf8a780ba48d5e1b64be045470";
   };
