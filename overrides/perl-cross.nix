@@ -21,12 +21,10 @@ in
     ];
 
     configurePhase = ''
-      ls -la ${perlCrossSrc}
-      ls -la .
       cp -rv ${perlCrossSrc}/* .
 
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
-      substituteInPlace ./cnf/configure --replace "#!/bin/bash" "#!${stdenv.shell}"
+      sed -i -e 's|#!/bin/bash|#!${stdenv.shell}|g' ./cnf/configure
 
       ./configure ${toString configureFlags}
     '';
