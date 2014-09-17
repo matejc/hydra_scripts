@@ -48,6 +48,7 @@ in
       #substituteInPlace ./x2p/Makefile --replace '$(LDFLAGS)' '-B${glibcCross}/lib'
 
       echo "##########################################################################"
+      cat ./ext/SDBM_File/Makefile
       echo "##########################################################################"
 
 
