@@ -135,10 +135,10 @@ let
       perlCross = pkgs.forceNativeDrv (pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; });
       perlCrossPackages = import "${pkgs.path}/pkgs/top-level/perl-packages.nix" {
         pkgs = pkgs // {
-          perl = perlCross;
-          buildPerlPackage = import "${pkgs.path}/pkgs/development/perl-modules/generic" perlCross;
+          perl = perl520;
+          buildPerlPackage = import ../overrides/buildPerlPackage-cross.nix perl520 perlCross pkgs;
         };
-        overrides = (config.perlCrossPackageOverrides or (p: {})) pkgs;
+        overrides = (p: {}) pkgs;
       };
       #perlDBICross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBI));
       #perlDBDSQLiteCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBDSQLite));
