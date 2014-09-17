@@ -36,8 +36,11 @@ perlCross.stdenv.mkDerivation (
       ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-nm $GCCBIN/nm
       ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-strip $GCCBIN/strip
       export PATH="$GCCBIN:$PATH"
-      #export CFLAGS="${glibcCross}/include"
-      ${busybox}/bin/find . -type f -exec sed -i -e 's|${pkgs.stdenv.gcc.libc}|${glibcCross}|g' {} \;
+      export INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
+      rm $GCCBIN/gcc
+      echo -e "#!${stdenv.shell} -x\n\
+      ${pkgs.gccCrossStageStatic}/bin/gcc -Wl,-dynamic-linker,$INTERPRETER `echo '$@' | sed -e 's|${pkgs.stdenv.gcc.libc}|${glibcCross}|g'`" > $GCCBIN/gcc
+      chmod +x $GCCBIN/gcc
     '';
   }
 )
