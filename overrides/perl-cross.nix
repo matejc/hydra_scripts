@@ -13,7 +13,7 @@ in
     src = fetchgit {
       url = "git://github.com/Perl/perl5";
       rev = "refs/tags/v5.20.0";
-      sha256 = "68732b270864cb0fc04c5790a594fc3ca420459a0555084cdd65bec9d9674d4a";
+      sha256 = "1s39f14mkrdq53q440fyn3jhwcrmsazn19n05gkhkaidx9w4zmid";
     };
 
     patches = [
