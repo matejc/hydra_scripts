@@ -3,7 +3,7 @@ let
   perlCrossSrc = fetchgit {
     url = "git://github.com/arsv/perl-cross";
     rev = "refs/tags/0.9.1";
-    sha256 = "509da48471bc1a2737dde3b2c84598bee838ab4dc17a71e9af1d16f0255fbdb2";
+    sha256 = "1icw7rkp0n12dzk8cjjcca824acjkxjw4bvd93fbkhjb0qgpnzdx";
   };
 
 in
