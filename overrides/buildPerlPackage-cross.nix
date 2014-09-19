@@ -47,6 +47,11 @@ pkgs.stdenv.mkDerivation (
       echo -e "#!${pkgs.stdenv.shell} -x\n\
       ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER \$(echo \$@ | sed -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g')" > $GCCBIN/gcc
       chmod +x $GCCBIN/gcc
+
+      rm $GCCBIN/ld
+      echo -e "#!${pkgs.stdenv.shell} -x\n\
+      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ld \$(echo \$@ | sed -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g')" > $GCCBIN/ld
+      chmod +x $GCCBIN/ld
     '';
     
     postInstall = ''
