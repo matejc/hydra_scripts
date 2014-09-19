@@ -10,8 +10,6 @@ done
 oldPreConfigure="$preConfigure"
 preConfigure() {
 
-    eval "$oldPreConfigure"
-
     find . | while read fn; do
         if test -f "$fn"; then
             first=$(dd if="$fn" count=2 bs=1 2> /dev/null)
@@ -24,6 +22,8 @@ preConfigure() {
             fi
         fi
     done
+
+    eval "$oldPreConfigure"
 
     perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags
 }
