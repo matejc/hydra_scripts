@@ -1,10 +1,10 @@
-perl: perlCross: glibcCross: pkgs: busybox:
+stdenvCross: perl: perlCross: glibcCross: pkgs: busybox:
 
 { buildInputs ? [], ... } @ attrs:
 let
   crossDrvs = list: map (i: if (i ? "crossDrv") then builtins.getAttr "crossDrv" i else i) list;
 in
-perlCross.stdenv.mkDerivation (
+stdenvCross.mkDerivation (
   {
     doCheck = false;
 
@@ -22,7 +22,7 @@ perlCross.stdenv.mkDerivation (
   {
     name = "perl-cross-" + attrs.name;
     builder = "${pkgs.path}/pkgs/development/perl-modules/generic/builder.sh";
-    buildInputs = (crossDrvs buildInputs) ++ [ perl ];
+    buildInputs = buildInputs ++ [ perl ];
     makeMakerFlags = " LD=${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ld ";
     preBuild = ''
       export GCCBIN=`pwd`/bin
