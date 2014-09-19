@@ -143,7 +143,7 @@ let
           DBDSQLite = pkgs.lib.overrideDerivation (import "${pkgs.path}/pkgs/development/perl-modules/DBD-SQLite" {
             inherit (p) stdenv fetchurl;
             buildPerlPackage = buildPerlCrossPackage;
-            DBI = p.perlPackages.DBI;
+            DBI = pkgs.perlPackages.DBI;
             inherit (p) sqlite;
           }) (oldAttrs: {
             preConfigure = ''
