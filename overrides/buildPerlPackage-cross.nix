@@ -3,8 +3,10 @@ stdenvCross: perl: perlCross: glibcCross: pkgs: busybox:
 { buildInputs ? [], ... } @ attrs:
 let
   crossDrvs = list: map (i: if (i ? "crossDrv") then builtins.getAttr "crossDrv" i else i) list;
+  sedCrossDrvs = list: map (i: if (i ? "crossDrv") then (" -e 's|${i}|${builtins.getAttr "crossDrv" i}|g' ") else "") list;
+  buildInputsOrg = buildInputs;
 in
-stdenvCross.mkDerivation (
+pkgs.stdenv.mkDerivation (
   {
     doCheck = false;
 
@@ -43,7 +45,7 @@ stdenvCross.mkDerivation (
 
       rm $GCCBIN/gcc
       echo -e "#!${pkgs.stdenv.shell} -x\n\
-      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER \$(echo \$@ | sed -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g')" > $GCCBIN/gcc
+      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER \$(echo \$@ | sed -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g')" > $GCCBIN/gcc
       chmod +x $GCCBIN/gcc
     '';
     
