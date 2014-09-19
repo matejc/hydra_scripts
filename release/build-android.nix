@@ -148,6 +148,10 @@ let
           }) (oldAttrs: {
             preConfigure = ''
               sed -i -e 's|require DBI;|require "`realpath ${p.perlPackages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`";|g' ./Makefile.PL
+              echo "############################################"
+              cat ./Makefile.PL
+              echo "############################################"
+              exit 1
             '' + (pkgs.lib.optionalString (oldAttrs ? preConfigure) oldAttrs.preConfigure);
           });
           DBI157 = buildPerlCrossPackage {
