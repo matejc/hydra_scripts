@@ -140,7 +140,7 @@ let
           buildPerlPackage = buildPerlCrossPackage;
         };
         overrides = (p: rec {
-          DBDSQLite = pkgs.lib.overrideDerivation (import "${pkgs.path}/pkgs/development/perl-modules/DBD-SQLite" {
+          DBDSQLite142 = pkgs.lib.overrideDerivation (import "${pkgs.path}/pkgs/development/perl-modules/DBD-SQLite" {
             inherit (p) stdenv fetchurl;
             buildPerlPackage = buildPerlCrossPackage;
             DBI = pkgs.perlPackages.DBI;
@@ -169,9 +169,9 @@ let
         buildInputs = oldAttrs.buildInputs ++ [perlCross];
         postInstall = ''
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl}|${perlCross}|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.DBI}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.DBI.crossDrv}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite.crossDrv}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.WWWCurl.crossDrv}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
         '';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
