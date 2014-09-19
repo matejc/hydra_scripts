@@ -149,7 +149,7 @@ let
             preConfigure = ''
               sed -i -e "s|^.*DBI 1.57.*$|print \$@; print \"######\";|g" ./Makefile.PL
               export PERL5LIB_ORIG=$PERL5LIB
-              export PERL5LIB="${p.perlPackages.DBI}/lib/perl5/site_perl";
+              export PERL5LIB="$(dirname `realpath ${p.perlPackages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`)";
               echo "############################1"
               echo $PERL5LIB
               echo "############################1"
