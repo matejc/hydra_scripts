@@ -147,7 +147,7 @@ let
             inherit (p) sqlite;
           }) (oldAttrs: {
             preConfigure = ''
-              sed -i -e 's|require DBI;|require "${"`realpath ${p.perlPackages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`"}";|g' ./Makefile.PL
+              sed -i -e "s|require DBI;|require \"`realpath ${p.perlPackages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`\";|g" ./Makefile.PL
               echo "############################################"
               cat ./Makefile.PL
               echo "############################################"
