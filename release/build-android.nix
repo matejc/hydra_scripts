@@ -143,15 +143,11 @@ let
           DBDSQLite = pkgs.lib.overrideDerivation (import "${pkgs.path}/pkgs/development/perl-modules/DBD-SQLite" {
             inherit (p) stdenv fetchurl;
             buildPerlPackage = buildPerlCrossPackage;
-            DBI = pkgs.perlPackages.DBI;
+            DBI = DBI1631;
             inherit (p) sqlite;
           }) (oldAttrs: {
             preConfigure = ''
-              sed -i -e "s|require DBI;|require \"`realpath ${p.perlPackages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`\";|g" ./Makefile.PL
-              echo "############################################"
-              cat ./Makefile.PL
-              echo "############################################"
-              exit 1
+              #sed -i -e "s|require DBI;|require \"`realpath ${DBI1631}/lib/perl5/site_perl/*/*/DBI.pm`\";|g" ./Makefile.PL
             '' + (pkgs.lib.optionalString (oldAttrs ? preConfigure) oldAttrs.preConfigure);
           });
           DBI157 = buildPerlCrossPackage {
@@ -163,6 +159,13 @@ let
             preConfigure = ''
               sed -i -e 's|$(PERL) dbixs_rev.pl|echo|g' ./Makefile.PL
             '';
+          };
+          DBI1631 = buildPerlCrossPackage {
+            name = "DBI-1.631";
+            src = fetchurl {
+              url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.631.tar.gz;
+              sha256 = "04fmrnchhwi7jx4niaiv93vmi343hdm3xj04w9zr2m9hhqh782np";
+            };
           };
         }) pkgs;
       };
