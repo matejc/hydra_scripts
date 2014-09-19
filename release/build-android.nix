@@ -151,7 +151,7 @@ let
               #echo ""
               #cat ./Makefile.PL
               #echo ""
-              export PERL5LIB=$(dirname `realpath ${DBI1631}/lib/perl5/site_perl/*/*/DBI.pm`)
+              export PERL5LIB="${DBI1631}/lib/perl5/site_perl:${DBI1631}/lib:$(dirname `realpath ${DBI1631}/lib/perl5/site_perl/*/*/DBI.pm`)"
             '' + (pkgs.lib.optionalString (oldAttrs ? preConfigure) oldAttrs.preConfigure);
           });
           DBI157 = buildPerlCrossPackage {
