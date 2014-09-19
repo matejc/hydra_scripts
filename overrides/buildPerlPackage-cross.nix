@@ -22,7 +22,7 @@ stdenvCross.mkDerivation (
   {
     name = "perl-cross-" + attrs.name;
     builder = "${pkgs.path}/pkgs/development/perl-modules/generic/builder.sh";
-    buildInputs = (crossDrvs buildInputs) ++ [ perl ];
+    buildInputs = buildInputs ++ [ perl ];
     makeMakerFlags = " LD=${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ld ";
     preBuild = ''
       export GCCBIN=`pwd`/bin
