@@ -147,7 +147,7 @@ let
             inherit (p) sqlite;
           }) (oldAttrs: {
             preConfigure = ''
-              sed -i -e "s|print \"DBI 1.57 is required to configure this module; please install it or upgrade your CPAN/CPANPLUS shell.\";|print DBI->VERSION; print \"######\";|g" ./Makefile.PL
+              sed -i -e "s|print \"DBI 1.57 is required to configure this module; please install it or upgrade your CPAN/CPANPLUS shell.\\n\";|print DBI->VERSION; print \"######\";|g" ./Makefile.PL
               export PERL5LIB_ORIG=$PERL5LIB
               export PERL5LIB="${p.perlPackages.DBI}/lib/perl5/site_perl";
               echo "############################1"
