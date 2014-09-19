@@ -1,4 +1,4 @@
-stdenvCross: perl: perlCross: glibcCross: pkgs: busybox:
+stdenvCross: perl: perlCross: glibcCross: pkgs: busybox: hydra_scripts:
 
 { buildInputs ? [], ... } @ attrs:
 let
@@ -23,7 +23,7 @@ pkgs.stdenv.mkDerivation (
   //
   {
     name = "perl-cross-" + attrs.name;
-    builder = "./buildPerlPackage-builder.sh";
+    builder = "${hydra_scripts}/overrides/buildPerlPackage-builder.sh";
     buildInputs = buildInputs ++ [ perl ];
     makeMakerFlags = " LD=`pwd`/bin/ld ";
     preBuild = ''
