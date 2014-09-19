@@ -36,7 +36,7 @@ stdenvCross.mkDerivation (
       ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ld $GCCBIN/ld
       ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-nm $GCCBIN/nm
       ln -sv ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-strip $GCCBIN/strip
-      #export PATH="$GCCBIN:$PATH"
+      export PATH="$GCCBIN:$PATH"
       export INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
       export PERLLIBDIR=`realpath ${perl}/lib/perl5/*/${pkgs.stdenv.system}-*/`
       export PERLCROSSLIBDIR=`realpath ${perlCross}/lib/perl5/*/*-*/`
