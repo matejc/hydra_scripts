@@ -153,6 +153,8 @@ let
               echo "############################1"
               echo $PERL5LIB
               echo "############################1"
+              cat ./Makefile.PL
+              echo "############################1"
             '';
             postConfigure = ''
               export PERL5LIB=$PERL5LIB_ORIG
