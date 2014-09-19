@@ -146,14 +146,20 @@ let
             DBI = DBI1631;
             inherit (p) sqlite;
           }) (oldAttrs: {
-            makeMakerFlags = ''PERL5LIB="${DBI1631}/lib/perl5/site_perl:${DBI1631}/lib:$(dirname `realpath ${DBI1631}/lib/perl5/site_perl/*/*/DBI.pm`)"'';
-            PERL5LIB = "${DBI1631}/lib/perl5/site_perl";
             preConfigure = ''
               #sed -i -e "s|require DBI;|require \"`realpath ${DBI1631}/lib/perl5/site_perl/*/*/DBI.pm`\";|g" ./Makefile.PL
-              echo "############################"
+              export PERL5LIB_ORIG=$PERL5LIB
+              export PERL5LIB="${p.perlPackages.DBI}/lib/perl5/site_perl";
+              echo "############################1"
               echo $PERL5LIB
-              echo "############################"
-            '' + (pkgs.lib.optionalString (oldAttrs ? preConfigure) oldAttrs.preConfigure);
+              echo "############################1"
+            '';
+            postConfigure = ''
+              export PERL5LIB=$PERL5LIB_ORIG
+              echo "############################2"
+              echo $PERL5LIB
+              echo "############################2"
+            '';
           });
           DBI157 = buildPerlCrossPackage {
             name = "DBI-1.57";
