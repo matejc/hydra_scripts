@@ -3,7 +3,7 @@ stdenvCross: perl: perlCross: glibcCross: pkgs: busybox:
 { buildInputs ? [], ... } @ attrs:
 let
   crossDrvs = list: map (i: if (i ? "crossDrv") then builtins.getAttr "crossDrv" i else i) list;
-  sedCrossDrvs = list: map (i: if (i ? "crossDrv") then (" -e 's|${i}|${builtins.getAttr "crossDrv" i}|g' ") else "") list;
+  sedCrossDrvs = list: concatStringsSep " " (map (i: if (i ? "crossDrv") then (" -e 's|${i}|${builtins.getAttr "crossDrv" i}|g' ") else "") list);
   buildInputsOrg = buildInputs;
 in
 pkgs.stdenv.mkDerivation (
