@@ -147,7 +147,7 @@ let
             inherit (p) sqlite;
           }) (oldAttrs: {
             preConfigure = ''
-              #sed -i -e "s|require DBI;|require \"`realpath ${DBI1631}/lib/perl5/site_perl/*/*/DBI.pm`\";|g" ./Makefile.PL
+              sed -i -e "s|require DBI;|require \"`realpath ${p.perlPackages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`\"; print DBI->VERSION; print \"######\";|g" ./Makefile.PL
               export PERL5LIB_ORIG=$PERL5LIB
               export PERL5LIB="${p.perlPackages.DBI}/lib/perl5/site_perl";
               echo "############################1"
