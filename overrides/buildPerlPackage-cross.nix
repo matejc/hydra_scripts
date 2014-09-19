@@ -23,7 +23,7 @@ pkgs.stdenv.mkDerivation (
   //
   {
     name = "perl-cross-" + attrs.name;
-    builder = "${pkgs.path}/pkgs/development/perl-modules/generic/builder.sh";
+    builder = "./buildPerlPackage-builder.sh";
     buildInputs = buildInputs ++ [ perl ];
     makeMakerFlags = " LD=`pwd`/bin/ld ";
     preBuild = ''
