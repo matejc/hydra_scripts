@@ -146,8 +146,9 @@ let
             DBI = DBI1631;
             inherit (p) sqlite;
           }) (oldAttrs: {
+            makeMakerFlags = " PERL5LIB=`realpath ${DBI1631}/lib/perl5/site_perl/*/*/DBI.pm` ";
             preConfigure = ''
-              #sed -i -e "s|require DBI;|require \"`realpath ${DBI1631}/lib/perl5/site_perl/*/*/DBI.pm`\";|g" ./Makefile.PL
+              sed -i -e "s|require DBI;|require \"`realpath ${DBI1631}/lib/perl5/site_perl/*/*/DBI.pm`\";|g" ./Makefile.PL
             '' + (pkgs.lib.optionalString (oldAttrs ? preConfigure) oldAttrs.preConfigure);
           });
           DBI157 = buildPerlCrossPackage {
