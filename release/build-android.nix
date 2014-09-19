@@ -133,6 +133,7 @@ let
       }));
       #perl_xcompile = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; binutils = binutils_xcompile; };
       perlCross = pkgs.forceNativeDrv (pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; });
+      perl.crossDrv = perlCross;
       buildPerlCrossPackage = import ../overrides/buildPerlPackage-cross.nix (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageStatic) pkgs.perl520 perlCross glibcCross pkgs busybox;
       perlCrossPackages = import "${pkgs.path}/pkgs/top-level/perl-packages.nix" {
         pkgs = pkgs // {
