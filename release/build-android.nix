@@ -140,14 +140,15 @@ let
           buildPerlPackage = buildPerlCrossPackage;
         };
         overrides = (p: rec {
-          DBDSQLite142 = pkgs.lib.overrideDerivation (import "${pkgs.path}/pkgs/development/perl-modules/DBD-SQLite" {
+          DBDSQLite = pkgs.lib.overrideDerivation (import "${pkgs.path}/pkgs/development/perl-modules/DBD-SQLite" {
             inherit (p) stdenv fetchurl;
             buildPerlPackage = buildPerlCrossPackage;
             DBI = pkgs.perlPackages.DBI;
             inherit (p) sqlite;
           }) (oldAttrs: {
             preConfigure = ''
-              ${pkgsNoOverrides.findutils}/bin/find ./ -type f -exec sed -i -e 's|1.57|1.631|g' {} \;
+              DBIPMPATH=`${pkgs.perlPackages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`
+              sed -i -e "s|require DBI|require \"$DBIPMPATH\"|g" ./Makefile.PL
             '' + (pkgs.lib.optionalString (oldAttrs ? preConfigure) oldAttrs.preConfigure);
           });
           DBI157 = buildPerlCrossPackage {
