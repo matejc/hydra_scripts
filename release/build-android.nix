@@ -140,12 +140,16 @@ let
           buildPerlPackage = buildPerlCrossPackage;
         };
         overrides = (p: rec {
-          DBDSQLite = import "${pkgs.path}/pkgs/development/perl-modules/DBD-SQLite" {
+          DBDSQLite = pkgs.lib.overrideDerivation (import "${pkgs.path}/pkgs/development/perl-modules/DBD-SQLite" {
             inherit (p) stdenv fetchurl;
             buildPerlPackage = buildPerlCrossPackage;
             DBI = DBI157;
             inherit (p) sqlite;
-          };
+          }) (oldAttrs: {
+            preConfigure = ''
+              ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|1.57|1.631|g' {} \;
+            '' + (pkgs.lib.optionalString (oldAttrs ? preConfigure) oldAttrs.preConfigure);
+          });
           DBI157 = buildPerlCrossPackage {
             name = "DBI-1.57";
             src = p.fetchurl {
