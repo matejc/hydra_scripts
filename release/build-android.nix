@@ -149,7 +149,7 @@ let
             preConfigure = ''
               sed -i -e "s|^.*DBI 1.57.*$|print \$@; print \"######\";|g" ./Makefile.PL
               export PERL5LIB_ORIG=$PERL5LIB
-              export PERL5LIB="$(dirname `realpath ${perlCrossPackages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`)";
+              export PERL5LIB="$(dirname `realpath ${perl520Packages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`)";
               echo "############################1"
               echo $PERL5LIB
               echo "############################1"
@@ -183,6 +183,13 @@ let
             };
           };
         }) pkgs;
+      };
+      perl520Packages = import "${pkgs.path}/pkgs/top-level/perl-packages.nix" {
+        pkgs = pkgs // {
+          perl = perl520;
+          buildPerlPackage = import "${pkgs.path}/pkgs/development/perl-modules/generic" perl520;
+        };
+        overrides = (p: {}) pkgs;
       };
       #perlDBICross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBI));
       #perlDBDSQLiteCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBDSQLite));
