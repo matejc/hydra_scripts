@@ -186,8 +186,8 @@ let
       };
       perl520Packages = import "${pkgs.path}/pkgs/top-level/perl-packages.nix" {
         pkgs = pkgs // {
-          perl = perl520;
-          buildPerlPackage = import "${pkgs.path}/pkgs/development/perl-modules/generic" perl520;
+          perl = pkgs.perl520;
+          buildPerlPackage = import "${pkgs.path}/pkgs/development/perl-modules/generic" pkgs.perl520;
         };
         overrides = (p: {}) pkgs;
       };
