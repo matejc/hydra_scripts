@@ -69,7 +69,7 @@ in
       
       rm $GCCBIN/${stdenv.cross.config}-gcc
       echo -e "#!${stdenv.shell} -x\n\
-      ${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER -B${glibcCross}/lib \$@" > $GCCBIN/${stdenv.cross.config}-gcc
+      ${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -B${glibcCross}/lib \$@" > $GCCBIN/${stdenv.cross.config}-gcc
       chmod +x $GCCBIN/${stdenv.cross.config}-gcc
       
       export PATH=`echo $PATH | sed -e "s|${gccCrossStageStatic}/bin|$GCCBIN|g" -e "s|${gccCrossStageStatic.gcc}/bin||g" -e "s|${stdenv.gcc}/bin||g"`
