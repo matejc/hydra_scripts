@@ -197,9 +197,9 @@ let
       nix.crossDrv = pkgs.lib.overrideDerivation (pkgs.nix.override { perl = pkgs.perl520; perlPackages = perl520Packages; }).crossDrv (oldAttrs: {
         preBuild = ''
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.DBI}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBI}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBI}/${perlCross.libPrefix}/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBDSQLite}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${perlCross.libPrefix}/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.WWWCurl}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${perlCross.libPrefix}/*/*/`|g" {} \;
         '';
         #postInstall = ''
         #  ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
