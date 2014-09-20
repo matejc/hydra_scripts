@@ -194,7 +194,7 @@ let
       #perlDBICross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBI));
       #perlDBDSQLiteCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBDSQLite));
       #perlWWWCurlCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.WWWCurl));
-      nix.crossDrv = pkgs.lib.overrideDerivation (pkgs.nix.override { perl = pkgs.perl520; }).crossDrv (oldAttrs: {
+      nix.crossDrv = pkgs.lib.overrideDerivation (pkgs.nix.override { perl = pkgs.perl520; perlPackages = perl520Packages; }).crossDrv (oldAttrs: {
         preBuild = ''
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.DBI}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
