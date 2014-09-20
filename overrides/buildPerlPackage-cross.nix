@@ -6,7 +6,7 @@ let
   sedCrossDrvs = list: pkgs.lib.concatStringsSep " " (map (i: if (i ? "crossDrv") then (" -e 's|${i}|${builtins.getAttr "crossDrv" i}|g' ") else "") list);
   buildInputsOrg = buildInputs;
 in
-pkgs.stdenv.mkDerivation (
+perl.stdenv.mkDerivation (
   {
     doCheck = false;
 
