@@ -7,7 +7,7 @@
 , minimal ? false
 , vm_timeout ? "36000"
 , passthru ? ""
-, tarInclude ? ""
+, tarGrep ? ""
 }:
 
 with import <nixpkgs/nixos/lib/build-vms.nix> { inherit system minimal; };
@@ -47,7 +47,7 @@ let
 
     if [[ "0" -eq "$EXITSTATUSCODE" ]]; then
       test -L ./result && cp -Pv ./result ${prefixDir}
-      STORE_PATHS=`nix-store -qR ./result ${pkgs.lib.optionalString (tarInclude != "") "| grep ${tarInclude}"}`
+      STORE_PATHS=`nix-store -qR ./result ${pkgs.lib.optionalString (tarGrep != "") "| grep ${tarGrep}"}`
       RESULT_PATHS="`find ${prefixDir}/result/* -type l | xargs realpath`\n${prefixDir}/result"
 
       echo -e "$STORE_PATHS\n$RESULT_PATHS" | sort | uniq > ./merged_paths
