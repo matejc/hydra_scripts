@@ -80,4 +80,5 @@ in
     #  find $out -type f -exec patchelf --set-interpreter $INTERPRETER {} \;
     #'';
 
+    passthru.libPrefix = "lib/perl5/site_perl";
   }
