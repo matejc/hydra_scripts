@@ -194,20 +194,19 @@ let
       #perlDBICross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBI));
       #perlDBDSQLiteCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBDSQLite));
       #perlWWWCurlCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.WWWCurl));
-      nix.crossDrv = pkgs.lib.overrideDerivation (pkgs.nix.override { perl = perlCross; }).crossDrv (oldAttrs: {
-        preConfigure = ''
-          export PATH_ORIG=$PATH
-          export PATH="${pkgs.perl520}:$PATH"
-        '';
-        postConfigure = ''
-          export PATH=$PATH_ORIG
-        '';
-        postInstall = ''
+      nix.crossDrv = pkgs.lib.overrideDerivation (pkgs.nix.override { perl = pkgs.perl520; }).crossDrv (oldAttrs: {
+        preBuild = ''
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.DBI}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
         '';
+        #postInstall = ''
+        #  ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
+        #  ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBI}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.DBI}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
+        #  ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.DBDSQLite}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
+        #  ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${pkgs.perlPackages.WWWCurl}/${pkgs.perl.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${pkgs.perl.libPrefix}/*/*/`|g" {} \;
+        #'';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
       python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
