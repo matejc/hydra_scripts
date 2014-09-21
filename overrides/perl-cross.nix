@@ -38,6 +38,7 @@ in
       "--host-set-ccflags='-I${stdenv.glibc}/include'"
       "-Dccflags='-I${glibcCross}/include -B${glibcCross}/lib'"
       "-Dlddlflags='-shared -I${glibcCross}/include -B${glibcCross}/lib '"
+      "-Dusethreads"
     ];
 
     preBuild = ''
