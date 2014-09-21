@@ -110,9 +110,5 @@ in
       preFixup = ''
         rm $out/bin/{ldd,tzselect,catchsegv,xtrace}
       '';
-
-      preBuild = ''
-        export CFLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE";
-      '';
     }
    else {}))
