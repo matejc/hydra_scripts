@@ -186,7 +186,7 @@ let
         };
         overrides = (p: {}) pkgs;
       };
-      sqlite.crossDrv = pkgs.lib.overrideDerivation (pkgs.sqlite.crossDrv).crossDrv (oldAttrs: {
+      sqlite.crossDrv = pkgs.lib.overrideDerivation pkgs.sqlite.crossDrv (oldAttrs: {
         CFLAGS = oldAttrs.CFLAGS + " -DSQLITE_DISABLE_LFS ";
       });
       #perlDBICross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBI));
