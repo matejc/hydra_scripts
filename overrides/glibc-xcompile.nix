@@ -89,6 +89,8 @@ in
         #${pkgs.findutils}/bin/find ../$sourceRoot/nss/nss_files -type f -iname "*.c" -exec sed -i -e "s|\"/etc/\"|\"${etcDir}/\"|g" {} \;
         ${pkgs.findutils}/bin/find ../$sourceRoot -type f \( -iname '*.c' -o -iname '*.h' \) -exec sed -i -e "s|\"/etc/|\"${etcDir}/|g" {} \;
 
+        export configureFlags="$configureFlags --with-stack-protector"
+
         sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
         cat > config.cache << "EOF"
