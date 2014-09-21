@@ -146,15 +146,14 @@ let
             DBI = DBI1631;
             inherit (p) sqlite;
           }) (oldAttrs: {
-            configurePhase = ''
+            preConfigure = ''
+              sed -i -e "s|^.*DBI 1.57.*$|print \$@;|g" ./Makefile.PL
+              export PERL5LIB_ORIG=$PERL5LIB
+              export PERL5LIB="$(dirname `realpath ${perl520Packages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`)";
+
               echo "############################################################################################"
               perl ./Makefile.PL --help
               echo "############################################################################################"
-            '';
-            preConfigure = ''
-              #sed -i -e "s|^.*DBI 1.57.*$|print \$@; print \"######\";|g" ./Makefile.PL
-              export PERL5LIB_ORIG=$PERL5LIB
-              export PERL5LIB="$(dirname `realpath ${perl520Packages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`)";
             '';
             postConfigure = ''
               export PERL5LIB=$PERL5LIB_ORIG
