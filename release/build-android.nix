@@ -151,9 +151,8 @@ let
               export PERL5LIB_ORIG=$PERL5LIB
               export PERL5LIB="$(dirname `realpath ${perl520Packages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`)";
             '';
-            postConfigure = ''
+            preBuild = ''
               export PERL5LIB=$PERL5LIB_ORIG
-
 
               echo "############################################################################ cat ./Makefile"
               cat ./Makefile
