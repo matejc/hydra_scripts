@@ -151,12 +151,12 @@ let
               export PERL5LIB_ORIG=$PERL5LIB
               export PERL5LIB="$(dirname `realpath ${perl520Packages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`)";
             '';
-            preBuild = ''
-              export PERL5LIB=$PERL5LIB_ORIG
-
+            postConfigure = ''
               echo "############################################################################ ./Makefile.PL"
               perl ./Makefile.PL -h
               echo "############################################################################ ./Makefile.PL"
+
+              export PERL5LIB=$PERL5LIB_ORIG
             '';
           });
           DBI157 = buildPerlCrossPackage {
