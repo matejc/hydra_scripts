@@ -50,7 +50,7 @@ perl.stdenv.mkDerivation (
 
       rm $GCCBIN/ld
       echo -e "#!${pkgs.stdenv.shell} -x\n\
-      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ld \$(echo \$@ | sed -e 's|-Wl,-Bsymbolic|-Bsymbolic|g' -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g')" > $GCCBIN/ld
+      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ld \$(echo \$@ | sed -e 's|-Wl,-Bsymbolic|-Bsymbolic|g' -e 's|-D_FILE_OFFSET_BITS=64||g' -e 's|-D_LARGEFILE64_SOURCE||g' -e 's|-D_LARGEFILE_SOURCE||g' -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g')" > $GCCBIN/ld
       chmod +x $GCCBIN/ld
     '';
     
