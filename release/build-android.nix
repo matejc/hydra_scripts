@@ -152,7 +152,6 @@ let
               export PERL5LIB="$(dirname `realpath ${perl520Packages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`)";
             '';
             GCC_EXTRA_OPTIONS = "-DSQLITE_DISABLE_LFS";
-            LD_EXTRA_OPTIONS = "-DSQLITE_DISABLE_LFS";
             postConfigure = ''
               echo "############################################################################ ./Makefile.PL"
               perl ./Makefile.PL -h
