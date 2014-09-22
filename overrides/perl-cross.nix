@@ -1,4 +1,5 @@
-{ pkgs, stdenv, fetchurl, fetchgit, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross, file, makeWrapper }:
+{ pkgs, stdenv, fetchurl, fetchgit, prefix ? "", gccCrossStageStatic, which, binutils, glibcCross, file, makeWrapper
+, bashCross, busybox }:
 let
   perlCrossSrc = fetchgit {
     url = "git://github.com/arsv/perl-cross";
@@ -26,6 +27,8 @@ in
       substituteInPlace ./configure --replace "#!/bin/bash" "#!${stdenv.shell}"
       sed -i -e 's|#!/bin/bash|#!${stdenv.shell}|g' ./cnf/configure
       substituteInPlace ./Makefile.config.SH --replace "#!/bin/bash" "#!${stdenv.shell}"
+
+      ${busybox}/bin/find . -type f -exec sed -i -e '/^\s*#/! s|"/bin/sh"|"${bashCross}/bin/bash"|g' {} \;
 
       ./configure ${toString configureFlags}
     '';
