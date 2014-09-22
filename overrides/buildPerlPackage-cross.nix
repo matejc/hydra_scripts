@@ -1,4 +1,4 @@
-stdenvCross: perl: perlCross: glibcCross: pkgs: busybox: hydra_scripts:
+stdenvCross: perl: perlCross: glibcCross: pkgs: busybox: bashCross: hydra_scripts:
 
 { buildInputs ? [], ... } @ attrs:
 let
@@ -58,6 +58,7 @@ perl.stdenv.mkDerivation (
     
     postInstall = ''
       ${busybox}/bin/find $out -type f -exec sed -i -e 's|${perl}|${perlCross}|g' {} \;
+      ${busybox}/bin/find $out -type f -exec sed -i -e 's|/bin/sh|${bashCross}/bin/bash|g' {} \;
     '';
   }
 )
