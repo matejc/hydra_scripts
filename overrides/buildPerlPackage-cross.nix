@@ -53,7 +53,7 @@ perl.stdenv.mkDerivation (
       ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ld \$(cat <<< \$@ | sed -e 's|-fstack-protector||g' -e 's|-Wl,-Bsymbolic|-Bsymbolic|g' -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g') -lc $LD_EXTRA_OPTIONS" > $GCCBIN/ld
       chmod +x $GCCBIN/ld
 
-      sed -i -e 's|-D_FILE_OFFSET_BITS=64||g' -e 's|-D_LARGEFILE64_SOURCE||g' -e 's|-D_LARGEFILE_SOURCE||g' ./Makefile
+      #sed -i -e 's|-D_FILE_OFFSET_BITS=64||g' -e 's|-D_LARGEFILE64_SOURCE||g' -e 's|-D_LARGEFILE_SOURCE||g' ./Makefile
     '';
     
     postInstall = ''
