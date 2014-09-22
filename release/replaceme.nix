@@ -2,7 +2,7 @@
 let
   replaceme = pkgs.writeScriptBin "replaceme" ''
   #!${shell}
-  export PATH="$PATH:${path}"
+  export PATH="${path}:$PATH"
   mkdir -p ${prefix}/tmp
   url="${url}"
   domain=`echo $url | busybox sed 's-^[^/]*/*\([^/]*\)/\?.*$-\1-'`
