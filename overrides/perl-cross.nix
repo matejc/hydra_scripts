@@ -67,7 +67,12 @@ in
       echo -e "#!${stdenv.shell} -x\n\
       ${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER -B${glibcCross}/lib \$(cat <<< \$@ | sed -e 's|-fstack-protector||g')" > $GCCBIN/${stdenv.cross.config}-gcc
       chmod +x $GCCBIN/${stdenv.cross.config}-gcc
-      
+
+      rm $GCCBIN/${stdenv.cross.config}-ld
+      echo -e "#!${stdenv.shell} -x\n\
+      ${gccCrossStageStatic}/bin/${stdenv.cross.config}-ld \$(cat <<< \$@ | sed -e 's|-fstack-protector||g')" > $GCCBIN/${stdenv.cross.config}-ld
+      chmod +x $GCCBIN/${stdenv.cross.config}-ld
+
       export PATH=`echo $PATH | sed -e "s|${gccCrossStageStatic}/bin|$GCCBIN|g" -e "s|${stdenv.gcc}/bin||g"`
     '';
 
