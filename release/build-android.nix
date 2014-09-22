@@ -193,11 +193,12 @@ let
           ${pkgsNoOverrides.findutils}/bin/find . -type f \( -iname "*.cc" -or -iname "*.in" -or -iname "*.nix" \) -exec sed -i -e '/^\s*#/! s|"/bin/sh"|"${pkgs.bash.crossDrv}/bin/bash"|g' {} \;
         '';
         postInstall = ''
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.bash}|${pkgs.bash.crossDrv}|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.coreutils}|${coreutils.crossDrv}|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.bzip2}|${pkgs.bzip2.crossDrv}|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.xz}|${pkgs.xz.crossDrv}|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.gnutar}|${pkgs.gnutar.crossDrv}|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|shell.*;|shell = "${pkgs.bash.crossDrv}/bin/bash";|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|coreutils.*;|coreutils = "${coreutils.crossDrv}/bin";|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|bzip2.*;|bzip2 = "${pkgs.bzip2.crossDrv}/bin/bzip2";|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|gzip.*;|gzip = "${pkgs.gzip.crossDrv}/bin/gzip";|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|xz.*;|xz = "${pkgs.xz.crossDrv}";|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|tar.*;|tar = "${pkgs.gnutar.crossDrv}";|g' {} \;
 
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e '/^\s*#/ s|/bin/sh|${pkgs.bash.crossDrv}/bin/bash|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
