@@ -8,7 +8,6 @@ let
     HostKey ${prefix}/etc/ssh/ssh_host_dsa_key
     UsePrivilegeSeparation no
     
-    UsePAM no
     PasswordAuthentication no
     PermitRootLogin no
     PermitEmptyPasswords no
@@ -49,8 +48,8 @@ let
     openssl dsa -pubout -in ${prefix}/etc/ssh/ssh_host_dsa_key -out ${prefix}/etc/ssh/ssh_host_dsa_key.pub; }
   cp -v ${sshd_config} ${prefix}/etc/ssh/sshd_config
   mkdir -p ${prefix}/home/builder/.ssh
-  mkdir -p ${prefix}/etc/pam.d
-  cp -v ${pam_sshd} ${prefix}/etc/pam.d/sshd
+  #mkdir -p ${prefix}/etc/pam.d
+  #cp -v ${pam_sshd} ${prefix}/etc/pam.d/sshd
   sed -e "s|@uid@|`id -u`|g" -e "s|@gid@|`id -g`|g" ${passwd} > ${prefix}/etc/passwd
   sed -e "s|@uid@|`id -u`|g" ${group} > ${prefix}/etc/group
   cp -v ${shadow} ${prefix}/etc/shadow
