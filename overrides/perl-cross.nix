@@ -65,7 +65,7 @@ in
 
       rm $GCCBIN/${stdenv.cross.config}-gcc
       echo -e "#!${stdenv.shell} -x\n\
-      ${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER -B${glibcCross}/lib \$(echo \"\$@\" | sed -e 's|-fstack-protector||g')" > $GCCBIN/${stdenv.cross.config}-gcc
+      ${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER -B${glibcCross}/lib \$(echo \\\"\$@\\\" | sed -e 's|-fstack-protector||g')" > $GCCBIN/${stdenv.cross.config}-gcc
       chmod +x $GCCBIN/${stdenv.cross.config}-gcc
       
       export PATH=`echo $PATH | sed -e "s|${gccCrossStageStatic}/bin|$GCCBIN|g" -e "s|${stdenv.gcc}/bin||g"`
