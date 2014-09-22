@@ -11,8 +11,8 @@ let
   pkgs: {
     packageOverrides = self: {
       nix = self.nix.override {
-        storeDir = "/data/nix/store";
-        stateDir = "/data/nix/var";
+        storeDir = "${prefix}/store";
+        stateDir = "${prefix}/var";
       };
     };
   }
