@@ -26,8 +26,6 @@ preConfigure() {
     eval "$oldPreConfigure"
 
     perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags
-    
-    eval "$postConfigure"
 }
 
 postFixup() {
