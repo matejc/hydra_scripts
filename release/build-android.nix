@@ -196,6 +196,7 @@ let
         #  ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e "s|${perl520Packages.WWWCurl}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${perlCross.libPrefix}/*/*/`|g" {} \;
         #'';
         postInstall = ''
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|/bin/sh|${mybash}/bin/mybash|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBI}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBI}/${perlCross.libPrefix}/*/*/`|g" {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBDSQLite}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${perlCross.libPrefix}/*/*/`|g" {} \;
@@ -257,7 +258,7 @@ let
 
   sshd = import "${hydra_scripts}/release/sshd.nix" {
     inherit pkgs prefix;
-    bash = pkgs.bash.crossDrv;
+    bash = pkgs.bashInteractive.crossDrv;
     openssh = pkgs.openssh.crossDrv;
     busybox = pkgs.busybox.crossDrv;
     openssl = pkgs.openssl.crossDrv;
