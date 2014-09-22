@@ -7,6 +7,17 @@ let
   nameserver 4.4.4.4
   '';
 
+  config_nix = pkgs.writeText "config.nix" ''
+  pkgs: {
+    packageOverrides = self: {
+      nix = self.nix.override {
+        storeDir = "/data/nix/store";
+        stateDir = "/data/nix/var";
+      };
+    };
+  }
+  '';
+
   sshd_config = pkgs.writeText "sshd_config" ''
     PidFile ${prefix}/run/sshd.pid
     Port 9022
@@ -58,6 +69,7 @@ let
   sed -e "s|@uid@|`id -u`|g" ${group} > ${prefix}/etc/group
   cp -v ${shadow} ${prefix}/etc/shadow
   cp -v ${resolv_conf} ${prefix}/etc/resolv.conf
+  test -f ${prefix}/home/builder/.nixpkgs/config.nix || { mkdir -p ${prefix}/home/builder/.nixpkgs && cp -v ${config_nix} ${prefix}/home/builder/.nixpkgs/config.nix; }
   '';
 
   sshd_run = pkgs.writeScript "sshd_run.sh" ''
