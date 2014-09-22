@@ -1,11 +1,5 @@
 { pkgs, prefix, url, path ? "/system/bin", shell ? "/system/bin/sh" }:
 let
-  resolv_conf = pkgs.writeText "resolv.conf" ''
-  nameserver 8.8.8.8
-  nameserver 8.8.4.4
-  nameserver 4.4.4.4
-  '';
-
   replaceme = pkgs.writeScriptBin "replaceme" ''
   #!${shell}
   export PATH="$PATH:${path}"
@@ -19,6 +13,5 @@ let
   rm -rf ${prefix}/result || true
   busybox tar xvf ${prefix}/tmp/out.tar.xx -C /
   '';
-
 in
   replaceme
