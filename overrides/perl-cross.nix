@@ -28,7 +28,8 @@ in
       sed -i -e 's|#!/bin/bash|#!${stdenv.shell}|g' ./cnf/configure
       substituteInPlace ./Makefile.config.SH --replace "#!/bin/bash" "#!${stdenv.shell}"
 
-      ${busybox}/bin/find . -type f -exec sed -i -e '/^\s*#/! s|"/bin/sh"|"${bashCross}/bin/bash"|g' {} \;
+      ${busybox}/bin/find . -type f -exec sed -i -e 's|"/bin/sh"|"${bashCross}/bin/bash"|g' {} \;
+      ${busybox}/bin/find . -type f -exec sed -i -e 's|\'/bin/sh\'|\'${bashCross}/bin/bash\'|g' {} \;
 
       ./configure ${toString configureFlags}
     '';
