@@ -56,6 +56,9 @@ in
       export GCCBIN=`pwd`/bin
       export INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
       mkdir -p $GCCBIN
+      for i in ${stdenv.gcc}/bin/*; do
+        ln -sv $i $GCCBIN
+      done
       for i in ${gccCrossStageStatic}/bin/*; do
         ln -sv $i $GCCBIN
       done
@@ -65,7 +68,7 @@ in
       ${gccCrossStageStatic}/bin/${stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER -B${glibcCross}/lib \$(echo \$@ | sed -e 's|-fstack-protector||g')" > $GCCBIN/${stdenv.cross.config}-gcc
       chmod +x $GCCBIN/${stdenv.cross.config}-gcc
       
-      export PATH=`echo $PATH | sed -e "s|${gccCrossStageStatic}/bin|$GCCBIN|g" -e "s|${gccCrossStageStatic.gcc}/bin||g" -e "s|${stdenv.gcc}/bin||g"`
+      export PATH=`echo $PATH | sed -e "s|${gccCrossStageStatic}/bin|$GCCBIN|g" -e "s|${stdenv.gcc}/bin||g"`
     '';
 
     #postInstall = ''
