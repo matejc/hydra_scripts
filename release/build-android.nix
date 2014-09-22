@@ -133,7 +133,7 @@ let
       }));
       #perl_xcompile = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; binutils = binutils_xcompile; };
       perlCross = pkgs.forceNativeDrv (pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; });
-      buildPerlCrossPackage = import ../overrides/buildPerlPackage-cross.nix (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageStatic) pkgs.perl520 perlCross glibcCross pkgs busybox bash.crossDrv hydra_scripts;
+      buildPerlCrossPackage = import ../overrides/buildPerlPackage-cross.nix (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageStatic) pkgs.perl520 perlCross glibcCross pkgs busybox pkgs.bash.crossDrv hydra_scripts;
       perlCrossPackages = import "${pkgs.path}/pkgs/top-level/perl-packages.nix" {
         pkgs = pkgs // {
           perl = pkgs.perl520;
@@ -188,10 +188,9 @@ let
       #perlDBICross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBI));
       #perlDBDSQLiteCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBDSQLite));
       #perlWWWCurlCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.WWWCurl));
-      bash.crossDrv = bashInteractive.crossDrv;
       nix.crossDrv = pkgs.lib.overrideDerivation (pkgs.nix.override { perl = pkgs.perl520; perlPackages = perl520Packages; }).crossDrv (oldAttrs: {
         postInstall = ''
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|/bin/sh|${bash.crossDrv}/bin/bash|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|/bin/sh|${pkgs.bash.crossDrv}/bin/bash|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBI}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBI}/${perlCross.libPrefix}/*/*/`|g" {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBDSQLite}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${perlCross.libPrefix}/*/*/`|g" {} \;
@@ -253,7 +252,7 @@ let
 
   sshd = import "${hydra_scripts}/release/sshd.nix" {
     inherit pkgs prefix;
-    bash = pkgs.bashInteractive.crossDrv;
+    bash = pkgs.bash.crossDrv;
     openssh = pkgs.openssh.crossDrv;
     busybox = pkgs.busybox.crossDrv;
     openssl = pkgs.openssl.crossDrv;
