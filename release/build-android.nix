@@ -194,6 +194,7 @@ let
         '';
         postInstall = ''
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|shell.*;|shell = "${pkgs.bash.crossDrv}/bin/bash";|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|tr.*;|tr = "${coreutils.crossDrv}/bin/tr";|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|coreutils.*;|coreutils = "${coreutils.crossDrv}/bin";|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|bzip2.*;|bzip2 = "${pkgs.bzip2.crossDrv}/bin/bzip2";|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|gzip.*;|gzip = "${pkgs.gzip.crossDrv}/bin/gzip";|g' {} \;
