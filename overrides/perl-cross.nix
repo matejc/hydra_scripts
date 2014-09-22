@@ -30,6 +30,7 @@ in
 
       ${busybox}/bin/find . -type f -exec sed -i -e 's|"/bin/sh"|"${bashCross}/bin/bash"|g' {} \;
       ${busybox}/bin/find . -type f -exec sed -i -e "s|'/bin/sh'|'${bashCross}/bin/bash'|g" {} \;
+      ${busybox}/bin/find . -type f -exec sed -i -e 's|#define SH_PATH .*$|#define SH_PATH "${bashCross}/bin/bash"|g' {} \;
 
       ./configure ${toString configureFlags}
     '';
