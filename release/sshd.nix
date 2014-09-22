@@ -78,7 +78,7 @@ let
   sshd_kill = pkgs.writeScript "sshd_kill.sh" ''
   #!${bash}/bin/bash
   source ${env}
-  test -f ${prefix}/run/sshd.pid && kill -9 `cat ${prefix}/run/sshd.pid`
+  test -f ${prefix}/run/sshd.pid && { kill -9 `cat ${prefix}/run/sshd.pid` && rm ${prefix}/run/sshd.pid; }
   '';
   
   env = pkgs.writeScript "env.sh" ''
