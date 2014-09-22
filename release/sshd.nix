@@ -1,6 +1,12 @@
 { pkgs, openssh, bash, openssl, busybox, forceCommand ? "", shell ? "", prefix, strace ? null }:
 let
 
+  resolv_conf = pkgs.writeText "resolv.conf" ''
+  nameserver 8.8.8.8
+  nameserver 8.8.4.4
+  nameserver 4.4.4.4
+  '';
+
   sshd_config = pkgs.writeText "sshd_config" ''
     PidFile ${prefix}/run/sshd.pid
     Port 9022
@@ -48,11 +54,10 @@ let
     openssl dsa -pubout -in ${prefix}/etc/ssh/ssh_host_dsa_key -out ${prefix}/etc/ssh/ssh_host_dsa_key.pub; }
   cp -v ${sshd_config} ${prefix}/etc/ssh/sshd_config
   mkdir -p ${prefix}/home/builder/.ssh
-  #mkdir -p ${prefix}/etc/pam.d
-  #cp -v ${pam_sshd} ${prefix}/etc/pam.d/sshd
   sed -e "s|@uid@|`id -u`|g" -e "s|@gid@|`id -g`|g" ${passwd} > ${prefix}/etc/passwd
   sed -e "s|@uid@|`id -u`|g" ${group} > ${prefix}/etc/group
   cp -v ${shadow} ${prefix}/etc/shadow
+  cp -v ${resolv_conf} ${prefix}/etc/resolv.conf
   '';
 
   sshd_run = pkgs.writeScript "sshd_run.sh" ''
