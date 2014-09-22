@@ -266,8 +266,6 @@ let
   replaceme = import "${hydra_scripts}/release/replaceme.nix" {
     inherit pkgs prefix;
     url = replaceme_url;
-    shell = "${mybash}/bin/mybash";
-    path = "/system/bin:${prefix}/result/bin";
     };
 
   hydra = (import "${hydra_scripts}/release/hydra.nix" {
