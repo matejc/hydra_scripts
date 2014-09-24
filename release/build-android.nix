@@ -256,7 +256,7 @@ let
           wrapProgram $out/bin/tmux --set TMUX_TMPDIR "${prefix}/tmp"
         '';
       });
-      git = lib.makeOverridable (import ./git) {
+      git = pkgs.lib.makeOverridable (import "${pkgs.path}/pkgs/applications/version-management/git-and-tools/git") {
         inherit (pkgs) fetchurl stdenv curl openssl zlib expat gettext gnugrep
           asciidoc xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt cpio tcl
           tk makeWrapper gzip;
