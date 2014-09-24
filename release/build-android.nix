@@ -256,6 +256,19 @@ let
           wrapProgram $out/bin/tmux --set TMUX_TMPDIR "${prefix}/tmp"
         '';
       });
+      git = lib.makeOverridable (import ./git) {
+        inherit (pkgs) fetchurl stdenv curl openssl zlib expat gettext gnugrep
+          asciidoc xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt cpio tcl
+          tk makeWrapper gzip;
+        python = python27;
+        perl = perlCross;
+        texinfo = texinfo5;
+        svnSupport = false;		# for git-svn support
+        guiSupport = false;		# requires tcl/tk
+        sendEmailSupport = false;	# requires plenty of perl libraries
+        perlLibs = with perlCrossPackages; [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
+        smtpPerlLibs = [ ];
+      }
     };
   };
 
