@@ -259,7 +259,7 @@ let
       git = pkgs.lib.makeOverridable (import "${pkgs.path}/pkgs/applications/version-management/git-and-tools/git") {
         inherit (pkgs) fetchurl stdenv curl openssl zlib expat gettext gnugrep
           asciidoc xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt cpio tcl
-          tk makeWrapper gzip;
+          tk makeWrapper gzip subversionClient;
         python = python27;
         perl = perlCross;
         texinfo = pkgs.texinfo5;
