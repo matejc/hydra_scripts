@@ -266,6 +266,7 @@ let
         svnSupport = false;		# for git-svn support
         guiSupport = false;		# requires tcl/tk
         sendEmailSupport = false;	# requires plenty of perl libraries
+        pythonSupport = false;
         perlLibs = with perlCrossPackages; [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
         smtpPerlLibs = [ ];
       }
