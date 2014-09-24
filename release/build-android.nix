@@ -262,7 +262,8 @@ let
           tk makeWrapper gzip;
         python = python27;
         perl = perlCross;
-        texinfo = texinfo5;
+        texinfo = pkgs.texinfo5;
+        withManual = false;
         svnSupport = false;		# for git-svn support
         guiSupport = false;		# requires tcl/tk
         sendEmailSupport = false;	# requires plenty of perl libraries
