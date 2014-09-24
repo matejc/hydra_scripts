@@ -269,7 +269,7 @@ let
         pythonSupport = false;
         perlLibs = with perlCrossPackages; [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
         smtpPerlLibs = [ ];
-      }
+      };
     };
   };
 
