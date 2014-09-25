@@ -263,7 +263,7 @@ let
         python = python27;
         perl = pkgs.perl520;
         texinfo = pkgs.texinfo5;
-        withManual = false;
+        withManual = true;
         svnSupport = false;		# for git-svn support
         guiSupport = false;		# requires tcl/tk
         sendEmailSupport = false;	# requires plenty of perl libraries
@@ -271,7 +271,7 @@ let
         perlLibs = with perlCrossPackages; [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
         smtpPerlLibs = [ ];
       })) (oldAttrs: {
-        nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.asciidoc pkgs.xmlto ];
+        #nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.asciidoc pkgs.xmlto ];
         postInstall = oldAttrs.postInstall + ''
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
         '';
