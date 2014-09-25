@@ -271,7 +271,7 @@ let
         perlLibs = with perlCrossPackages; [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
         smtpPerlLibs = [ ];
       })) (oldAttrs: {
-        nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.asciidoc ];
+        nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.asciidoc pkgs.xmlto ];
         postInstall = oldAttrs.postInstall + ''
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
         '';
