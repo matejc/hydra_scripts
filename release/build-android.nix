@@ -256,7 +256,7 @@ let
           wrapProgram $out/bin/tmux --set TMUX_TMPDIR "${prefix}/tmp"
         '';
       });
-      gitCross = pkgs.lib.overrideDerivation (pkgs.lib.appendToName "xcompile" (pkgs.lib.makeOverridable (import "${pkgs.path}/pkgs/applications/version-management/git-and-tools/git") {
+      gitCross = pkgs.lib.overrideDerivation ((pkgs.lib.makeOverridable (import "${pkgs.path}/pkgs/applications/version-management/git-and-tools/git") {
         inherit (pkgs) fetchurl stdenv curl openssl zlib expat gettext gnugrep
           asciidoc xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt cpio tcl
           tk makeWrapper gzip subversionClient;
@@ -270,7 +270,7 @@ let
         pythonSupport = false;
         perlLibs = with perlCrossPackages; [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
         smtpPerlLibs = [ ];
-      })) (oldAttrs: {
+      }).crossDrv) (oldAttrs: {
         #nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.asciidoc pkgs.xmlto ];
         postInstall = oldAttrs.postInstall + ''
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
