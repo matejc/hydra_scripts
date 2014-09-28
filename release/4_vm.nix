@@ -102,7 +102,7 @@ let
     mkdir -p /var/images
     touch /var/images/$HASH.lock
     export NIX_DISK_IMAGE=/var/images/$HASH.img
-    export QEMU_OPTS="${extra_qemu_opts}"
+    export QEMU_OPTS="${pkgs.lib.optionalString (extra_qemu_opts != "") extra_qemu_opts}"
     timeout ${vm_timeout} ${vm.config.system.build.vm}/bin/run-*-vm
     rm /var/images/$HASH.lock
 
