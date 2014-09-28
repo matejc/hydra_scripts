@@ -8,6 +8,7 @@
 , vm_timeout ? "36000"
 , passthru ? ""
 , tarGrep ? ""
+, extra_qemu_opts ? "-cpu kvm64 -smp cores=1,threads=2,sockets=1"
 }:
 
 with import <nixpkgs/nixos/lib/build-vms.nix> { inherit system minimal; };
@@ -101,7 +102,7 @@ let
     mkdir -p /var/images
     touch /var/images/$HASH.lock
     export NIX_DISK_IMAGE=/var/images/$HASH.img
-    export QEMU_OPTS="-smp cores=2,threads=1,sockets=1"
+    export QEMU_OPTS="${extra_qemu_opts}"
     timeout ${vm_timeout} ${vm.config.system.build.vm}/bin/run-*-vm
     rm /var/images/$HASH.lock
 
