@@ -294,6 +294,9 @@ let
   replaceme = import "${hydra_scripts}/release/replaceme.nix" {
     inherit pkgs prefix;
     url = replaceme_url;
+    resultPath = "${prefix}/result/bin";
+    systemPath = "/system/bin";
+    shell = "/system/bin/sh";
     };
 
   hydra = (import "${hydra_scripts}/release/hydra.nix" {
