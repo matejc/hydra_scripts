@@ -15,6 +15,7 @@ let
         stateDir = "${prefix}/var";
       };
     };
+    allowBroken = true;
   }
   '';
 
