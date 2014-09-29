@@ -8,6 +8,7 @@ let
   { \
     export PATH="${systemPath}" && \
     rm -rf ${prefix}/store || true && \
+    rm -rf ${prefix}/var/nix || true && \
     rm -rf ${prefix}/result || true && \
     busybox tar xvf ${prefix}/tmp/out.tar.xx -C /; \
   }
