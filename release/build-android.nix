@@ -188,7 +188,7 @@ let
           };
         }) pkgs;
       };
-      curlCross = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.crossDrv (oldAttrs: {
+      curlCross = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.crossDrv) (oldAttrs: {
         configureFlags = [ "--with-libssh2=${pkgs.libssh2.crossDrv}" "--with-ssl=${pkgs.openssl.crossDrv}" "--enable-ares=${pkgs.c-ares.crossDrv}" ];
         postInstall = ''
           source "${pkgs.makeWrapper}/nix-support/setup-hook"
