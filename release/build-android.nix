@@ -188,13 +188,8 @@ let
           };
         }) pkgs;
       };
-      curlCross = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.override {
-        fetchurl = pkgs.fetchurlBoot;
-        zlibSupport = true;
-        sslSupport = true;
-        scpSupport = true;
-        c-aresSupport = true;
-      }).crossDrv (oldAttrs: {
+      curlCross = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.crossDrv (oldAttrs: {
+        configureFlags = [ "--with-libssh2=${pkgs.libssh2.crossDrv}" "--with-ssl=${pkgs.openssl.crossDrv}" "--enable-ares=${pkgs.c-ares.crossDrv}" ];
         postInstall = ''
           source "${pkgs.makeWrapper}/nix-support/setup-hook"
           wrapProgram $out/bin/curl --add-flags "--dns-servers 8.8.4.4,4.4.4.4"
