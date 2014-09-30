@@ -219,7 +219,7 @@ let
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|gzip =.*;|gzip = "${pkgs.gzip.crossDrv}/bin/gzip";|' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|xz =.*;|xz = "${pkgs.xz.crossDrv}/bin/xz";|' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|tar =.*;|tar = "${pkgs.gnutar.crossDrv}/bin/tar";|' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|curl =.*;|tar = "${curlCross}/bin/curl";|' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|curl =.*;|curl = "${curlCross}/bin/curl";|' {} \;
 
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e '/^\s*#/ s|/bin/sh|${pkgs.bash.crossDrv}/bin/bash|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
