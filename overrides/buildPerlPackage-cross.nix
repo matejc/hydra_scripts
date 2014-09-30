@@ -42,15 +42,17 @@ perl.stdenv.mkDerivation (
       export INTERPRETER=`realpath ${glibcCross}/lib/ld-*.so`
       export PERLLIBDIR=`realpath ${perl}/lib/perl5/*/${pkgs.stdenv.system}-*/`
       export PERLCROSSLIBDIR=`realpath ${perlCross}/lib/perl5/*/*-*/`
+      export LGCC=$(dirname `realpath ${pkgs.gccCrossStageFinal.gcc}/lib/gcc/${pkgs.stdenv.cross.config}/*/libgcc.a`)
+      export LGCCS=${pkgs.gccCrossStageFinal.gcc}/${pkgs.stdenv.cross.config}/lib
 
       rm $GCCBIN/gcc
       echo -e "#!${pkgs.stdenv.shell} -x\n\
-      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER \$(cat <<< \$@ | sed -e 's|-fstack-protector||g' -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g') -lc -L${pkgs.gccCrossStageFinal.gcc}/${pkgs.stdenv.cross.config}/lib -lgcc_s $GCC_EXTRA_OPTIONS" > $GCCBIN/gcc
+      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER \$(cat <<< \$@ | sed -e 's|-fstack-protector||g' -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g') -lc -L $LGCCS -lgcc_s -L $LGCC -lgcc $GCC_EXTRA_OPTIONS" > $GCCBIN/gcc
       chmod +x $GCCBIN/gcc
 
       rm $GCCBIN/ld
       echo -e "#!${pkgs.stdenv.shell} -x\n\
-      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ld \$(cat <<< \$@ | sed -e 's|-fstack-protector||g' -e 's|-Wl,-Bsymbolic|-Bsymbolic|g' -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g') -lc -L${pkgs.gccCrossStageFinal.gcc}/${pkgs.stdenv.cross.config}/lib -lgcc_s $LD_EXTRA_OPTIONS" > $GCCBIN/ld
+      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ld \$(cat <<< \$@ | sed -e 's|-fstack-protector||g' -e 's|-Wl,-Bsymbolic|-Bsymbolic|g' -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g') -lc -L $LGCCS -lgcc_s -L $LGCC -lgcc $LD_EXTRA_OPTIONS" > $GCCBIN/ld
       chmod +x $GCCBIN/ld
 
       #sed -i -e 's|-D_FILE_OFFSET_BITS=64||g' -e 's|-D_LARGEFILE64_SOURCE||g' -e 's|-D_LARGEFILE_SOURCE||g' ./Makefile
