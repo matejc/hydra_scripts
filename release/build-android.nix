@@ -175,7 +175,7 @@ let
           };
           WWWCurlCross = buildPerlCrossPackage rec {
             name = "WWW-Curl-4.17";
-            src = fetchurl {
+            src = pkgs.fetchurl {
               url = "mirror://cpan/authors/id/S/SZ/SZBALINT/${name}.tar.gz";
               sha256 = "1fmp9aib1kaps9vhs4dwxn7b15kgnlz9f714bxvqsd1j1q8spzsj";
             };
