@@ -193,7 +193,7 @@ let
           source "${pkgs.makeWrapper}/nix-support/setup-hook"
           wrapProgram $out/bin/curl --add-flags "--dns-servers 8.8.4.4,4.4.4.4"
         '';
-      });
+      }));
       perl520Packages = import "${pkgs.path}/pkgs/top-level/perl-packages.nix" {
         pkgs = pkgs // {
           perl = pkgs.perl520;
