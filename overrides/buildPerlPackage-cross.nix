@@ -45,12 +45,12 @@ perl.stdenv.mkDerivation (
 
       rm $GCCBIN/gcc
       echo -e "#!${pkgs.stdenv.shell} -x\n\
-      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER \$(cat <<< \$@ | sed -e 's|-fstack-protector||g' -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g') -lc -L${pkgs.gccCrossStageStatic}/lib -lgcc_s $GCC_EXTRA_OPTIONS" > $GCCBIN/gcc
+      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-gcc -Wl,-dynamic-linker,$INTERPRETER \$(cat <<< \$@ | sed -e 's|-fstack-protector||g' -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g') -lc -L${pkgs.gccCrossStageStatic.gcc}/lib -lgcc_s $GCC_EXTRA_OPTIONS" > $GCCBIN/gcc
       chmod +x $GCCBIN/gcc
 
       rm $GCCBIN/ld
       echo -e "#!${pkgs.stdenv.shell} -x\n\
-      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ld \$(cat <<< \$@ | sed -e 's|-fstack-protector||g' -e 's|-Wl,-Bsymbolic|-Bsymbolic|g' -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g') -lc -L${pkgs.gccCrossStageStatic}/lib -lgcc_s $LD_EXTRA_OPTIONS" > $GCCBIN/ld
+      ${pkgs.gccCrossStageStatic}/bin/${pkgs.stdenv.cross.config}-ld \$(cat <<< \$@ | sed -e 's|-fstack-protector||g' -e 's|-Wl,-Bsymbolic|-Bsymbolic|g' -e 's|${perlCross.stdenv.gcc.libc}|${glibcCross}|g' ${sedCrossDrvs buildInputsOrg} -e 's|$PERLLIBDIR|$PERLCROSSLIBDIR|g') -lc -L${pkgs.gccCrossStageStatic.gcc}/lib -lgcc_s $LD_EXTRA_OPTIONS" > $GCCBIN/ld
       chmod +x $GCCBIN/ld
 
       #sed -i -e 's|-D_FILE_OFFSET_BITS=64||g' -e 's|-D_LARGEFILE64_SOURCE||g' -e 's|-D_LARGEFILE_SOURCE||g' ./Makefile
