@@ -188,7 +188,13 @@ let
           };
         }) pkgs;
       };
-      curlCross = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.crossDrv) (oldAttrs: {
+      curlCross = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.override {
+        fetchurl = pkgs.fetchurlBoot;
+        zlibSupport = true;
+        sslSupport = true;
+        scpSupport = true;
+        c-aresSupport = true;
+      }).crossDrv (oldAttrs: {
         postInstall = ''
           source "${pkgs.makeWrapper}/nix-support/setup-hook"
           wrapProgram $out/bin/curl --add-flags "--dns-servers 8.8.4.4,4.4.4.4"
