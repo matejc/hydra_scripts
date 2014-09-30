@@ -173,8 +173,27 @@ let
               sha256 = "04fmrnchhwi7jx4niaiv93vmi343hdm3xj04w9zr2m9hhqh782np";
             };
           };
+          WWWCurlCross = buildPerlCrossPackage rec {
+            name = "WWW-Curl-4.17";
+            src = fetchurl {
+              url = "mirror://cpan/authors/id/S/SZ/SZBALINT/${name}.tar.gz";
+              sha256 = "1fmp9aib1kaps9vhs4dwxn7b15kgnlz9f714bxvqsd1j1q8spzsj";
+            };
+            buildInputs = [ curlCross ];
+            preConfigure =
+              ''
+                substituteInPlace Makefile.PL --replace '"cpp"' '"gcc -E"'
+              '';
+            doCheck = false; # performs network access
+          };
         }) pkgs;
       };
+      curlCross = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.crossDrv) (oldAttrs: {
+        postInstall = ''
+          source "${pkgs.makeWrapper}/nix-support/setup-hook"
+          wrapProgram $out/bin/curl --add-flags "--dns-servers 8.8.4.4,4.4.4.4"
+        '';
+      });
       perl520Packages = import "${pkgs.path}/pkgs/top-level/perl-packages.nix" {
         pkgs = pkgs // {
           perl = pkgs.perl520;
@@ -200,6 +219,7 @@ let
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|gzip =.*;|gzip = "${pkgs.gzip.crossDrv}/bin/gzip";|' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|xz =.*;|xz = "${pkgs.xz.crossDrv}/bin/xz";|' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|tar =.*;|tar = "${pkgs.gnutar.crossDrv}/bin/tar";|' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|curl =.*;|tar = "${curlCross}/bin/curl";|' {} \;
 
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e '/^\s*#/ s|/bin/sh|${pkgs.bash.crossDrv}/bin/bash|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
