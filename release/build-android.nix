@@ -190,7 +190,10 @@ let
           */
         }) pkgs;
       };
-      curl.crossDrv = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.override {
+      curl = pkgs.curl.override {
+        c-aresSupport = true;
+      };
+      curlCross = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.override {
         zlibSupport = true;
         sslSupport = true;
         scpSupport = true;
