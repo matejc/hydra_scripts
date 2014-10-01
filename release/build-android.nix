@@ -190,9 +190,6 @@ let
           */
         }) pkgs;
       };
-      curl = pkgs.curl.override {
-        c-aresSupport = true;
-      };
       curlCross = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.override {
         zlibSupport = true;
         sslSupport = true;
@@ -219,7 +216,7 @@ let
       #perlDBDSQLiteCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBDSQLite));
       #perlWWWCurlCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.WWWCurl));
       nix.crossDrv = pkgs.lib.overrideDerivation (pkgs.nix.override { perl = pkgs.perl520; perlPackages = perl520Packages; }).crossDrv (oldAttrs: {
-        #buildInputs = [ curlCross pkgs.openssl.crossDrv pkgs.boehmgc.crossDrv pkgs.sqlite.crossDrv ];
+        buildInputs = [ curlCross pkgs.openssl.crossDrv pkgs.boehmgc.crossDrv pkgs.sqlite.crossDrv ];
         preConfigure = ''
           ${pkgsNoOverrides.findutils}/bin/find . -type f \( -iname "*.cc" -or -iname "*.in" -or -iname "*.nix" \) -exec sed -i -e '/^\s*#/! s|"/bin/sh"|"${pkgs.bash.crossDrv}/bin/bash"|g' {} \;
         '';
@@ -231,7 +228,7 @@ let
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|gzip =.*;|gzip = "${pkgs.gzip.crossDrv}/bin/gzip";|' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|xz =.*;|xz = "${pkgs.xz.crossDrv}/bin/xz";|' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|tar =.*;|tar = "${pkgs.gnutar.crossDrv}/bin/tar";|' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|curl =.*;|curl = "${curl.crossDrv}/bin/curl";|' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|curl =.*;|curl = "${curlCross}/bin/curl";|' {} \;
 
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e '/^\s*#/ s|/bin/sh|${pkgs.bash.crossDrv}/bin/bash|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
