@@ -241,7 +241,7 @@ let
           source "${pkgs.makeWrapper}/nix-support/setup-hook"
           wrapProgram $out/bin/nix-prefetch-url --set NIX_CURL_FLAGS "\"--dns-servers 8.8.4.4,4.4.4.4\""
 
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -name "fetchurl.nix" -exec sed -i -e 's|--fail --location|--fail --dns-servers 8.8.4.4,4.4.4.4 --location|g' {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -name "fetchurl.nix" -exec sed -i -e 's|[\$]{curl}|${curlCross}/bin/curl --dns-servers 8.8.4.4,4.4.4.4|g' {} \;
         '';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
