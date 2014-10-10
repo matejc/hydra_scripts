@@ -173,6 +173,7 @@ let
               sha256 = "04fmrnchhwi7jx4niaiv93vmi343hdm3xj04w9zr2m9hhqh782np";
             };
           };
+          /*
           WWWCurlCross = buildPerlCrossPackage rec {
             name = "WWW-Curl-4.17";
             src = pkgs.fetchurl {
@@ -186,6 +187,7 @@ let
               '';
             doCheck = false; # performs network access
           };
+          */
         }) pkgs;
       };
       curlCross = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.override {
@@ -232,7 +234,9 @@ let
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBI}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBI}/${perlCross.libPrefix}/*/*/`|g" {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBDSQLite}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${perlCross.libPrefix}/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.WWWCurl}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.WWWCurlCross}/${perlCross.libPrefix}/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.WWWCurl}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${perlCross.libPrefix}/*/*/`|g" {} \;
+          
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|$Nix::Config::curl|$Nix::Config::curl --dns-servers 8.8.4.4,4.4.4.4|g' {} \;
         '';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
