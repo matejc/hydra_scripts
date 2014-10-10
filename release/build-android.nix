@@ -237,6 +237,8 @@ let
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.WWWCurl}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${perlCross.libPrefix}/*/*/`|g" {} \;
           
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -not -name "nix-prefetch-url" -exec sed -i -e 's|$Nix::Config::curl|$Nix::Config::curl --dns-servers 8.8.4.4,4.4.4.4|g' {} \;
+          source "${pkgs.makeWrapper}/nix-support/setup-hook"
+          wrapProgram $out/bin/nix-prefetch-url --set NIX_CURL_FLAGS "--dns-servers 8.8.4.4,4.4.4.4"
         '';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
