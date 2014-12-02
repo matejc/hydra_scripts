@@ -29,9 +29,6 @@ let
     echo "############################### BUILD START ###############################"
     export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:$PATH
 
-    # for running configure as root
-    export FORCE_UNSAFE_CONFIGURE=1
-
     # some apps need /bin/sh
     mkdir -p /bin
     ln -sf ${pkgs.stdenv.shell} /bin/sh
@@ -42,6 +39,9 @@ let
     cp ${passwd} /etc/passwd
     cp ${group} /etc/group
     cp ${shadow} /etc/shadow
+
+    busybox adduser -h /home/builder -s ${pkgs.stdenv.shell} -D  builder
+    busybox su - builder
 
     mkdir -p ${prefixDir}/store
     chgrp -R 30000 ${prefixDir}
