@@ -63,7 +63,7 @@ let
     export PROOT_DIR=/var/proots/$HASH
     mkdir -p $PROOT_DIR/xchg
 
-    cp ${buildScript}/bin/* ${buildScript}/bin/
+    cp -r ${buildScript}/bin $PROOT_DIR/bin
 
     timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" -b /nix/store /bin/build.sh
 
