@@ -11,14 +11,13 @@
 }:
 let
   pkgs = import <nixpkgs> { inherit system; };
-  with pkgs;
 
   attrs_str = toString attrs;  # legacy
 
   buildScript = pkgs.writeScriptBin "build.sh" ''
     #! ${pkgs.stdenv.shell} -e
     echo "############################### BUILD START ###############################"
-    export PATH=${nix}/bin:$PATH
+    export PATH=${pkgs.nix}/bin:$PATH
 
     mkdir -p ${prefixDir}/store
     chgrp -R 30000 ${prefixDir}
@@ -45,16 +44,16 @@ let
       echo -e "$STORE_PATHS\n$RESULT_PATHS" | wc -l
       cat ./merged_paths | wc -l
 
-      ${gnutar}/bin/tar cvf /xchg/out.tar --files-from ./merged_paths --mode=u+rw
-      ${bzip2}/bin/bzip2 /xchg/out.tar
+      ${pkgs.gnutar}/bin/tar cvf /xchg/out.tar --files-from ./merged_paths --mode=u+rw
+      ${pkgs.bzip2}/bin/bzip2 /xchg/out.tar
     else
       echo "BUILD FAILED!"
     fi
     echo "############################### BUILD END ###############################"
   '';
 
-  runCommand = writeText "runCommand" ''
-    export PATH=${coreutils}/bin:${gawk}/bin:$PATH
+  runCommand = pkgs.writeText "runCommand" ''
+    export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin:$PATH
 
     HASH=`echo "${prefixDir}" | sha1sum - | awk '{print $1}'`
 
@@ -66,7 +65,7 @@ let
 
     cp ${buildScript}/bin/* ${buildScript}/bin/
 
-    timeout ${timeout} ${proot}/bin/proot -S "$PROOT_DIR" -b /nix/store /bin/build.sh
+    timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" -b /nix/store /bin/build.sh
 
     rm /var/proots/$HASH.lock
 
@@ -85,9 +84,9 @@ let
     done
   '';
 
-  runner = stdenv.mkDerivation {
+  runner = pkgs.stdenv.mkDerivation {
     name = "proot-runner";
-    builder = "${bash}/bin/sh";
+    builder = "${pkgs.bash}/bin/sh";
     args = ["-e" runCommand];
   };
 
