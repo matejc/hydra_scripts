@@ -5,10 +5,9 @@
 , attrs ? [ "pkgs.nix" "pkgs.bash" ]
 , prefixDir ? "/var/matej"
 , minimal ? false
-, vm_timeout ? "36000"
+, timeout ? "36000"
 , passthru ? ""
 , tarGrep ? ""
-, extra_qemu_opts ? "-cpu kvm64 -smp cores=1,threads=2,sockets=1"
 }:
 
 with import <nixpkgs/nixos/lib/build-vms.nix> { inherit system minimal; };
@@ -16,14 +15,6 @@ with pkgs;
 
 let
   pkgs = import <nixpkgs> { inherit system; };
-  configVM = {
-    virtualisation.memorySize = 2047;
-    virtualisation.graphics = false;
-    virtualisation.diskSize = 30000;
-  };
-
-  machine =
-    { config, pkgs, ... }: configVM;
 
   attrs_str = toString attrs;  # legacy
 
@@ -64,33 +55,7 @@ let
     echo "############################### BUILD END ###############################"
   '';
 
-  vm = buildVM { } [
-    machine {
-      key = "run-in-machine";
-      networking.enableIPv6 = false;
-      nix.readOnlyStore = true;
-      systemd.services.backdoor.enable = false;
-
-      systemd.services.build = {
-        description = "Build";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "multi-user.target" ];
-        script = ''
-          {
-            ${vmBuildCommands}
-          } || {
-            echo "BUILD SCRIPT EXITED WITH ERROR"
-          }
-          sleep 5; poweroff
-        '';
-        serviceConfig = {
-          Type = "oneshot";
-        };
-      };
-    }
-  ];
-
-  vmRunCommand = writeText "vm-run" ''
+  runCommand = writeText "vm-run" ''
     export PATH=${coreutils}/bin:${gawk}/bin:$PATH
 
     mkdir -p vm-state-client/xchg
@@ -98,22 +63,24 @@ let
     
     HASH=`echo "${prefixDir}" | sha1sum - | awk '{print $1}'`
 
-    while `test -f /var/images/$HASH.lock`; do sleep 10; echo "Waiting: $HASH.lock"; done
-    mkdir -p /var/images
-    touch /var/images/$HASH.lock
-    export NIX_DISK_IMAGE=/var/images/$HASH.img
-    export QEMU_OPTS="${pkgs.lib.optionalString (extra_qemu_opts != "") extra_qemu_opts}"
-    timeout ${vm_timeout} ${vm.config.system.build.vm}/bin/run-*-vm
-    rm /var/images/$HASH.lock
+    while `test -f /var/proots/$HASH.lock`; do sleep 10; echo "Waiting: $HASH.lock"; done
+    mkdir -p /var/proots
+    touch /var/proots/$HASH.lock
+    export PROOT_DIR=/var/proots/$HASH
+    mkdir $PROOT_DIR/xchg
 
-    test -w $NIX_DISK_IMAGE || echo "WARNING: `id` has no write permission for $NIX_DISK_IMAGE"
-    chmod g+w $NIX_DISK_IMAGE || true
+    timeout ${vm_timeout} ${buildScript} $PROOT_DIR
 
-    EXITSTATUSCODE=`cat ./nix-vm.*/xchg/exitstatuscode`
+    rm /var/proots/$HASH.lock
+
+    test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
+    chmod g+w $PROOT_DIR || true
+
+    EXITSTATUSCODE=`cat $PROOT_DIR/xchg/exitstatuscode`
     test 0 -ne $EXITSTATUSCODE && exit $EXITSTATUSCODE
 
     mkdir -p $out/tarballs
-    cp ./nix-vm.*/xchg/out.tar.bz2 $out/tarballs
+    cp $PROOT_DIR/xchg/out.tar.bz2 $out/tarballs
 
     mkdir -p $out/nix-support
     for i in $out/tarballs/*; do
@@ -121,14 +88,13 @@ let
     done
   '';
 
-  vmRunner = stdenv.mkDerivation {
-    name = "vm-runner";
-    requiredSystemFeatures = [ "kvm" ];
+  runner = stdenv.mkDerivation {
+    name = "proot-runner";
     builder = "${bash}/bin/sh";
-    args = ["-e" vmRunCommand];
+    args = ["-e" runCommand];
   };
 
   jobs = {
-    build = vmRunner;
+    build = runner;
   };
 in jobs
