@@ -29,6 +29,9 @@ let
     echo "############################### BUILD START ###############################"
     export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:$PATH
 
+    mkdir -p /bin
+    ln -s ${pkgs.stdenv.shell} /bin/sh
+
     mkdir -p /etc
     cp ${passwd} /etc/passwd
     cp ${group} /etc/group
