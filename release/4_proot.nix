@@ -79,7 +79,7 @@ let
   '';
 
   runCommand = pkgs.writeText "runCommand" ''
-    export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin:$PATH
+    export PATH=${pkgs.coreutils}/bin:${pkgs.qemu}/bin:${pkgs.gawk}/bin:$PATH
 
     export HASH=`echo "${prefixDir}" | sha1sum - | awk '{print $1}'`
 
