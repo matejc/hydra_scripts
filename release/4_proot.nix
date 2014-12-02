@@ -19,8 +19,8 @@ let
     echo "############################### BUILD START ###############################"
     export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:$PATH
 
-    adduser -h /root -s /bin/sh -G 0 -S -D -u 0 admin
-    su admin
+    busybox adduser -h /root -s /bin/sh -G 0 -S -D -u 0 admin
+    busybox su admin
     echo `id`
 
     mkdir -p ${prefixDir}/store
