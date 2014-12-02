@@ -61,7 +61,7 @@ let
     mkdir -p /var/proots
     touch /var/proots/$HASH.lock
     export PROOT_DIR=/var/proots/$HASH
-    mkdir $PROOT_DIR/xchg
+    mkdir -p $PROOT_DIR/xchg
 
     cp ${buildScript}/bin/* ${buildScript}/bin/
 
