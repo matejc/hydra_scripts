@@ -16,7 +16,7 @@ let
   attrs_str = toString attrs;  # legacy
 
   passwd = pkgs.writeText "passwd" ''
-    root:x:0:0::/root:${pkgs.stdenv.shell}
+    root:x:0:0::/root:/bin/sh
   '';
   group = pkgs.writeText "group" ''
     root:x:0:
@@ -26,13 +26,9 @@ let
   '';
 
   buildScript = pkgs.writeScriptBin "build.sh" ''
-    #! ${pkgs.stdenv.shell} -e
+    #! /bin/sh -e
     echo "############################### BUILD START ###############################"
     export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:$PATH
-
-    # some apps need /bin/sh
-    mkdir -p /bin
-    ln -sf ${pkgs.stdenv.shell} /bin/sh
 
     # to associate uid with username and
     # gid with groupname for programs like `id`
@@ -42,7 +38,7 @@ let
     cp ${shadow} /etc/shadow
 
     mkdir -p /home/builder
-    busybox adduser -h /home/builder -s ${pkgs.stdenv.shell} -D  builder || true
+    busybox adduser -h /home/builder -s /bin/sh -D  builder || true
 
     mkdir -p ${prefixDir}/store
     export NIX_STORE_DIR=${prefixDir}/store
@@ -93,7 +89,7 @@ let
     export PROOT_DIR=/var/proots/$HASH
     mkdir -p $PROOT_DIR && chmod -R g+w $PROOT_DIR
 
-    timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" -b /nix/store ${extraPRootArgs} ${buildScript}/bin/build.sh
+    timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" -b /bin/sh -b ${pkgs.busybox} -b ${pkgs.nix} -b ${pkgs.gnutar} -b ${pkgs.bzip2} -b ${<hydra_scripts>} -b ${<nixpkgs>} ${extraPRootArgs} ${buildScript}/bin/build.sh
 
     test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
     chmod g+w $PROOT_DIR || true
