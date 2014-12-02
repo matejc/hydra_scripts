@@ -1,4 +1,4 @@
-{ nixpkgs, hydra_scripts, prefix, system, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv", build_sshd ? "", replaceme_url ? "", build_hydra ? "" }:
+{ nixpkgs, hydra_scripts, prefix, system, attrs_str ? "pkgs.nix pkgs.bash", build_sshd ? "", replaceme_url ? "", build_hydra ? "" }:
 let
 
   platform = {
@@ -103,7 +103,7 @@ let
   };
 
   pkgs = import nixpkgs {
-    crossSystem = crosssystem;
+    #crossSystem = crosssystem;
     inherit config;
   };
 
@@ -113,7 +113,7 @@ let
   };
 
   pkgsNoOverrides = import nixpkgs {
-    crossSystem = crosssystem;
+    #crossSystem = crosssystem;
     config = { nix = config_nix; };
   };
 
@@ -129,12 +129,12 @@ let
 
   sshd = import "${hydra_scripts}/release/sshd.nix" {
     inherit pkgs prefix;
-    bash = pkgs.bash.crossDrv;
-    openssh = pkgs.openssh.crossDrv;
-    busybox = pkgs.busybox.crossDrv;
-    openssl = pkgs.openssl.crossDrv;
+    bash = pkgs.bash;
+    openssh = pkgs.openssh;
+    busybox = pkgs.busybox;
+    openssl = pkgs.openssl;
     shell = "${mybash}/bin/mybash";
-    strace = pkgs.strace.crossDrv;
+    strace = pkgs.strace;
     };
 
   replaceme = import "${hydra_scripts}/release/replaceme.nix" {
@@ -149,16 +149,16 @@ let
     inherit pkgs prefix;
     }).armv7l-linux;
 
-  essentials = [pkgs.bashInteractive.crossDrv pkgs.busybox.crossDrv];
+  essentials = [pkgs.bashInteractive pkgs.busybox];
   paths = parsed_attrs ++ essentials;
 
   mybash = pkgs.writeScriptBin "mybash" ''
-  #!${pkgs.bashInteractive.crossDrv}/bin/bash
+  #!${pkgs.bashInteractive}/bin/bash
   cd /
-  ${pkgs.bashInteractive.crossDrv}/bin/bash --rcfile ${bashrc} "$@"
+  ${pkgs.bashInteractive}/bin/bash --rcfile ${bashrc} "$@"
   '';
   bashrc = pkgs.writeText "bashrc" ''
-  ${pkgs.busybox.crossDrv}/bin/busybox tty -s
+  ${pkgs.busybox}/bin/busybox tty -s
   if [ $? -ne 0 ]; then return; fi
 
   PATH="${pkgs.lib.makeSearchPath "bin" (map (a: a.outPath) paths)}"
