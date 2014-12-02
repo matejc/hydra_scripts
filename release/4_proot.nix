@@ -10,7 +10,6 @@
 , tarGrep ? ""
 }:
 
-with import <nixpkgs/nixos/lib/build-vms.nix> { inherit system minimal; };
 with pkgs;
 
 let
@@ -56,7 +55,7 @@ let
     echo "############################### BUILD END ###############################"
   '';
 
-  runCommand = writeText "vm-run" ''
+  runCommand = writeText "runCommand" ''
     export PATH=${coreutils}/bin:${gawk}/bin:$PATH
 
     HASH=`echo "${prefixDir}" | sha1sum - | awk '{print $1}'`
@@ -69,7 +68,7 @@ let
 
     cp ${buildScript}/bin/* ${buildScript}/bin/
 
-    timeout ${vm_timeout} ${proot}/bin/proot -S "$PROOT_DIR" -b /nix/store /bin/build.sh
+    timeout ${timeout} ${proot}/bin/proot -S "$PROOT_DIR" -b /nix/store /bin/build.sh
 
     rm /var/proots/$HASH.lock
 
