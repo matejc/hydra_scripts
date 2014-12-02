@@ -62,7 +62,7 @@ let
     while `test -f /var/proots/$HASH.lock`; do sleep 10; echo "Waiting: $HASH.lock"; done
     touch /var/proots/$HASH.lock
     export PROOT_DIR=/var/proots/$HASH
-    mkdir -p $PROOT_DIR
+    mkdir -p $PROOT_DIR && chmod -R g+w $PROOT_DIR
 
     timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" -b /nix/store ${buildScript}/bin/build.sh
 
