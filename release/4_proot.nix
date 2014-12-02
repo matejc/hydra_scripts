@@ -17,9 +17,10 @@ let
   buildScript = pkgs.writeScriptBin "build.sh" ''
     #! ${pkgs.stdenv.shell} -e
     echo "############################### BUILD START ###############################"
-    export PATH=${pkgs.nix}/bin:$PATH
+    export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:$PATH
 
-    su root
+    adduser -h /root -s /bin/sh -G 0 -S -D -u 0 admin
+    su admin
     echo `id`
 
     mkdir -p ${prefixDir}/store
