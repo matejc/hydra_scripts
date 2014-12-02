@@ -19,6 +19,7 @@ let
     echo "############################### BUILD START ###############################"
     export PATH=${pkgs.nix}/bin:$PATH
 
+    su root
     echo `id`
 
     mkdir -p ${prefixDir}/store
