@@ -9,11 +9,9 @@
 , passthru ? ""
 , tarGrep ? ""
 }:
-
-with pkgs;
-
 let
   pkgs = import <nixpkgs> { inherit system; };
+  with pkgs;
 
   attrs_str = toString attrs;  # legacy
 
