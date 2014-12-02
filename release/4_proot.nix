@@ -34,7 +34,7 @@ let
 
     # some apps need /bin/sh
     mkdir -p /bin
-    ln -s ${pkgs.stdenv.shell} /bin/sh
+    ln -sf ${pkgs.stdenv.shell} /bin/sh
 
     # to associate uid with username and
     # gid with groupname for programs like `id`
