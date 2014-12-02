@@ -104,7 +104,7 @@ let
 
   pkgs = import nixpkgs {
     #crossSystem = crosssystem;
-    inherit config;
+    inherit config system;
   };
 
   config_nix = {
@@ -114,6 +114,7 @@ let
 
   pkgsNoOverrides = import nixpkgs {
     #crossSystem = crosssystem;
+    inherit system;
     config = { nix = config_nix; };
   };
 
