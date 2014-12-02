@@ -170,7 +170,7 @@ let
 
   build = {
     vmEnvironment = pkgs.buildEnv {
-      name = "outenv-${pkgs.stdenv.cross.config}";
+      name = "outenv-arm";
       paths = paths ++ [mybash] ++ (pkgs.lib.optionals (build_hydra == "1") [hydra]) ++ (pkgs.lib.optionals (build_sshd == "1") [sshd]) ++ (pkgs.lib.optionals (replaceme_url != "") [replaceme]);
       pathsToLink = [ "/" ];
       ignoreCollisions = true;
