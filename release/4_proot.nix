@@ -14,10 +14,25 @@ let
 
   attrs_str = toString attrs;  # legacy
 
+  passwd = pkgs.writeText "passwd" ''
+    root:x:0:0::/root:${pkgs.stdenv.shell}
+  '';
+  group = pkgs.writeText "group" ''
+    root:x:0:
+  '';
+  shadow = pkgs.writeText "shadow" ''
+    root:x:16117::::::
+  '';
+
   buildScript = pkgs.writeScriptBin "build.sh" ''
     #! ${pkgs.stdenv.shell} -e
     echo "############################### BUILD START ###############################"
     export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:$PATH
+
+    mkdir -p /etc
+    cp ${passwd} /etc/passwd
+    cp ${group} /etc/group
+    cp ${shadow} /etc/shadow
 
     busybox adduser -h /root -s /bin/sh -G root -S -D -u 0 admin
     busybox su admin
