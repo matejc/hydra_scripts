@@ -8,6 +8,7 @@
 , timeout ? "36000"
 , passthru ? ""
 , tarGrep ? ""
+, extraPRootArgs ? "-q qemu-arm"
 }:
 let
   pkgs = import <nixpkgs> { inherit system; };
@@ -92,7 +93,7 @@ let
     export PROOT_DIR=/var/proots/$HASH
     mkdir -p $PROOT_DIR && chmod -R g+w $PROOT_DIR
 
-    timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" -b /nix/store ${buildScript}/bin/build.sh
+    timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" -b /nix/store ${extraPRootArgs} ${buildScript}/bin/build.sh
 
     test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
     chmod g+w $PROOT_DIR || true
