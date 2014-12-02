@@ -89,7 +89,11 @@ let
     export PROOT_DIR=/var/proots/$HASH
     mkdir -p $PROOT_DIR && chmod -R g+w $PROOT_DIR
 
-    timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" -b /bin/sh -b ${pkgs.busybox} -b ${pkgs.nix} -b ${pkgs.gnutar} -b ${pkgs.bzip2} -b ${<hydra_scripts>} -b ${<nixpkgs>} -b ${buildScript} -b ${passwd} -b ${group} -b ${shadow} -b ${pkgs.perl} ${extraPRootArgs} ${buildScript}/bin/build.sh
+    timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" \
+      -b /bin/sh -b ${pkgs.busybox} -b ${pkgs.nix} -b ${pkgs.gnutar} \
+      -b ${pkgs.bzip2} -b ${<hydra_scripts>} -b ${<nixpkgs>} -b ${buildScript} \
+      -b ${passwd} -b ${group} -b ${shadow} -b ${pkgs.perl} -b ${pkgs.stdenv} \
+      ${extraPRootArgs} ${buildScript}/bin/build.sh
 
     test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
     chmod g+w $PROOT_DIR || true
