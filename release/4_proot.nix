@@ -45,13 +45,14 @@ let
     
 
     mkdir -p ${prefixDir}/store
-    chgrp -R 30000 ${prefixDir}
-    chmod -R 1775 ${prefixDir}
     export NIX_STORE_DIR=${prefixDir}/store
     mkdir -p ${prefixDir}/var/nix
     export NIX_STATE_DIR=${prefixDir}/var/nix
     mkdir -p ${prefixDir}/var/nix/db
     export NIX_DB_DIR=${prefixDir}/var/nix/db
+
+    chown -R builder ${prefixDir}
+    chmod -R 1775 ${prefixDir}
 
     busybox su builder -c 'nix-build ${<hydra_scripts>}"/"${build_script} -A vmEnvironment --argstr nixpkgs ${<nixpkgs>} --argstr hydra_scripts ${<hydra_scripts>} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} ${toString passthru} -vv --show-trace'
 
