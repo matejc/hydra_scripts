@@ -34,8 +34,6 @@ let
     cp ${group} /etc/group
     cp ${shadow} /etc/shadow
 
-    busybox adduser -h /root -s /bin/sh -G root -S -D -u 0 admin
-    busybox su admin
     echo `id`
 
     mkdir -p ${prefixDir}/store
