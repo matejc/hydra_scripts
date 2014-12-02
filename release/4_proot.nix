@@ -29,15 +29,19 @@ let
     echo "############################### BUILD START ###############################"
     export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:$PATH
 
+    # for running configure as root
+    export FORCE_UNSAFE_CONFIGURE=1
+
+    # some apps need /bin/sh
     mkdir -p /bin
     ln -s ${pkgs.stdenv.shell} /bin/sh
 
+    # to associate uid with username and
+    # gid with groupname for programs like `id`
     mkdir -p /etc
     cp ${passwd} /etc/passwd
     cp ${group} /etc/group
     cp ${shadow} /etc/shadow
-
-    echo `id`
 
     mkdir -p ${prefixDir}/store
     chgrp -R 30000 ${prefixDir}
