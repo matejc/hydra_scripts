@@ -19,6 +19,8 @@ let
     echo "############################### BUILD START ###############################"
     export PATH=${pkgs.nix}/bin:$PATH
 
+    echo `id`
+
     mkdir -p ${prefixDir}/store
     chgrp -R 30000 ${prefixDir}
     chmod -R 1775 ${prefixDir}
