@@ -58,14 +58,11 @@ let
     HASH=`echo "${prefixDir}" | sha1sum - | awk '{print $1}'`
 
     while `test -f /var/proots/$HASH.lock`; do sleep 10; echo "Waiting: $HASH.lock"; done
-    mkdir -p /var/proots
     touch /var/proots/$HASH.lock
     export PROOT_DIR=/var/proots/$HASH
-    mkdir -p $PROOT_DIR/xchg
+    mkdir -p $PROOT_DIR
 
-    cp -r ${buildScript}/bin $PROOT_DIR/bin
-
-    timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" -b /nix/store /bin/build.sh
+    timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" -b /nix/store ${buildScript}/bin/build.sh
 
     rm /var/proots/$HASH.lock
 
