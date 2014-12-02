@@ -18,7 +18,8 @@ let
 
   attrs_str = toString attrs;  # legacy
 
-  vmBuildCommands = ''
+  buildScript = pkgs.writeScriptBin "build.sh" ''
+    #! ${pkgs.stdenv.shell} -e
     echo "############################### BUILD START ###############################"
     export PATH=${nix}/bin:$PATH
 
@@ -47,8 +48,8 @@ let
       echo -e "$STORE_PATHS\n$RESULT_PATHS" | wc -l
       cat ./merged_paths | wc -l
 
-      ${gnutar}/bin/tar cvf /tmp/xchg/out.tar --files-from ./merged_paths --mode=u+rw
-      ${bzip2}/bin/bzip2 /tmp/xchg/out.tar
+      ${gnutar}/bin/tar cvf /xchg/out.tar --files-from ./merged_paths --mode=u+rw
+      ${bzip2}/bin/bzip2 /xchg/out.tar
     else
       echo "BUILD FAILED!"
     fi
@@ -58,9 +59,6 @@ let
   runCommand = writeText "vm-run" ''
     export PATH=${coreutils}/bin:${gawk}/bin:$PATH
 
-    mkdir -p vm-state-client/xchg
-    export > vm-state-client/xchg/saved-env
-    
     HASH=`echo "${prefixDir}" | sha1sum - | awk '{print $1}'`
 
     while `test -f /var/proots/$HASH.lock`; do sleep 10; echo "Waiting: $HASH.lock"; done
@@ -69,7 +67,9 @@ let
     export PROOT_DIR=/var/proots/$HASH
     mkdir $PROOT_DIR/xchg
 
-    timeout ${vm_timeout} ${buildScript} $PROOT_DIR
+    cp ${buildScript}/bin/* ${buildScript}/bin/
+
+    timeout ${vm_timeout} ${proot}/bin/proot -S "$PROOT_DIR" -b /nix/store /bin/build.sh
 
     rm /var/proots/$HASH.lock
 
