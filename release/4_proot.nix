@@ -40,7 +40,8 @@ let
     cp ${group} /etc/group
     cp ${shadow} /etc/shadow
 
-    busybox adduser -h /home/builder -s ${pkgs.stdenv.shell} -D  builder
+    mkdir -p /home/builder
+    busybox adduser -h /home/builder -s ${pkgs.stdenv.shell} -D  builder || true
     busybox su - builder
 
     mkdir -p ${prefixDir}/store
