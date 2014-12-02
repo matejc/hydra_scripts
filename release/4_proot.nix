@@ -80,16 +80,19 @@ let
   runCommand = pkgs.writeText "runCommand" ''
     export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin:$PATH
 
-    HASH=`echo "${prefixDir}" | sha1sum - | awk '{print $1}'`
+    export HASH=`echo "${prefixDir}" | sha1sum - | awk '{print $1}'`
 
     while `test -f /var/proots/$HASH.lock`; do sleep 10; echo "Waiting: $HASH.lock"; done
     touch /var/proots/$HASH.lock
+    postCommands() {
+      rm /var/proots/$HASH.lock
+    }
+    trap "postCommands" EXIT
+
     export PROOT_DIR=/var/proots/$HASH
     mkdir -p $PROOT_DIR && chmod -R g+w $PROOT_DIR
 
     timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" -b /nix/store ${buildScript}/bin/build.sh
-
-    rm /var/proots/$HASH.lock
 
     test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
     chmod g+w $PROOT_DIR || true
