@@ -309,6 +309,7 @@ let
           ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
         '';
       });*/
+      gnugrep = pkgs.gnugrep.override { doCheck = false; };
     };
   };
 
