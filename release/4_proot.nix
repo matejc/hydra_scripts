@@ -54,7 +54,8 @@ let
 
     EXITSTATUSCODE=$?
 
-    echo $EXITSTATUSCODE > /tmp/xchg/exitstatuscode
+    mkdir -p /xchg
+    echo $EXITSTATUSCODE > /xchg/exitstatuscode
 
     if [[ "0" -eq "$EXITSTATUSCODE" ]]; then
       test -L ./result && cp -Pv ./result ${prefixDir}
@@ -87,11 +88,12 @@ let
     trap "postCommands" EXIT
 
     export PROOT_DIR=/var/proots/$HASH
-    mkdir -p $PROOT_DIR && chmod -R g+w $PROOT_DIR
+    mkdir -p $PROOT_DIR
+    # && chmod -R g+w $PROOT_DIR
 
-    timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" \
+    { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" \
       -b /bin/sh -b /nix/store \
-      ${extraPRootArgs} ${buildScript}/bin/build.sh
+      ${extraPRootArgs} ${buildScript}/bin/build.sh; } || true
 
     test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
     chmod g+w $PROOT_DIR || true
