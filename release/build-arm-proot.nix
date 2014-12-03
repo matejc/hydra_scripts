@@ -112,10 +112,7 @@ let
     stateDir = prefix+"/var/nix";
   };
 
-  pkgsNoOverrides = import nixpkgs {
-    crossSystem = crosssystem;
-    config = { nix = config_nix; };
-  };
+  pkgsHost = import nixpkgs {};
 
   etcDir = "${prefix}/etc";
 
@@ -218,43 +215,43 @@ let
       nix.crossDrv = pkgs.lib.overrideDerivation (pkgs.nix.override { perl = pkgs.perl520; perlPackages = perl520Packages; }).crossDrv (oldAttrs: {
         buildInputs = [ curlCross pkgs.openssl.crossDrv pkgs.boehmgc.crossDrv pkgs.sqlite.crossDrv ];
         preConfigure = ''
-          ${pkgsNoOverrides.findutils}/bin/find . -type f \( -iname "*.cc" -or -iname "*.in" -or -iname "*.nix" \) -exec sed -i -e '/^\s*#/! s|"/bin/sh"|"${pkgs.bash.crossDrv}/bin/bash"|g' {} \;
+          ${pkgsHost.findutils}/bin/find . -type f \( -iname "*.cc" -or -iname "*.in" -or -iname "*.nix" \) -exec sed -i -e '/^\s*#/! s|"/bin/sh"|"${pkgs.bash.crossDrv}/bin/bash"|g' {} \;
         '';
         postInstall = ''
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|shell =.*;|shell = "${pkgs.bash.crossDrv}/bin/bash";|' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|tr =.*;|tr = "${coreutils.crossDrv}/bin/tr";|' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|coreutils =.*;|coreutils = "${coreutils.crossDrv}/bin";|' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|bzip2 =.*;|bzip2 = "${pkgs.bzip2.crossDrv}/bin/bzip2";|' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|gzip =.*;|gzip = "${pkgs.gzip.crossDrv}/bin/gzip";|' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|xz =.*;|xz = "${pkgs.xz.crossDrv}/bin/xz";|' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|tar =.*;|tar = "${pkgs.gnutar.crossDrv}/bin/tar";|' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|curl =.*;|curl = "${curlCross}/bin/curl";|' {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|shell =.*;|shell = "${pkgs.bash.crossDrv}/bin/bash";|' {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|tr =.*;|tr = "${coreutils.crossDrv}/bin/tr";|' {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|coreutils =.*;|coreutils = "${coreutils.crossDrv}/bin";|' {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|bzip2 =.*;|bzip2 = "${pkgs.bzip2.crossDrv}/bin/bzip2";|' {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|gzip =.*;|gzip = "${pkgs.gzip.crossDrv}/bin/gzip";|' {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|xz =.*;|xz = "${pkgs.xz.crossDrv}/bin/xz";|' {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|tar =.*;|tar = "${pkgs.gnutar.crossDrv}/bin/tar";|' {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -iname "config.nix" -exec sed -i -e 's|curl =.*;|curl = "${curlCross}/bin/curl";|' {} \;
 
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e '/^\s*#/ s|/bin/sh|${pkgs.bash.crossDrv}/bin/bash|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBI}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBI}/${perlCross.libPrefix}/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBDSQLite}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${perlCross.libPrefix}/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.WWWCurl}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${perlCross.libPrefix}/*/*/`|g" {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e '/^\s*#/ s|/bin/sh|${pkgs.bash.crossDrv}/bin/bash|g' {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBI}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBI}/${perlCross.libPrefix}/*/*/`|g" {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBDSQLite}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${perlCross.libPrefix}/*/*/`|g" {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.WWWCurl}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${perlCross.libPrefix}/*/*/`|g" {} \;
           
-          #${pkgsNoOverrides.findutils}/bin/find $out -type f -not -name "nix-prefetch-url" -exec sed -i -e 's|$Nix::Config::curl|$Nix::Config::curl --dns-servers 8.8.4.4,4.4.4.4|g' {} \;
+          #${pkgsHost.findutils}/bin/find $out -type f -not -name "nix-prefetch-url" -exec sed -i -e 's|$Nix::Config::curl|$Nix::Config::curl --dns-servers 8.8.4.4,4.4.4.4|g' {} \;
 
           source "${pkgs.makeWrapper}/nix-support/setup-hook"
           wrapProgram $out/bin/nix-prefetch-url --set NIX_CURL_FLAGS "\"--dns-servers 8.8.4.4,4.4.4.4\""
 
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -name "fetchurl.nix" -exec sed -i -e 's|[\$]{curl}|${curlCross}/bin/curl --dns-servers 8.8.4.4,4.4.4.4|g' {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -name "fetchurl.nix" -exec sed -i -e 's|[\$]{curl}|${curlCross}/bin/curl --dns-servers 8.8.4.4,4.4.4.4|g' {} \;
         '';
       });
       bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
       python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
-      pam = pkgs.callPackage ../overrides/pam-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
+      pam = pkgs.callPackage ../overrides/pam-xcompile.nix { inherit etcDir; findutils = pkgsHost.findutils; };
       #nodejs = pkgs.callPackage ../overrides/nodejs-xcompile.nix { };
       openssh = pkgs.lib.overrideDerivation (pkgs.openssh.override { pam = null; }) (oldAttrs: {
         preConfigure = ''
-          #${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/pam|${etcDir}/pam|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
+          #${pkgsHost.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/pam|${etcDir}/pam|g' {} \;
+          ${pkgsHost.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/passwd|${etcDir}/passwd|g' {} \;
+          ${pkgsHost.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/group|${etcDir}/group|g' {} \;
+          ${pkgsHost.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
         '' + oldAttrs.preConfigure;
       });
       glibcCross = pkgs.forceNativeDrv (pkgs.makeOverridable (import ../overrides/glibc-xcompile.nix)
@@ -279,7 +276,7 @@ let
       };
       #shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
       coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { inherit etcDir; };
-      busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
+      busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; findutils = pkgsHost.findutils; };
       apr = pkgs.lib.overrideDerivation (pkgs.apr) (oldAttrs: {
         configureFlags = [ "ac_cv_file__dev_zero=yes" "ac_cv_func_setpgrp_void=yes" ] ++ oldAttrs.configureFlags;
       });
@@ -309,7 +306,7 @@ let
       }).crossDrv) (oldAttrs: {
         #nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.asciidoc pkgs.xmlto ];
         postInstall = oldAttrs.postInstall + ''
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
         '';
       });
     };
