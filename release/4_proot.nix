@@ -26,7 +26,7 @@ let
   '';
 
   buildScript = pkgs.writeScriptBin "build.sh" ''
-    #! /bin/sh -e
+    #!/bin/sh
     echo "############################### BUILD START ###############################"
     export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:$PATH
 
