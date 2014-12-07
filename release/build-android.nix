@@ -332,7 +332,6 @@ let
     busybox = pkgs.busybox.crossDrv;
     openssl = pkgs.openssl.crossDrv;
     shell = "${mybash}/bin/mybash";
-    strace = pkgs.strace.crossDrv;
     };
 
   replaceme = import "${hydra_scripts}/release/replaceme.nix" {
