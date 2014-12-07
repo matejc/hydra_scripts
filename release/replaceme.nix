@@ -12,6 +12,9 @@ let
     rm -rf ${prefix}/result || true && \
     busybox tar xvf ${prefix}/tmp/out.tar.xx -C /; \
   }
+  ${resultPath}/sshd_kill || true
+  ${resultPath}/sshd_init || true
+  ${resultPath}/sshd_run
   '';
 in
   replaceme
