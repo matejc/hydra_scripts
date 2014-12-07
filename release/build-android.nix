@@ -354,7 +354,7 @@ let
     }).armv7l-linux;
 
   essentials = [pkgs.bashInteractive.crossDrv pkgs.busybox.crossDrv];
-  paths = parsed_attrs ++ essentials ++ (pkgs.lib.optionals (replaceproot_url != "") [replaceproot]);
+  paths = parsed_attrs ++ essentials ++ (pkgs.lib.optionals (replaceproot_url != "") [replaceproot pkgs.proot.crossDrv]);
 
   mybash = pkgs.writeScriptBin "mybash" ''
   #!${pkgs.bashInteractive.crossDrv}/bin/bash
