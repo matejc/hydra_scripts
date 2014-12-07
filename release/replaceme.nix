@@ -10,11 +10,11 @@ let
     rm -rf ${prefix}/store || true && \
     rm -rf ${prefix}/var/nix || true && \
     rm -rf ${prefix}/result || true && \
-    busybox tar xvf ${prefix}/tmp/out.tar.xx -C /; \
+    busybox tar xvf ${prefix}/tmp/out.tar.xx -C / &&
+    ${resultPath}/sshd_kill || true &&
+    ${resultPath}/sshd_init || true &&
+    ${resultPath}/sshd_run; \
   }
-  ${resultPath}/sshd_kill || true
-  ${resultPath}/sshd_init || true
-  ${resultPath}/sshd_run
   '';
 in
   replaceme
