@@ -30,9 +30,6 @@ let
     echo "############################### BUILD START ###############################"
     export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:$PATH
 
-    env
-    exit 1
-
     # to associate uid with username and
     # gid with groupname for programs like `id`
     mkdir -p /etc
