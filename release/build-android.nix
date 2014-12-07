@@ -1,4 +1,12 @@
-{ nixpkgs, hydra_scripts, prefix, system, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv", build_sshd ? "", replaceme_url ? "", build_hydra ? "" }:
+{ nixpkgs
+, hydra_scripts
+, prefix
+, system
+, attrs_str ? "pkgs.nix.crossDrv pkgs.bash.crossDrv"
+, build_sshd ? ""
+, replaceme_url ? ""
+, replaceproot_url ? ""
+, build_hydra ? "" }:
 let
 
   platform = {
@@ -334,13 +342,19 @@ let
     systemPath = "/system/bin";
     shell = "/system/bin/sh";
     };
+  replaceproot = import "${hydra_scripts}/release/replaceproot.nix" {
+    inherit pkgs prefix;
+    url = replaceproot_url;
+    resultPath = "${prefix}/result/bin";
+    shell = "${prefix}/result/bin/bash";
+    };
 
   hydra = (import "${hydra_scripts}/release/hydra.nix" {
     inherit pkgs prefix;
     }).armv7l-linux;
 
   essentials = [pkgs.bashInteractive.crossDrv pkgs.busybox.crossDrv];
-  paths = parsed_attrs ++ essentials;
+  paths = parsed_attrs ++ essentials ++ (pkgs.lib.optionals (replaceproot_url != "") [replaceproot]);
 
   mybash = pkgs.writeScriptBin "mybash" ''
   #!${pkgs.bashInteractive.crossDrv}/bin/bash
