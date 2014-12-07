@@ -252,7 +252,10 @@ let
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -name "fetchurl.nix" -exec sed -i -e 's|[\$]{curl}|${curlCross}/bin/curl --dns-servers 8.8.4.4,4.4.4.4|g' {} \;
         '';
       });
-      bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = pkgs.readline; };
+      readline = pkgs.lib.overrideDerivation pkgs.readline (oldAttrs: {
+        doCheck = false;
+      });
+      bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = readline; };
       python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
       bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
       pam = pkgs.callPackage ../overrides/pam-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
