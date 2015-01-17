@@ -140,8 +140,9 @@ let
         cross = crosssystem;
       }));
       #perl_xcompile = pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross; binutils = binutils_xcompile; };
-      perlCrossOBS = pkgs.forceNativeDrv (pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross busybox; bashCross = pkgs.bash.crossDrv; });
-      buildPerlCrossPackageOBS = import ../overrides/buildPerlPackage-cross.nix (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageStatic) pkgs.perl520 perlCross glibcCross pkgs busybox pkgs.bash.crossDrv hydra_scripts;
+      /*
+      perlCross = pkgs.forceNativeDrv (pkgs.callPackage ../overrides/perl-cross.nix { inherit prefix glibcCross busybox; bashCross = pkgs.bash.crossDrv; });
+      buildPerlCrossPackage = import ../overrides/buildPerlPackage-cross.nix (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageStatic) pkgs.perl520 perlCross glibcCross pkgs busybox pkgs.bash.crossDrv hydra_scripts;
       perlCrossPackages = import "${pkgs.path}/pkgs/top-level/perl-packages.nix" {
         pkgs = pkgs // {
           perl = pkgs.perl520;
@@ -157,7 +158,7 @@ let
             preConfigure = ''
               sed -i -e "s|^.*DBI 1.57.*$|print \$@;|g" ./Makefile.PL
               export PERL5LIB_ORIG=$PERL5LIB
-              export PERL5LIB="$(dirname `realpath ${perl520Packages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`)";
+              export PERL5LIB="$(dirname `realpath ${perl520Packages.DBI}/lib/perl5/site_perl/* /* /DBI.pm`)";
             '';
             #GCC_EXTRA_OPTIONS = "-DSQLITE_DISABLE_LFS";
             postConfigure = ''
@@ -181,7 +182,6 @@ let
               sha256 = "04fmrnchhwi7jx4niaiv93vmi343hdm3xj04w9zr2m9hhqh782np";
             };
           };
-          /*
           WWWCurlCross = buildPerlCrossPackage rec {
             name = "WWW-Curl-4.17";
             src = pkgs.fetchurl {
@@ -195,9 +195,9 @@ let
               '';
             doCheck = false; # performs network access
           };
-          */
         }) pkgs;
       };
+      */
       curlCross = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.override {
         zlibSupport = true;
         sslSupport = true;
@@ -223,6 +223,7 @@ let
       #perlDBICross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBI));
       #perlDBDSQLiteCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.DBDSQLite));
       #perlWWWCurlCross = (pkgs.makeOverridable (pkgs.makeStdenvCross pkgs.stdenv crosssystem binutilsCross pkgs.gccCrossStageFinal).mkDerivation (pkgs.perlPackages.WWWCurl));
+      /*
       nix.crossDrv = pkgs.lib.overrideDerivation (pkgs.nix.override { perl = pkgs.perl520; perlPackages = perl520Packages; }).crossDrv (oldAttrs: {
         buildInputs = [ curlCross pkgs.openssl.crossDrv pkgs.boehmgc.crossDrv pkgs.sqlite.crossDrv ];
         preConfigure = ''
@@ -240,9 +241,9 @@ let
 
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e '/^\s*#/ s|/bin/sh|${pkgs.bash.crossDrv}/bin/bash|g' {} \;
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBI}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBI}/${perlCross.libPrefix}/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBDSQLite}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${perlCross.libPrefix}/*/*/`|g" {} \;
-          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.WWWCurl}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${perlCross.libPrefix}/*/*/`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBI}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBI}/${perlCross.libPrefix}/* /* /`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBDSQLite}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${perlCross.libPrefix}/* /* /`|g" {} \;
+          ${pkgsNoOverrides.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.WWWCurl}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${perlCross.libPrefix}/* /* /`|g" {} \;
           
           #${pkgsNoOverrides.findutils}/bin/find $out -type f -not -name "nix-prefetch-url" -exec sed -i -e 's|$Nix::Config::curl|$Nix::Config::curl --dns-servers 8.8.4.4,4.4.4.4|g' {} \;
 
@@ -252,6 +253,7 @@ let
           ${pkgsNoOverrides.findutils}/bin/find $out -type f -name "fetchurl.nix" -exec sed -i -e 's|[\$]{curl}|${curlCross}/bin/curl --dns-servers 8.8.4.4,4.4.4.4|g' {} \;
         '';
       });
+      */
       readline = pkgs.lib.overrideDerivation pkgs.readline (oldAttrs: {
         doCheck = false;
       });
@@ -268,7 +270,8 @@ let
           ${pkgsNoOverrides.findutils}/bin/find . -type f -exec sed -i -e 's|/etc/shadow|${etcDir}/shadow|g' {} \;
         '' + oldAttrs.preConfigure;
       });
-      glibcCrossOBS = pkgs.forceNativeDrv (pkgs.makeOverridable (import ../overrides/glibc-xcompile.nix)
+      /*
+      glibcCross = pkgs.forceNativeDrv (pkgs.makeOverridable (import ../overrides/glibc-xcompile.nix)
         (let crossGNU = crosssystem != null && crosssystem.config == "i586-pc-gnu";
          in {
            inherit (pkgs) stdenv fetchurl;
@@ -280,7 +283,7 @@ let
             inherit (pkgs.gnu) machHeaders hurdHeaders libpthreadHeaders mig;
             inherit (pkgs) fetchgit;
           } // {inherit pkgs etcDir;}));
-      glibcOBS = pkgs.callPackage ../overrides/glibc-xcompile.nix {
+      glibc = pkgs.callPackage ../overrides/glibc-xcompile.nix {
         kernelHeaders = pkgs.linuxHeaders;
         installLocales = pkgs.config.glibc.locales or false;
         machHeaders = null;
@@ -288,6 +291,7 @@ let
         gccCross = null;
         inherit pkgs etcDir;
       };
+      */
       #shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
       coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { inherit etcDir; };
       busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
