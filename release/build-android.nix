@@ -293,7 +293,7 @@ let
       };
       */
       #shadow =  pkgs.callPackage ../overrides/shadow-xcompile.nix { inherit pam; glibcCross = pkgs.glibcCross; inherit etcDir; };
-      coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { inherit etcDir; };
+      #coreutils = pkgs.callPackage ../overrides/coreutils-xcompile.nix { inherit etcDir; };
       busybox = pkgs.callPackage ../overrides/busybox-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
       apr = pkgs.lib.overrideDerivation (pkgs.apr) (oldAttrs: {
         configureFlags = [ "ac_cv_file__dev_zero=yes" "ac_cv_func_setpgrp_void=yes" ] ++ oldAttrs.configureFlags;
