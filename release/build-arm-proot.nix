@@ -310,6 +310,18 @@ let
       });
       gnugrep = pkgs.lib.overrideDerivation pkgs.gnugrep (oldAttrs: { doCheck = false; });
       */
+      curl = pkgs.lib.overrideDerivation (pkgs.curl.override {
+        zlibSupport = true;
+        sslSupport = true;
+        scpSupport = true;
+        c-aresSupport = true;
+      }) (oldAttrs: {
+        configureFlags = [ "--with-libssh2=${pkgs.libssh2.crossDrv}" "--with-ssl=${pkgs.openssl.crossDrv}" "--enable-ares=${pkgs.c-ares.crossDrv}" ];
+        postInstall = ''
+          source "${pkgs.makeWrapper}/nix-support/setup-hook"
+          wrapProgram $out/bin/curl --add-flags "--dns-servers 8.8.8.8,8.8.4.4,4.4.4.4"
+        '';
+      });
     };
   };
 
