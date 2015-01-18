@@ -56,7 +56,7 @@ let
     chown -R builder ${prefixDir}
     #chmod -R 1775 ${prefixDir}
 
-    busybox su builder -c 'nix-build ${<hydra_scripts>}"/"${build_script} -A vmEnvironment --argstr nixpkgs ${<nixpkgs>} --argstr hydra_scripts ${<hydra_scripts>} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} ${toString passthru} -vv --show-trace'
+    busybox su builder -c 'NIX_CURL_FLAGS="--dns-servers 8.8.4.4,4.4.4.4" nix-build ${<hydra_scripts>}"/"${build_script} -A vmEnvironment --argstr nixpkgs ${<nixpkgs>} --argstr hydra_scripts ${<hydra_scripts>} --argstr prefix ${prefixDir} --argstr attrs_str "${attrs_str}" --argstr system ${system} ${toString passthru} -vv --show-trace'
 
     EXITSTATUSCODE=$?
 
