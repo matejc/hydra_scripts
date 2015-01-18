@@ -24,6 +24,11 @@ let
   shadow = pkgs.writeText "shadow" ''
     root:x:16117::::::
   '';
+  resolv_conf = pkgs.writeText "resolv.conf" ''
+    nameserver 8.8.8.8
+    nameserver 8.8.4.4
+    nameserver 4.4.4.4
+  '';
 
   buildScript = pkgs.writeScriptBin "build.sh" ''
     #!/bin/sh
@@ -36,6 +41,7 @@ let
     cp ${passwd} /etc/passwd
     cp ${group} /etc/group
     cp ${shadow} /etc/shadow
+    cp ${resolv_conf} /etc/resolv.conf
 
     mkdir -p /home/builder
     busybox adduser -h /home/builder -s /bin/sh -D  builder || true
