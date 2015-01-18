@@ -119,6 +119,7 @@ let
   config = {
     nix = config_nix;
     packageOverrides = pkgs : rec {
+      /*
       binutils_xcompile = pkgs.callPackage ../overrides/binutils-xcompile.nix { gold = false; };
       #binutils = pkgs.binutils_nogold;
       #binutilsCross = pkgs.lib.overrideDerivation pkgs.binutilsCross (oldAttrs: { gold = false; });
@@ -146,7 +147,7 @@ let
             preConfigure = ''
               sed -i -e "s|^.*DBI 1.57.*$|print \$@;|g" ./Makefile.PL
               export PERL5LIB_ORIG=$PERL5LIB
-              export PERL5LIB="$(dirname `realpath ${perl520Packages.DBI}/lib/perl5/site_perl/*/*/DBI.pm`)";
+              export PERL5LIB="$(dirname `realpath ${perl520Packages.DBI}/lib/perl5/site_perl/* /* /DBI.pm`)";
             '';
             #GCC_EXTRA_OPTIONS = "-DSQLITE_DISABLE_LFS";
             postConfigure = ''
@@ -170,7 +171,6 @@ let
               sha256 = "04fmrnchhwi7jx4niaiv93vmi343hdm3xj04w9zr2m9hhqh782np";
             };
           };
-          /*
           WWWCurlCross = buildPerlCrossPackage rec {
             name = "WWW-Curl-4.17";
             src = pkgs.fetchurl {
@@ -184,7 +184,6 @@ let
               '';
             doCheck = false; # performs network access
           };
-          */
         }) pkgs;
       };
       curlCross = pkgs.forceNativeDrv (pkgs.lib.overrideDerivation (pkgs.curl.override {
@@ -229,9 +228,9 @@ let
 
           ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e '/^\s*#/ s|/bin/sh|${pkgs.bash.crossDrv}/bin/bash|g' {} \;
           ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
-          ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBI}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBI}/${perlCross.libPrefix}/*/*/`|g" {} \;
-          ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBDSQLite}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${perlCross.libPrefix}/*/*/`|g" {} \;
-          ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.WWWCurl}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${perlCross.libPrefix}/*/*/`|g" {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBI}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBI}/${perlCross.libPrefix}/* /* /`|g" {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.DBDSQLite}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.DBDSQLite}/${perlCross.libPrefix}/* /* /`|g" {} \;
+          ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e "s|${perl520Packages.WWWCurl}/${pkgs.perl520.libPrefix}|`realpath ${perlCrossPackages.WWWCurl}/${perlCross.libPrefix}/* /* /`|g" {} \;
           
           #${pkgsHost.findutils}/bin/find $out -type f -not -name "nix-prefetch-url" -exec sed -i -e 's|$Nix::Config::curl|$Nix::Config::curl --dns-servers 8.8.4.4,4.4.4.4|g' {} \;
 
@@ -308,8 +307,9 @@ let
         postInstall = oldAttrs.postInstall + ''
           ${pkgsHost.findutils}/bin/find $out -type f -exec sed -i -e 's|${pkgs.perl520}|${perlCross}|g' {} \;
         '';
-      });*/
+      });
       gnugrep = pkgs.lib.overrideDerivation pkgs.gnugrep (oldAttrs: { doCheck = false; });
+      */
     };
   };
 
