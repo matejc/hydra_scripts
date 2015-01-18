@@ -89,7 +89,7 @@ let
 
     export PROOT_DIR=/var/proots/$HASH
     mkdir -p $PROOT_DIR
-    # && chmod -R g+w $PROOT_DIR
+    chmod -R g+w $PROOT_DIR/xchg
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" \
       -b /bin/sh -b /nix/store \
