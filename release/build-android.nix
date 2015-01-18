@@ -257,7 +257,7 @@ let
       readline = pkgs.lib.overrideDerivation pkgs.readline (oldAttrs: {
         doCheck = false;
       });
-      bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = readline; };
+      #bashInteractive = pkgs.bashInteractive.override { interactive = true; readline = readline; };
       #python27 = pkgs.callPackage ../overrides/python-xcompile.nix { inherit hydra_scripts; };
       #bison3 = pkgs.callPackage ../overrides/bison3-xcompile.nix { };
       #pam = pkgs.callPackage ../overrides/pam-xcompile.nix { inherit etcDir; findutils = pkgsNoOverrides.findutils; };
