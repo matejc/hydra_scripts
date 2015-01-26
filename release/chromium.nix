@@ -1,6 +1,9 @@
 { nixpkgs, system ? builtins.currentSystem }:
 let
-  pkgs = import <nixpkgs> { inherit system; };
+  config = {
+    chromium.enablePepperFlash = true;
+  };
+  pkgs = import <nixpkgs> { inherit system config; };
   jobs = {
     chromium = pkgs.chromium;
   };
