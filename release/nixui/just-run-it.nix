@@ -14,6 +14,7 @@ let
   };
   
   testNodePackages = pkgs.buildEnv {
+    name = "testNodePackages";
     paths = [ nodePackages.mocha nodePackages.sinon ];
   };
 
