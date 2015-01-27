@@ -10,14 +10,6 @@ let
     export NIXUI_CONFIG="${nixui}/lib/node_modules/nixui/src/config.json"
     ${node_webkit}/bin/nw ${nixui}/lib/node_modules/nixui/
   '';
-  config = builtins.toFile "config.json" ''
-  {
-      "profilePaths": ${builtins.toJSON profilePaths},
-      "dataDir": "${dataDir}",
-      "configurations": ${builtins.toJSON configurations},
-      "NIX_PATH": "${NIX_PATH}"
-  }
-  '';
   desktop = makeDesktopItem {
     name = "nixui";
     exec = script;
