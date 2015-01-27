@@ -1,8 +1,4 @@
-{ nixpkgs, src
-, profilePaths ? (config.nixui.profilePaths or ["/nix/var/nix/profiles"])
-, dataDir ? (config.nixui.dataDir or "/tmp")
-, configurations ? (config.nixui.configurations or ["/etc/nixos/configuration.nix"])
-, NIX_PATH ? (config.nixui.NIX_PATH or "/nix/var/nix/profiles/per-user/root/channels/nixos:nixpkgs=/etc/nixos/nixpkgs:nixos-config=/etc/nixos/configuration.nix") }:
+{ nixpkgs, src }:
 let
   inherit (import nixpkgs { system = builtins.currentSystem; }) stdenv pkgs fetchgit nix makeDesktopItem writeScript;
   node_webkit = <src/node-webkit.nix>;
@@ -10,7 +6,7 @@ let
   script = writeScript "nixui" ''
     #! ${stdenv.shell}
     export PATH="${nix}/bin:\$PATH"
-    export NIXUI_CONFIG="${config}"
+    export NIXUI_CONFIG="${nixui}/lib/node_modules/nixui/src/config.json"
     ${node_webkit}/bin/nw ${nixui}/lib/node_modules/nixui/
   '';
   config = builtins.toFile "config.json" ''
