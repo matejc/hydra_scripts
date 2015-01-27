@@ -41,7 +41,9 @@ let
         #trap "{ echo 'killing '$(cat $HOME/.Xvnc.pid); kill -15 $(cat $HOME/.Xvnc.pid); }" EXIT
         #{pkgs.busybox}/bin/timeout -t 5 ./result/bin/nixui
 
-        cd ./src && ${testNodePackages}/lib/node_modules/.bin/mocha --reporter list
+        cd ./src
+        ${testNodePackages}/lib/node_modules/.bin/mocha --reporter list
+        cd ..
       '';
       installPhase = ''
         mkdir -p $out/lib
