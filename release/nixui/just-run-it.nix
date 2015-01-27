@@ -30,10 +30,11 @@ let
         # and then kill the VNC server
         vncserver -kill :99
 
-        make test
+        nix-shell dispatcher.nix --argstr action env --command "cd ./src && ../node_modules/.bin/mocha --reporter list
       '';
       installPhase = ''
-        make package
+        mkdir -p $out/lib
+        cp -r . $out/lib/nixui
       '';
     };
   };
