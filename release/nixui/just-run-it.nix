@@ -25,10 +25,12 @@ let
         ${pkgs.tightvnc}/bin/Xvnc :99 -localhost -fp $VNCFONTS &
         echo $! > $HOME/.Xvnc.pid
 
+        trap "{ echo 'killing '$(cat $HOME/.Xvnc.pid); kill -15 $(cat $HOME/.Xvnc.pid); }" EXIT
+
         ${pkgs.busybox}/bin/timeout -t 5 ./result/bin/nixui
 
         # and then kill the VNC server
-        kill -15 `cat $HOME/.Xvnc.pid`
+        
 
         nix-shell dispatcher.nix --argstr action env --command "cd ./src && ../node_modules/.bin/mocha --reporter list"
       '';
