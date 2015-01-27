@@ -26,6 +26,7 @@ let
       configurePhase = ''
         export NIX_REMOTE=daemon
         export NIX_PATH="nixpkgs=${nixpkgs}"
+        export NODE_PATH="${testNodePackages}/lib/node_modules:$NODE_PATH"
         #export DISPLAY=:99.0
         #export VNCFONTS="${pkgs.xorg.fontmiscmisc}/lib/X11/fonts/misc,${pkgs.xorg.fontcursormisc}/lib/X11/fonts/misc"
         #export USER="test"
@@ -34,8 +35,6 @@ let
       '';
       buildPhase = ''
         nix-build dispatcher.nix --argstr action package
-        
-        ${pkgs.findutils}/bin/find ${testNodePackages}/lib/node_modules
 
         #{pkgs.tightvnc}/bin/Xvnc :99 -localhost -geometry 1024x768 -depth 16 -fp $VNCFONTS &
         #echo $! > $HOME/.Xvnc.pid
