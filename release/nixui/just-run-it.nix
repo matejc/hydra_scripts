@@ -15,6 +15,9 @@ let
       name = "nixui-dev";
       inherit src;
       buildInputs = with pkgs; [ gnumake nix ];
+      configurePhase = ''
+        export NIX_REMOTE=daemon
+      '';
       buildPhase = ''
         make just-run-it
       '';
