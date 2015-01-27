@@ -5,6 +5,10 @@ let
   node_webkit = <src/node-webkit.nix>;
   nixui = (import <src/default.nix> { inherit pkgs; }).build;
 
+  vncmy = writeScript "vncmy.sh" ''
+    
+  '';
+
   jobs = {
     nixui = stdenv.mkDerivation {
       name = "nixui-dev";
@@ -13,7 +17,8 @@ let
       configurePhase = ''
         export NIX_REMOTE=daemon
         export NIX_PATH="nixpkgs=${nixpkgs}"
-        
+        export DISPLAY=:99.0
+        export VNCFONTS="${pkgs.xorg.fontmiscmisc}/lib/X11/fonts/misc,${pkgs.xorg.fontcursormisc}/lib/X11/fonts/misc"
         export USER="test"
         export HOME="`pwd`/home"
         mkdir -p $HOME
@@ -21,17 +26,13 @@ let
       buildPhase = ''
         nix-build dispatcher.nix --argstr action package
 
-        # this command runs the VNC server on screen :99
-        vncserver :99
+        ${pkgs.tightvnc}/bin/Xvnc :99 -localhost -fp $VNCFONTS &
+        echo $! > $HOME/.Xvnc.pid
 
-        # start your tests by setting DISPLAY env variable
-        export DISPLAY=:99.0
-        
-        # check if it starts
         ${pkgs.busybox}/bin/timeout 5 ./result/bin/nixui
 
         # and then kill the VNC server
-        vncserver -kill :99
+        kill -15 `cat \$HOME/.Xvnc.pid`
 
         nix-shell dispatcher.nix --argstr action env --command "cd ./src && ../node_modules/.bin/mocha --reporter list"
       '';
