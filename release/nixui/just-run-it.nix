@@ -16,8 +16,7 @@ let
       '';
       buildPhase = ''
         nix-build dispatcher.nix --argstr action package
-      '';
-      checkPhase = ''
+
         # this command runs the VNC server on screen :99
         vncserver :99
 
@@ -30,7 +29,7 @@ let
         # and then kill the VNC server
         vncserver -kill :99
 
-        nix-shell dispatcher.nix --argstr action env --command "cd ./src && ../node_modules/.bin/mocha --reporter list
+        nix-shell dispatcher.nix --argstr action env --command "cd ./src && ../node_modules/.bin/mocha --reporter list"
       '';
       installPhase = ''
         mkdir -p $out/lib
