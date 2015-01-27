@@ -9,7 +9,7 @@ let
     nixui = stdenv.mkDerivation {
       name = "nixui-dev";
       src = { outPath = src; name = "nixui-src"; };
-      buildInputs = with pkgs; [ gnumake nix busybox tightvnc ];
+      buildInputs = with pkgs; [ gnumake nix tightvnc ];
       configurePhase = ''
         export NIX_REMOTE=daemon
         export NIX_PATH="nixpkgs=${nixpkgs}"
@@ -25,7 +25,7 @@ let
         export DISPLAY=:99.0
         
         # check if it starts
-        timeout 5 ./result/bin/nixui
+        ${busybox}/bin/timeout 5 ./result/bin/nixui
 
         # and then kill the VNC server
         vncserver -kill :99
