@@ -5,6 +5,18 @@ let
   node_webkit = <src/node-webkit.nix>;
   nixui = (import <src/default.nix> { inherit pkgs; }).build;
 
+  nodePackages = import <nixpkgs/pkgs/top-level/node-packages.nix> {
+    inherit pkgs;
+    inherit (pkgs) stdenv nodejs fetchurl fetchgit;
+    neededNatives = [ pkgs.python ] ++ pkgs.lib.optional pkgs.stdenv.isLinux pkgs.utillinux;
+    self = nodePackages;
+    generated = <src/node.nix>;
+  };
+  
+  testNodePackages = pkgs.buildEnv {
+    paths = [ nodePackages.mocha nodePackages.sinon ];
+  };
+
   jobs = {
     nixui = stdenv.mkDerivation {
       name = "nixui-dev";
@@ -27,8 +39,7 @@ let
         #trap "{ echo 'killing '$(cat $HOME/.Xvnc.pid); kill -15 $(cat $HOME/.Xvnc.pid); }" EXIT
         #{pkgs.busybox}/bin/timeout -t 5 ./result/bin/nixui
 
-        nix-shell dispatcher.nix --argstr action env --command "npm install"
-        nix-shell dispatcher.nix --argstr action env --command "cd ./src && ../node_modules/.bin/mocha --reporter list"
+        nix-shell dispatcher.nix --argstr action env --command "cd ./src && ${testNodePackages}/lib/node_modules/.bin/mocha --reporter list"
       '';
       installPhase = ''
         mkdir -p $out/lib
