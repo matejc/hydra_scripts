@@ -22,15 +22,12 @@ let
       buildPhase = ''
         nix-build dispatcher.nix --argstr action package
 
-        ${pkgs.tightvnc}/bin/Xvnc :99 -localhost -fp $VNCFONTS &
+        ${pkgs.tightvnc}/bin/Xvnc :99 -localhost -geometry 1024x768 -depth 16 -fp $VNCFONTS &
         echo $! > $HOME/.Xvnc.pid
 
         trap "{ echo 'killing '$(cat $HOME/.Xvnc.pid); kill -15 $(cat $HOME/.Xvnc.pid); }" EXIT
 
         ${pkgs.busybox}/bin/timeout -t 5 ./result/bin/nixui
-
-        # and then kill the VNC server
-        
 
         nix-shell dispatcher.nix --argstr action env --command "cd ./src && ../node_modules/.bin/mocha --reporter list"
       '';
