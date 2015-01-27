@@ -17,6 +17,7 @@ let
       buildInputs = with pkgs; [ gnumake nix ];
       configurePhase = ''
         export NIX_REMOTE=daemon
+        export NIX_PATH="nixpkgs=${nixpkgs}"
       '';
       buildPhase = ''
         make just-run-it
