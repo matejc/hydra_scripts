@@ -28,15 +28,22 @@ let
     desktopName = "NixUI";
     genericName = "NixUI";
   };
-in
-stdenv.mkDerivation rec {
-  name = "nixui-dev";
-  inherit src;
-  installPhase = ''
-    mkdir -p $out/bin
-    ln -s ${script} $out/bin/nixui
 
-    mkdir -p $out/share/applications
-    ln -s ${desktop}/share/applications/* $out/share/applications/
-  '';
-}
+  nixui = stdenv.mkDerivation rec {
+    name = "nixui-dev";
+    inherit src;
+    installPhase = ''
+      mkdir -p $out/bin
+      ln -s ${script} $out/bin/nixui
+    
+      mkdir -p $out/share/applications
+      ln -s ${desktop}/share/applications/* $out/share/applications/
+    '';
+  };
+  
+  
+  jobs = {
+    inherit nixui;
+  };
+in
+  jobs
