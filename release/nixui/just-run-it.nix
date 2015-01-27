@@ -13,6 +13,10 @@ let
       configurePhase = ''
         export NIX_REMOTE=daemon
         export NIX_PATH="nixpkgs=${nixpkgs}"
+        
+        export USER="test"
+        export HOME="`pwd`/home"
+        mkdir -p $HOME
       '';
       buildPhase = ''
         nix-build dispatcher.nix --argstr action package
