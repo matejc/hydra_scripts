@@ -15,7 +15,7 @@ let
   
   testNodePackages = pkgs.buildEnv {
     name = "testNodePackages";
-    paths = with nodePackages; [ mocha sinon nodePackages."expect.js" ];
+    paths = with nodePackages; [ mocha sinon nodePackages.by-spec."expect.js"."~0.3.1" ];
   };
 
   jobs = {
