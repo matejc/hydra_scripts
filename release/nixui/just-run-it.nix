@@ -5,10 +5,6 @@ let
   node_webkit = <src/node-webkit.nix>;
   nixui = (import <src/default.nix> { inherit pkgs; }).build;
 
-  vncmy = writeScript "vncmy.sh" ''
-    
-  '';
-
   jobs = {
     nixui = stdenv.mkDerivation {
       name = "nixui-dev";
@@ -29,7 +25,7 @@ let
         ${pkgs.tightvnc}/bin/Xvnc :99 -localhost -fp $VNCFONTS &
         echo $! > $HOME/.Xvnc.pid
 
-        ${pkgs.busybox}/bin/timeout 5 ./result/bin/nixui
+        ${pkgs.busybox}/bin/timeout -t 5 ./result/bin/nixui
 
         # and then kill the VNC server
         kill -15 `cat \$HOME/.Xvnc.pid`
