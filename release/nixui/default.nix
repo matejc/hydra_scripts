@@ -7,7 +7,6 @@ let
   script = writeScript "nixui" ''
     #! ${stdenv.shell}
     export PATH="${nix}/bin:\$PATH"
-    export NIXUI_CONFIG="${nixui}/lib/node_modules/nixui/src/config.json"
     ${node_webkit}/bin/nw ${nixui}/lib/node_modules/nixui/
   '';
   desktop = makeDesktopItem {
