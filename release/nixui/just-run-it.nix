@@ -13,21 +13,19 @@ let
       configurePhase = ''
         export NIX_REMOTE=daemon
         export NIX_PATH="nixpkgs=${nixpkgs}"
-        export DISPLAY=:99.0
-        export VNCFONTS="${pkgs.xorg.fontmiscmisc}/lib/X11/fonts/misc,${pkgs.xorg.fontcursormisc}/lib/X11/fonts/misc"
-        export USER="test"
-        export HOME="`pwd`/home"
-        mkdir -p $HOME
+        #export DISPLAY=:99.0
+        #export VNCFONTS="${pkgs.xorg.fontmiscmisc}/lib/X11/fonts/misc,${pkgs.xorg.fontcursormisc}/lib/X11/fonts/misc"
+        #export USER="test"
+        #export HOME="`pwd`/home"
+        #mkdir -p $HOME
       '';
       buildPhase = ''
         nix-build dispatcher.nix --argstr action package
 
-        ${pkgs.tightvnc}/bin/Xvnc :99 -localhost -geometry 1024x768 -depth 16 -fp $VNCFONTS &
-        echo $! > $HOME/.Xvnc.pid
-
-        trap "{ echo 'killing '$(cat $HOME/.Xvnc.pid); kill -15 $(cat $HOME/.Xvnc.pid); }" EXIT
-
-        ${pkgs.busybox}/bin/timeout -t 5 ./result/bin/nixui
+        #{pkgs.tightvnc}/bin/Xvnc :99 -localhost -geometry 1024x768 -depth 16 -fp $VNCFONTS &
+        #echo $! > $HOME/.Xvnc.pid
+        #trap "{ echo 'killing '$(cat $HOME/.Xvnc.pid); kill -15 $(cat $HOME/.Xvnc.pid); }" EXIT
+        #{pkgs.busybox}/bin/timeout -t 5 ./result/bin/nixui
 
         nix-shell dispatcher.nix --argstr action env --command "cd ./src && ../node_modules/.bin/mocha --reporter list"
       '';
