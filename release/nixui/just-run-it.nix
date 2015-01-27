@@ -34,6 +34,8 @@ let
       '';
       buildPhase = ''
         nix-build dispatcher.nix --argstr action package
+        
+        ${findutils}/bin/find ${testNodePackages}/lib/node_modules
 
         #{pkgs.tightvnc}/bin/Xvnc :99 -localhost -geometry 1024x768 -depth 16 -fp $VNCFONTS &
         #echo $! > $HOME/.Xvnc.pid
