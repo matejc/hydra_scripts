@@ -1,8 +1,9 @@
 { nixpkgs, src }:
 let
-  inherit (import nixpkgs { system = builtins.currentSystem; }) stdenv pkgs fetchgit nix makeDesktopItem writeScript;
+  pkgs = import nixpkgs { system = builtins.currentSystem; };
+  inherit (pkgs) stdenv fetchgit nix makeDesktopItem writeScript;
   node_webkit = <src/node-webkit.nix>;
-  nixui = (import <src/node-default.nix> { nixui = src; inherit pkgs; }).build;
+  nixui = (import <src/default.nix> { inherit pkgs; }).build;
   script = writeScript "nixui" ''
     #! ${stdenv.shell}
     export PATH="${nix}/bin:\$PATH"
