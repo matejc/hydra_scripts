@@ -6,9 +6,9 @@ let
   nixui = (import <src/default.nix> { inherit pkgs; }).build;
 
   jobs = {
-    nixui = stdenv.mkDerivation rec {
+    nixui = stdenv.mkDerivation {
       name = "nixui-dev";
-      inherit src;
+      src = { outPath = src; name = "nixui-src"; };
       buildInputs = with pkgs; [ gnumake nix busybox tightvnc ];
       configurePhase = ''
         export NIX_REMOTE=daemon
