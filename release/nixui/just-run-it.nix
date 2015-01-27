@@ -25,7 +25,7 @@ let
         export DISPLAY=:99.0
         
         # check if it starts
-        ${busybox}/bin/timeout 5 ./result/bin/nixui
+        ${pkgs.busybox}/bin/timeout 5 ./result/bin/nixui
 
         # and then kill the VNC server
         vncserver -kill :99
