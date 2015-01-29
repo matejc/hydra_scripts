@@ -11,8 +11,6 @@ let
 
   checkForSystems = map (s: nameValuePair s (checkForSystem s)) systems;
 
-  jobs = {
-    builtins.listToAttrs checkForSystems;
-  };
+  jobs = builtins.listToAttrs checkForSystems;
 in
   jobs
