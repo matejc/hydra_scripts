@@ -8,7 +8,7 @@ let
       nodewebkit = p.callPackage <src/node-webkit.nix> { gconf = p.gnome.GConf; };
       test = pkgs.runCommand "test-${s}" {} ''
         echo "########################## test-${s} ##########################"
-        ${p.stdenv.glibc}/bin/ldd ${nodewebkit}/bin/nw
+        ls `${p.patchelf}/bin/patchelf --print-interpreter ${nodewebkit}/bin/nw`
       '';
     in
       test;
