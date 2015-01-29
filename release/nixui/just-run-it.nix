@@ -1,8 +1,8 @@
-{ nixpkgs, src }:
+{ nixpkgs, src, system ? builtins.currentSystem }:
 let
-  pkgs = import nixpkgs { system = builtins.currentSystem; };
+  pkgs = import nixpkgs { inheritr system; };
   inherit (pkgs) stdenv fetchgit nix makeDesktopItem writeScript;
-  node_webkit = <src/node-webkit.nix>;
+  nodewebkit = pkgs.callPackage <src/node-webkit.nix> { gconf = pkgs.gnome.GConf; };
   nixui = (import <src/default.nix> { inherit pkgs; }).build;
 
   nodePackages = import <nixpkgs/pkgs/top-level/node-packages.nix> {
@@ -34,6 +34,7 @@ let
         #mkdir -p $HOME
       '';
       buildPhase = ''
+        echo "############################ test 'package' ############################"
         nix-build dispatcher.nix --argstr action package
 
         #{pkgs.tightvnc}/bin/Xvnc :99 -localhost -geometry 1024x768 -depth 16 -fp $VNCFONTS &
@@ -41,9 +42,13 @@ let
         #trap "{ echo 'killing '$(cat $HOME/.Xvnc.pid); kill -15 $(cat $HOME/.Xvnc.pid); }" EXIT
         #{pkgs.busybox}/bin/timeout -t 5 ./result/bin/nixui
 
+        echo "############################ run tests ############################"
         cd ./src
         ${testNodePackages}/lib/node_modules/.bin/mocha --reporter list
         cd ..
+        
+        echo "############################ test nodewebkit ############################"
+        ls -lah ${nodewebkit}/bin/nw
       '';
       installPhase = ''
         mkdir -p $out/lib
