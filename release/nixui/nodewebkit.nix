@@ -7,6 +7,7 @@ let
       p = import nixpkgs { system = s; };
       nodewebkit = p.callPackage <src/node-webkit.nix> { gconf = p.gnome.GConf; };
       test = p.stdenv.mkDerivation {
+        name = "test-${s}";
         phases = "testPhase";
         testPhase = ''
           ls `${p.patchelf}/bin/patchelf --print-interpreter ${nodewebkit}/bin/nw`
