@@ -6,7 +6,8 @@ let
     let
       pkgs = import nixpkgs { inherit system; };
       nodewebkit = pkgs.callPackage <src/node-webkit.nix> { gconf = pkgs.gnome.GConf; };
-    in nodewebkit
+    in
+      nodewebkit;
 
   checkForSystems = map (s: nameValuePair s (checkForSystem s)) systems;
 
