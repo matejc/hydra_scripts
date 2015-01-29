@@ -1,4 +1,4 @@
-{ nixpkgs, src, systems ? [ "i686-linux" "x86_64-linux" ]; }:
+{ nixpkgs, src, systems ? [ "i686-linux" "x86_64-linux" ] }:
 let
 
 
