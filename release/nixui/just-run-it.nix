@@ -1,6 +1,6 @@
 { nixpkgs, src, system ? builtins.currentSystem }:
 let
-  pkgs = import nixpkgs { inheritr system; };
+  pkgs = import nixpkgs { inherit system; };
   inherit (pkgs) stdenv fetchgit nix makeDesktopItem writeScript;
   nodewebkit = pkgs.callPackage <src/node-webkit.nix> { gconf = pkgs.gnome.GConf; };
   nixui = (import <src/default.nix> { inherit pkgs; }).build;
