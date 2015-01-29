@@ -6,8 +6,12 @@ let
     let
       p = import nixpkgs { system = s; };
       nodewebkit = p.callPackage <src/node-webkit.nix> { gconf = p.gnome.GConf; };
+      test = pkgs.runCommand "test-${s}" {} ''
+        echo "########################## test-${s} ##########################"
+        ${p.stdenv.glibc}/bin/ldd ${nodewebkit}/bin/nw
+      '';
     in
-      nodewebkit;
+      test;
 
   checkForSystems = map (s: pkgs.lib.nameValuePair s (checkForSystem s)) systems;
 
