@@ -6,10 +6,13 @@ let
     let
       p = import nixpkgs { system = s; };
       nodewebkit = p.callPackage <src/node-webkit.nix> { gconf = p.gnome.GConf; };
-      test = pkgs.runCommand "test-${s}" {} ''
-        echo "########################## test-${s} ##########################"
-        ls `${p.patchelf}/bin/patchelf --print-interpreter ${nodewebkit}/bin/nw`
-      '';
+      test = p.stdenv.mkDerivation {
+        phases = "testPhase";
+        testPhase = ''
+          ls `${p.patchelf}/bin/patchelf --print-interpreter ${nodewebkit}/bin/nw`
+          echo $? > $out
+        '';
+      };
     in
       test;
 
