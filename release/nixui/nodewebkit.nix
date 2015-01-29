@@ -4,7 +4,7 @@ let
 
   checkForSystem = s:
     let
-      p = import nixpkgs { inherit s; };
+      p = import nixpkgs { system = s; };
       nodewebkit = p.callPackage <src/node-webkit.nix> { gconf = p.gnome.GConf; };
     in
       nodewebkit;
