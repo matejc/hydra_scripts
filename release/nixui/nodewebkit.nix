@@ -1,15 +1,15 @@
 { nixpkgs, src, systems ? [ "i686-linux" "x86_64-linux" ] }:
 let
+  pkgs = import nixpkgs { system = builtins.currentSystem; };
 
-
-  checkForSystem = system:
+  checkForSystem = s:
     let
-      pkgs = import nixpkgs { inherit system; };
-      nodewebkit = pkgs.callPackage <src/node-webkit.nix> { gconf = pkgs.gnome.GConf; };
+      p = import nixpkgs { inherit s; };
+      nodewebkit = p.callPackage <src/node-webkit.nix> { gconf = p.gnome.GConf; };
     in
       nodewebkit;
 
-  checkForSystems = map (s: nameValuePair s (checkForSystem s)) systems;
+  checkForSystems = map (s: pkgs.lib.nameValuePair s (checkForSystem s)) systems;
 
   jobs = builtins.listToAttrs checkForSystems;
 in
