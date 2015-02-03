@@ -33,7 +33,7 @@ let
     mkdir -p /home/builder
     busybox adduser -h /home/builder -s /bin/sh -D  builder || true
 
-    chown -R builder /nix/store
+    #chown -R builder /nix/store
     #chmod -R 1775 /nix/store
 
     busybox su builder -c '/bin/sh /xchg/travis-nox-review-pr.sh nix'
