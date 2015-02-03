@@ -66,7 +66,7 @@ let
     mkdir -p $PROOT_DIR/xchg
     test -w $PROOT_DIR/xchg || chmod -R g+w $PROOT_DIR/xchg
 
-    cp <nixpkgs/maintainers/scripts/travis-nox-review-pr.sh> $PROOT_DIR/xchg
+    cp ${<nixpkgs/maintainers/scripts/travis-nox-review-pr.sh>} $PROOT_DIR/xchg
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" \
       -b /bin/sh \
