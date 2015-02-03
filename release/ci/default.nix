@@ -71,7 +71,7 @@ let
     chmod -R g+w $PROOT_DIR/xchg || true
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" \
-      -b /bin/sh \
+      -b /bin/sh -b /nix/store \
       ${extraPRootArgs} /xchg/build.sh; } || true
 
     test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
