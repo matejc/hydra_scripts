@@ -64,7 +64,7 @@ let
 
     export PROOT_DIR=/var/proots/$HASH
     mkdir -p $PROOT_DIR/xchg
-    test -w $PROOT_DIR/xchg || chmod -R g+w $PROOT_DIR/xchg
+    #test -w $PROOT_DIR/xchg || chmod -R g+w $PROOT_DIR/xchg
 
     cp ${<nixpkgs/maintainers/scripts/travis-nox-review-pr.sh>} $PROOT_DIR/xchg/travis-nox-review-pr.sh
     cp ${buildScript}/bin/build.sh $PROOT_DIR/xchg
