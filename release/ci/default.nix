@@ -22,11 +22,13 @@ let
   buildScript = pkgs.writeScriptBin "build.sh" ''
     #!/bin/sh
     echo "############################### BUILD START ###############################"
+    export PATH="/bin/sh:`readlink -f /nix/store/*-nix-*/bin | awk 'NR==1'`:$PATH"
 
-    export HOME=/root
+    export HOME=/home/builder
     mkdir -p $HOME
 
-    export PATH="/bin/sh:`readlink -f /nix/store/*-nix-*/bin | awk 'NR==1'`"
+    mkdir -p /home/builder
+    useradd -d /home/builder -s /bin/sh nixbld1 || true
 
     if [ -f /nix-path-registration ]; then
       nix-store --load-db < /nix-path-registration && rm /nix-path-registration
