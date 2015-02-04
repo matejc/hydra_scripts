@@ -90,6 +90,9 @@ let
     mkdir -p $PROOT_ROOT/bin
     test -d $PROOT_ROOT/nix/store || tar xf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
+    
+    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'`
+    ln -sf ''${FULLPATH#$PROOT_ROOT} $PROOT_ROOT/bin/sh
 
     mkdir -p $PROOT_ROOT/etc/
     cp ${passwd} $PROOT_ROOT/etc/passwd && chmod 600 $PROOT_ROOT/etc/passwd
