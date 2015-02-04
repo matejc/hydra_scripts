@@ -42,7 +42,7 @@ let
 
     echo "https://nixos.org/channels/nixpkgs-unstable nixpkgs" > $HOME/.nix-channels
     
-    nix-channel --update
+    strace nix-channel --update
 
     # if [ -f /nix-path-registration ]; then
       # nix-store --load-db < /nix-path-registration && rm /nix-path-registration
