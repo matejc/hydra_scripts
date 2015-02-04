@@ -73,9 +73,9 @@ let
     BASHFULL=`readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'`
     ln -sf ''${BASHFULL#$PROOT_ROOT} $PROOT_ROOT/bin/sh
 
-    cp ${passwd} $PROOT_ROOT/passwd
-    cp ${group} $PROOT_ROOT/group
-    cp ${shadow} $PROOT_ROOT/shadow
+    cp ${passwd} $PROOT_ROOT/passwd && chmod +w $PROOT_ROOT/passwd
+    cp ${group} $PROOT_ROOT/group && chmod +w $PROOT_ROOT/group
+    cp ${shadow} $PROOT_ROOT/shadow && chmod +w $PROOT_ROOT/shadow
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" \
       -b $PROOT_DIR/xchg/build.sh:/bin/build.sh \
