@@ -79,9 +79,6 @@ let
     test -d $PROOT_ROOT/nix/store || tar xf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
-    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-system-path/bin/ | awk 'NR==1'`
-    ln -sf ''${FULLPATH#$PROOT_ROOT}/* $PROOT_ROOT/bin/
-
     cp ${passwd} $PROOT_ROOT/passwd && chmod +w $PROOT_ROOT/passwd
     cp ${group} $PROOT_ROOT/group && chmod +w $PROOT_ROOT/group
     cp ${shadow} $PROOT_ROOT/shadow && chmod +w $PROOT_ROOT/shadow
