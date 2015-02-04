@@ -46,7 +46,7 @@ let
   '';
 
   runCommand = pkgs.writeText "runCommand" ''
-    export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin:${pkgs.curl}/bin:${pkgs.gnutar}/bin:${pkgs.xz}/bin:$PATH
+    export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin:${pkgs.wget}/bin:${pkgs.gnutar}/bin:${pkgs.xz}/bin:$PATH
     export CURL_CA_BUNDLE=${pkgs.cacert}/etc/ca-bundle.crt
     export HASH=`echo "${nixpkgs}${pr}" | sha1sum - | awk '{print $1}'`
 
@@ -62,7 +62,7 @@ let
     mkdir -p $PROOT_DIR/xchg
 
     cp -f ${buildScript}/bin/build.sh $PROOT_DIR/xchg
-    test -f $PROOT_DIR/xchg/tarball.tar.xz || curl ${tarball} -o $PROOT_DIR/xchg/tarball.tar.xz
+    test -f $PROOT_DIR/xchg/tarball.tar.xz || wget ${tarball} -O $PROOT_DIR/xchg/tarball.tar.xz
     xz -dk $PROOT_DIR/xchg/tarball.tar.xz
     tar xvf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
