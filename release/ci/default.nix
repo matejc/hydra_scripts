@@ -29,9 +29,9 @@ let
     # nixos-rebuild also requires a "system" profile
     `readlink -f /nix/store/*-nix-*/bin/nix-env | awk 'NR==1'` -p /nix/var/nix/profiles/system --set /run/current-system
 
-    nix-env -qa '*' | wc -l
+    `readlink -f /nix/store/*-nix-*/bin/nix-env | awk 'NR==1'` -qa '*' | wc -l
 
-    nix-env -iA pkgs.nox
+    `readlink -f /nix/store/*-nix-*/bin/nix-env | awk 'NR==1'` -iA pkgs.nox
 
     { nox-review pr ${pr}; }
 
