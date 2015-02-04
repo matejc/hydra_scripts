@@ -80,9 +80,9 @@ let
     test -d $PROOT_ROOT/nix/store || tar xf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
-    cp ${passwd} $PROOT_ROOT/passwd && chmod +w $PROOT_ROOT/passwd
-    cp ${group} $PROOT_ROOT/group && chmod +w $PROOT_ROOT/group
-    cp ${shadow} $PROOT_ROOT/shadow && chmod +w $PROOT_ROOT/shadow
+    cp ${passwd} $PROOT_ROOT/etc/passwd && chmod +w $PROOT_ROOT/etc/passwd
+    cp ${group} $PROOT_ROOT/etc/group && chmod +w $PROOT_ROOT/etc/group
+    cp ${shadow} $PROOT_ROOT/etc/shadow && chmod +w $PROOT_ROOT/etc/shadow
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" \
       -b $PROOT_DIR/xchg/build.sh:/bin/build.sh \
