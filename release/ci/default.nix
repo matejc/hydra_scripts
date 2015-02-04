@@ -20,8 +20,6 @@ let
   buildScript = pkgs.writeScriptBin "build.sh" ''
     #!/bin/sh
     echo "############################### BUILD START ###############################"
-    export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:${pkgs.nox}/bin:${pkgs.curl}/bin:${pkgs.bashInteractive}/bin:$PATH
-    export CURL_CA_BUNDLE=${pkgs.cacert}/etc/ca-bundle.crt
 
     # to associate uid with username and
     # gid with groupname for programs like `id`
@@ -29,15 +27,10 @@ let
     cp ${passwd} /etc/passwd
     cp ${group} /etc/group
     cp ${shadow} /etc/shadow
-    #cp ${resolv_conf} /etc/resolv.conf
 
-    mkdir -p /home/builder
-    busybox adduser -h /home/builder -s /bin/sh -D  builder || true
+    bash <(curl -sS https://nixos.org/nix/install)
 
-    #chown -R builder /nix/store
-    #chmod -R 1775 /nix/store
-
-    busybox su builder -c 'nox-review pr ${pr}'
+    {  && nox-review pr ${pr}; }
 
     EXITSTATUSCODE=$?
 
@@ -66,14 +59,11 @@ let
     trap "postCommands" EXIT
 
     mkdir -p $PROOT_DIR/xchg
-    #test -w $PROOT_DIR/xchg || chmod -R g+w $PROOT_DIR/xchg
 
-    cp ${<nixpkgs/maintainers/scripts/travis-nox-review-pr.sh>} $PROOT_DIR/xchg/travis-nox-review-pr.sh
     cp ${buildScript}/bin/build.sh $PROOT_DIR/xchg
     chmod -R g+w $PROOT_DIR/xchg || true
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" \
-      -b /bin/sh -b /nix/store -b /usr/bin/env \
       ${extraPRootArgs} /xchg/build.sh; } || true
 
     test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
