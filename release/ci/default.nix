@@ -5,14 +5,15 @@ let
 
   passwd = pkgs.writeText "passwd" ''
     root:x:0:0::/root:/bin/sh
-    nixbld1:x:0:0::/home/builder:/bin/sh
+    nixbld1:x:30001:30000::/home/builder:/bin/sh
   '';
   group = pkgs.writeText "group" ''
     root:x:0:
-    nixbld:x:100:nixbld1
+    nixbld:x:30000:nixbld1
   '';
   shadow = pkgs.writeText "shadow" ''
     root:x:16117::::::
+    nixbld1:!:15925::::::
   '';
   resolv_conf = pkgs.writeText "resolv.conf" ''
     nameserver 8.8.8.8
