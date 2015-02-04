@@ -71,11 +71,11 @@ let
     ls -lah $PROOT_ROOT
 
     if [ -f $PROOT_ROOT/nix-path-registration ]; then
-      ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" "$(ls /nix/store/*-nix-*/bin/nix-store) --load-db < /nix-path-registration && rm /nix-path-registration"
+      ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" '$(ls /nix/store/*-nix-*/bin/nix-store) --load-db < /nix-path-registration && rm /nix-path-registration'
     fi
 
     # nixos-rebuild also requires a "system" profile
-    ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" "$(ls /nix/store/*-nix-*/bin/nix-env) -p /nix/var/nix/profiles/system --set /run/current-system"
+    ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" '$(ls /nix/store/*-nix-*/bin/nix-env) -p /nix/var/nix/profiles/system --set /run/current-system'
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" \
       -b $PROOT_DIR/xchg/build.sh:/bin/build.sh \
