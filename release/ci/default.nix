@@ -68,6 +68,8 @@ let
 
     cp -f ${buildScript}/bin/build.sh $PROOT_DIR/xchg
     test -f $PROOT_DIR/xchg/nix.tar.xx || curl ${nix} -o $PROOT_DIR/xchg/nix.tar.xx
+    test -d $PROOT_DIR/xchg/nix && rm -rf $PROOT_DIR/xchg/nix
+    mkdir -p $PROOT_DIR/xchg/nix
     tar xvf $PROOT_DIR/xchg/nix.tar.xx -C $PROOT_DIR/xchg/nix
     chmod -R g+w $PROOT_DIR/xchg || true
 
