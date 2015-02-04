@@ -8,6 +8,7 @@ let
   '';
   group = pkgs.writeText "group" ''
     root:x:0:
+    nixbld:x:0:
   '';
   shadow = pkgs.writeText "shadow" ''
     root:x:16117::::::
@@ -28,11 +29,6 @@ let
     # nixos-rebuild also requires a "system" profile
     `readlink -f /nix/store/*-nix-*/bin/nix-env | awk 'NR==1'` -p /nix/var/nix/profiles/system --set /run/current-system
 
-    ls -lah /xchg/nix
-
-    cd /xchg/nix && ./install
-
-    . ~/.nix-profile/etc/profile.d/nix.sh
     nix-env -qa '*' | wc -l
 
     nix-env -iA pkgs.nox
@@ -76,6 +72,10 @@ let
 
     BASHFULL=`readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'`
     ln -sf ''${BASHFULL#$PROOT_ROOT} $PROOT_ROOT/bin/sh
+
+    cp ${passwd} $PROOT_ROOT/passwd
+    cp ${group} $PROOT_ROOT/group
+    cp ${shadow} $PROOT_ROOT/shadow
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" \
       -b $PROOT_DIR/xchg/build.sh:/bin/build.sh \
