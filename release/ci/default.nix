@@ -20,7 +20,7 @@ let
   buildScript = pkgs.writeScriptBin "build.sh" ''
     #!/bin/sh
     echo "############################### BUILD START ###############################"
-    export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:${pkgs.curl}/bin:${pkgs.bash}/bin:$PATH
+    export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:${pkgs.curl}/bin:${pkgs.bashInteractive}/bin:$PATH
 
     # to associate uid with username and
     # gid with groupname for programs like `id`
