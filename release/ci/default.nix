@@ -59,6 +59,7 @@ let
     while `test -f /var/proots/$HASH.lock`; do sleep 10; echo "Waiting: $HASH.lock"; done
     touch /var/proots/$HASH.lock
     export PROOT_DIR=/var/proots/$HASH
+    export PROOT_ROOT=/var/proots/$HASH/root
     postCommands() {
       rm /var/proots/$HASH.lock
     }
@@ -73,9 +74,13 @@ let
     tar xvf $PROOT_DIR/xchg/nix.tar.xx -C $PROOT_DIR/xchg/nix
     chmod -R g+w $PROOT_DIR/xchg || true
 
-    { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" \
-      -b ${pkgs.bash}/bin/bash:/bin/sh
-      ${extraPRootArgs} "/xchg/build.sh"; } || true
+    ls -lah $PROOT_DIR/xchg/nix
+
+    { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" \
+      -b ${pkgs.bash}/bin/bash:/bin/sh \
+      -b $PROOT_DIR/xchg/nix:/nix \
+      -b $PROOT_DIR/xchg/build.sh:/bin/build.sh \
+      ${extraPRootArgs} "/bin/build.sh"; } || true
 
     test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
     chmod g+w $PROOT_DIR || true
