@@ -23,7 +23,7 @@ let
     echo "############################### BUILD START ###############################"
     export PATH="/bin:`readlink -f /nix/store/*-system-path/bin/ | awk 'NR==1'`:$PATH"
 
-    echo $PATH
+    chown -R 0:0 /etc
 
     export HOME=/home/builder
     mkdir -p $HOME
