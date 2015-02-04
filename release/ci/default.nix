@@ -26,7 +26,7 @@ let
     export HOME=/root
     mkdir -p $HOME
 
-    `readlink -f /nix/store/*-nix-*/etc/profile.d/nix.sh | awk 'NR==1'`
+    /bin/sh -c "`readlink -f /nix/store/*-nix-*/etc/profile.d/nix.sh | awk 'NR==1'`"
     
 
     if [ -f /nix-path-registration ]; then
