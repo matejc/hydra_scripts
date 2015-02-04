@@ -1,4 +1,5 @@
-{ nixpkgs, system ? builtins.currentSystem, timeout ? "36000", extraPRootArgs ? "", pr ? "6118", nix }:
+{ nixpkgs, system ? builtins.currentSystem, timeout ? "36000", extraPRootArgs ? "", pr ? "6118", nix,
+tarball ? "http://hydra.nixos.org/job/nixos/trunk-combined/nixos.containerTarball.x86_64-linux/latest/download-by-type/file/system-tarball" }:
 let
   pkgs = import <nixpkgs> { inherit system; };
 
@@ -21,17 +22,10 @@ let
     #!/bin/sh
     echo "############################### BUILD START ###############################"
 
-    # to associate uid with username and
-    # gid with groupname for programs like `id`
-    mkdir -p /etc
-    cp ${passwd} /etc/passwd
-    cp ${group} /etc/group
-    cp ${shadow} /etc/shadow
-
     ls -lah /xchg/nix
-    
+
     cd /xchg/nix && ./install
-    
+
     . ~/.nix-profile/etc/profile.d/nix.sh
     nix-env -qa '*' | wc -l
 
@@ -41,7 +35,7 @@ let
 
     EXITSTATUSCODE=$?
 
-    echo $EXITSTATUSCODE > /xchg/exitstatuscode
+    echo $EXITSTATUSCODE > /exitstatuscode
 
     if [[ "0" -eq "$EXITSTATUSCODE" ]]; then
       echo "BUILD SUCCESS!"
@@ -52,7 +46,7 @@ let
   '';
 
   runCommand = pkgs.writeText "runCommand" ''
-    export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin:${pkgs.curl}/bin:${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
+    export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin:${pkgs.curl}/bin:${pkgs.gnutar}/bin:${pkgs.xz}/bin:$PATH
     export CURL_CA_BUNDLE=${pkgs.cacert}/etc/ca-bundle.crt
     export HASH=`echo "${nixpkgs}${pr}" | sha1sum - | awk '{print $1}'`
 
@@ -68,24 +62,20 @@ let
     mkdir -p $PROOT_DIR/xchg
 
     cp -f ${buildScript}/bin/build.sh $PROOT_DIR/xchg
-    test -f $PROOT_DIR/xchg/nix.tar.xx || curl ${nix} -o $PROOT_DIR/xchg/nix.tar.xx
-    test -d $PROOT_DIR/xchg/nix && rm -rf $PROOT_DIR/xchg/nix
-    mkdir -p $PROOT_DIR/xchg/nix
-    tar xvf $PROOT_DIR/xchg/nix.tar.xx -C $PROOT_DIR/xchg/nix
+    test -f $PROOT_DIR/xchg/tarball.tar.xx || curl ${tarball} -o $PROOT_DIR/xchg/tarball.tar.xx
+    tar xvf $PROOT_DIR/xchg/tarball.tar.xx -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
-    ls -lah $PROOT_DIR/xchg/nix
+    ls -lah $PROOT_ROOT
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" \
-      -b ${pkgs.bash}/bin/bash:/bin/sh \
-      -b $PROOT_DIR/xchg/nix:/nix \
       -b $PROOT_DIR/xchg/build.sh:/bin/build.sh \
       ${extraPRootArgs} "/bin/build.sh"; } || true
 
     test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
     chmod g+w $PROOT_DIR || true
 
-    EXITSTATUSCODE=`cat $PROOT_DIR/xchg/exitstatuscode`
+    EXITSTATUSCODE=`cat $PROOT_ROOT/exitstatuscode`
     echo $EXITSTATUSCODE > $out
     test 0 -ne $EXITSTATUSCODE && exit $EXITSTATUSCODE
   '';
