@@ -42,7 +42,7 @@ let
       nix-store --load-db < /nix-path-registration && rm /nix-path-registration
     fi
     # nixos-rebuild also requires a "system" profile
-    nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+    #nix-env -p /nix/var/nix/profiles/system --set /run/current-system
 
     nix-env -qa '*' | wc -l
 
