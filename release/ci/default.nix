@@ -60,15 +60,14 @@ let
     touch /var/proots/$HASH.lock
     export PROOT_DIR=/var/proots/$HASH
     postCommands() {
-      test -d $PROOT_DIR/xchg && rm -rf $PROOT_DIR/xchg
       rm /var/proots/$HASH.lock
     }
     trap "postCommands" EXIT
 
     mkdir -p $PROOT_DIR/xchg
 
-    cp ${buildScript}/bin/build.sh $PROOT_DIR/xchg
-    curl ${nix} -o $PROOT_DIR/xchg/nix.tar.xx
+    cp -f ${buildScript}/bin/build.sh $PROOT_DIR/xchg
+    test -f $PROOT_DIR/xchg/nix.tar.xx || curl ${nix} -o $PROOT_DIR/xchg/nix.tar.xx
     tar xvf $PROOT_DIR/xchg/nix.tar.xx -C $PROOT_DIR/xchg/nix
     chmod -R g+w $PROOT_DIR/xchg || true
 
