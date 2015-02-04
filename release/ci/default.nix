@@ -77,16 +77,7 @@ let
     test -d $PROOT_ROOT/nix/store || tar xf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
-    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'`
-    ln -sf ''${FULLPATH#$PROOT_ROOT} $PROOT_ROOT/bin/sh
-
-    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-shadow-*/bin/useradd | awk 'NR==1'`
-    ln -sf ''${FULLPATH#$PROOT_ROOT} $PROOT_ROOT/bin/useradd
-
-    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-shadow-*/bin/su | awk 'NR==1'`
-    ln -sf ''${FULLPATH#$PROOT_ROOT} $PROOT_ROOT/bin/su
-
-    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-nix-*/bin/ | awk 'NR==1'`
+    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-system-path/bin/ | awk 'NR==1'`
     ln -sf ''${FULLPATH#$PROOT_ROOT}/* $PROOT_ROOT/bin/
 
     cp ${passwd} $PROOT_ROOT/passwd && chmod +w $PROOT_ROOT/passwd
