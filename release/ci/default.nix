@@ -28,7 +28,8 @@ let
     cp ${passwd} /etc/passwd
     cp ${group} /etc/group
     cp ${shadow} /etc/shadow
-    cp ${resolv_conf} /etc/resolv.conf
+    #cp ${resolv_conf} /etc/resolv.conf
+    cat /etc/resolv.conf
 
     mkdir -p /home/builder
     busybox adduser -h /home/builder -s /bin/sh -D  builder || true
