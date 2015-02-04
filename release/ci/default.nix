@@ -26,16 +26,15 @@ let
     export HOME=/root
     mkdir -p $HOME
 
-    /bin/sh -c "`readlink -f /nix/store/*-nix-*/etc/profile.d/nix.sh | awk 'NR==1'`"
-    
+    export PATH="/bin/sh:`readlink -f /nix/store/*-nix-*/bin | awk 'NR==1'`"
 
     if [ -f /nix-path-registration ]; then
-      `readlink -f /nix/store/*-nix-*/bin/nix-store | awk 'NR==1'` --load-db < /nix-path-registration && rm /nix-path-registration
+      nix-store --load-db < /nix-path-registration && rm /nix-path-registration
     fi
     # nixos-rebuild also requires a "system" profile
-    `readlink -f /nix/store/*-nix-*/bin/nix-env | awk 'NR==1'` -p /nix/var/nix/profiles/system --set /run/current-system
+    nix-env -p /nix/var/nix/profiles/system --set /run/current-system
 
-    `readlink -f /nix/store/*-nix-*/bin/nix-env | awk 'NR==1'` -qa '*' | wc -l
+    nix-env -qa '*' | wc -l
 
     `readlink -f /nix/store/*-nix-*/bin/nix-env | awk 'NR==1'` -iA pkgs.nox
 
