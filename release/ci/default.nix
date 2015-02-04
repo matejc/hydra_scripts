@@ -20,7 +20,7 @@ let
   buildScript = pkgs.writeScriptBin "build.sh" ''
     #!/bin/sh
     echo "############################### BUILD START ###############################"
-    export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:${pkgs.curl}/bin:${pkgs.bashInteractive}/bin:$PATH
+    export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:${pkgs.nox}/bin:${pkgs.curl}/bin:${pkgs.bashInteractive}/bin:$PATH
     export CURL_CA_BUNDLE=${pkgs.cacert}/etc/ca-bundle.crt
 
     # to associate uid with username and
@@ -37,7 +37,7 @@ let
     #chown -R builder /nix/store
     #chmod -R 1775 /nix/store
 
-    busybox su builder -c '/xchg/travis-nox-review-pr.sh nix'
+    busybox su builder -c 'nox-review pr ${pr}'
 
     EXITSTATUSCODE=$?
 
