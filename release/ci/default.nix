@@ -23,6 +23,12 @@ let
     #!/bin/sh
     echo "############################### BUILD START ###############################"
 
+    export HOME=/root
+    mkdir -p $HOME
+
+    `readlink -f /nix/store/*-nix-*/etc/profile.d/nix.sh | awk 'NR==1'`
+    
+
     if [ -f /nix-path-registration ]; then
       `readlink -f /nix/store/*-nix-*/bin/nix-store | awk 'NR==1'` --load-db < /nix-path-registration && rm /nix-path-registration
     fi
