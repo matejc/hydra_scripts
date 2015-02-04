@@ -22,6 +22,12 @@ let
     #!/bin/sh
     echo "############################### BUILD START ###############################"
 
+    if [ -f /nix-path-registration ]; then
+      `readlink -f /nix/store/*-nix-*/bin/nix-store | awk 'NR==1'` --load-db < /nix-path-registration && rm /nix-path-registration
+    fi
+    # nixos-rebuild also requires a "system" profile
+    `readlink -f /nix/store/*-nix-*/bin/nix-env | awk 'NR==1'` -p /nix/var/nix/profiles/system --set /run/current-system
+
     ls -lah /xchg/nix
 
     cd /xchg/nix && ./install
@@ -68,22 +74,15 @@ let
     test -d $PROOT_ROOT/nix/store || tar xf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
-    ln -s `readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'` $PROOT_ROOT/bin/sh
-    ls -lah $PROOT_ROOT
-
-    if [ -f $PROOT_ROOT/nix-path-registration ]; then
-      ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" $('ls /nix/store/*-nix-*/bin/nix-store) --load-db < /nix-path-registration && rm /nix-path-registration'
-    fi
-
-    # nixos-rebuild also requires a "system" profile
-    ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" '$(ls /nix/store/*-nix-*/bin/nix-env) -p /nix/var/nix/profiles/system --set /run/current-system'
+    ln -sf `readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'` $PROOT_ROOT/bin/sh
+    ln -sf $PROOT_DIR/xchg/build.sh $PROOT_ROOT/bin/build.sh
+    ls -lah $PROOT_ROOT/bin
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" \
-      -b $PROOT_DIR/xchg/build.sh:/bin/build.sh \
       ${extraPRootArgs} "/bin/build.sh"; } || true
 
     test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
-    chmod g+w $PROOT_DIR || true
+    # chmod g+w $PROOT_DIR || true
 
     EXITSTATUSCODE=`cat $PROOT_ROOT/exitstatuscode`
     echo $EXITSTATUSCODE > $out
