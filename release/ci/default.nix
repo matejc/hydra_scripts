@@ -22,7 +22,7 @@ let
   buildScript = pkgs.writeScriptBin "build.sh" ''
     #!/bin/sh
     echo "############################### BUILD START ###############################"
-    export PATH="/bin/sh:`readlink -f /nix/store/*-nix-*/bin | awk 'NR==1'`:`readlink -f /nix/store/*-shadow-*/bin | awk 'NR==1'`:$PATH"
+    export PATH="/bin:`readlink -f /nix/store/*-nix-*/bin | awk 'NR==1'`:`readlink -f /nix/store/*-shadow-*/bin | awk 'NR==1'`:$PATH"
 
     export HOME=/home/builder
     mkdir -p $HOME
@@ -77,8 +77,14 @@ let
     test -d $PROOT_ROOT/nix/store || tar xf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
-    BASHFULL=`readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'`
-    ln -sf ''${BASHFULL#$PROOT_ROOT} $PROOT_ROOT/bin/sh
+    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'`
+    ln -sf ''${FULLPATH#$PROOT_ROOT} $PROOT_ROOT/bin/sh
+
+    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-shadow-*/bin/ | awk 'NR==1'`
+    ln -sf ''${FULLPATH#$PROOT_ROOT}/* $PROOT_ROOT/bin/
+
+    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-nix-*/bin/ | awk 'NR==1'`
+    ln -sf ''${FULLPATH#$PROOT_ROOT}/* $PROOT_ROOT/bin/
 
     cp ${passwd} $PROOT_ROOT/passwd && chmod +w $PROOT_ROOT/passwd
     cp ${group} $PROOT_ROOT/group && chmod +w $PROOT_ROOT/group
