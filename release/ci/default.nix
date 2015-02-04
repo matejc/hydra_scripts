@@ -64,14 +64,15 @@ let
     cp -f ${buildScript}/bin/build.sh $PROOT_DIR/xchg
     test -f $PROOT_DIR/xchg/tarball.tar.xz || wget ${tarball} -O $PROOT_DIR/xchg/tarball.tar.xz
     test -f $PROOT_DIR/xchg/tarball.tar || xz -dk $PROOT_DIR/xchg/tarball.tar.xz
-    mkdir -p $PROOT_ROOT
+    mkdir -p $PROOT_ROOT/bin
     test -d $PROOT_ROOT/nix/store || tar xf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
+    ln -s $PROOT_ROOT/nix/store/*-bash-*/bin/bash $PROOT_ROOT/bin/sh
     ls -lah $PROOT_ROOT
 
     if [ -f $PROOT_ROOT/nix-path-registration ]; then
-      ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" '$(ls /nix/store/*-nix-*/bin/nix-store) --load-db < /nix-path-registration && rm /nix-path-registration'
+      ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" $('ls /nix/store/*-nix-*/bin/nix-store) --load-db < /nix-path-registration && rm /nix-path-registration'
     fi
 
     # nixos-rebuild also requires a "system" profile
