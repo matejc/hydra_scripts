@@ -8,6 +8,7 @@ let
   '';
   group = pkgs.writeText "group" ''
     root:x:0:
+    nixbld:x:100:
   '';
   shadow = pkgs.writeText "shadow" ''
     root:x:16117::::::
@@ -25,14 +26,14 @@ let
 
     # chown -R 0:0 /etc
     
-    echo "login   auth    required        pam_nologin.so  no_warn" > /etc/pam.conf
+    # echo "login   auth    required        pam_nologin.so  no_warn" > /etc/pam.conf
     
     ls -lah /etc
 
     export HOME=/root
     mkdir -p $HOME
 
-    strace groupadd -f -r -g 100 nixbld
+    # strace groupadd -f -g 100 nixbld
 
     mkdir -p /home/builder
     useradd -d /home/builder -s /bin/sh nixbld1 -g nixbld || true
