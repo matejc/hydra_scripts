@@ -5,10 +5,11 @@ let
 
   passwd = pkgs.writeText "passwd" ''
     root:x:0:0::/root:/bin/sh
+    nixbld1:x:0:0::/home/builder:/bin/sh
   '';
   group = pkgs.writeText "group" ''
     root:x:0:
-    nixbld:x:100:
+    nixbld:x:100:nixbld1
   '';
   shadow = pkgs.writeText "shadow" ''
     root:x:16117::::::
@@ -28,7 +29,7 @@ let
     
     # echo "login   auth    required        pam_nologin.so  no_warn" > /etc/pam.conf
     
-    ls -lah /etc
+    # ls -lah /etc
 
     export HOME=/root
     mkdir -p $HOME
@@ -36,7 +37,7 @@ let
     # strace groupadd -f -g 100 nixbld
 
     mkdir -p /home/builder
-    useradd -d /home/builder -s /bin/sh nixbld1 -g nixbld || true
+    # useradd -d /home/builder -s /bin/sh nixbld1 -g nixbld || true
 
     echo "https://nixos.org/channels/nixpkgs-unstable nixpkgs" > $HOME/.nix-channels
     
