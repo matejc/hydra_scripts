@@ -55,6 +55,7 @@ let
     export PROOT_DIR=/var/proots/$HASH
     export PROOT_ROOT=/var/proots/$HASH/root
     postCommands() {
+      rm -rf $PROOT_ROOT
       rm /var/proots/$HASH.lock
     }
     trap "postCommands" EXIT
@@ -65,7 +66,7 @@ let
     test -f $PROOT_DIR/xchg/tarball.tar.xz || wget ${tarball} -O $PROOT_DIR/xchg/tarball.tar.xz
     test -f $PROOT_DIR/xchg/tarball.tar || xz -dk $PROOT_DIR/xchg/tarball.tar.xz
     mkdir -p $PROOT_ROOT
-    tar xvf $PROOT_DIR/xchg/tarball.tar --overwrite -C $PROOT_ROOT
+    tar xvf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
     ls -lah $PROOT_ROOT
