@@ -44,15 +44,17 @@ let
     
     nix-channel --update
 
-    if [ -f /nix-path-registration ]; then
-      nix-store --load-db < /nix-path-registration && rm /nix-path-registration
-    fi
+    # if [ -f /nix-path-registration ]; then
+      # nix-store --load-db < /nix-path-registration && rm /nix-path-registration
+    # fi
     # nixos-rebuild also requires a "system" profile
     #nix-env -p /nix/var/nix/profiles/system --set /run/current-system
 
+    echo "list packages:"
     nix-env -qa '*' | wc -l
 
-    `readlink -f /nix/store/*-nix-*/bin/nix-env | awk 'NR==1'` -iA pkgs.nox
+    echo "install nox:"
+    nix-env -iA pkgs.nox
 
     { nox-review pr ${pr}; }
 
