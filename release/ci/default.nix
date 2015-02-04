@@ -30,7 +30,7 @@ let
     export HOME=/home/builder
     mkdir -p $HOME
 
-    groupadd -f -r -g 100 nixbld
+    strace groupadd -f -r -g 100 nixbld
 
     mkdir -p /home/builder
     useradd -d /home/builder -s /bin/sh nixbld1 -g nixbld || true
