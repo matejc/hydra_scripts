@@ -22,7 +22,7 @@ let
   buildScript = pkgs.writeScriptBin "build.sh" ''
     #!/bin/sh
     echo "############################### BUILD START ###############################"
-    export PATH="/bin/sh:`readlink -f /nix/store/*-nix-*/bin | awk 'NR==1'`:$PATH"
+    export PATH="/bin/sh:`readlink -f /nix/store/*-nix-*/bin | awk 'NR==1'`:`readlink -f /nix/store/*-shadow-*/bin | awk 'NR==1'`:$PATH"
 
     export HOME=/home/builder
     mkdir -p $HOME
