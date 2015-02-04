@@ -8,7 +8,6 @@ let
   '';
   group = pkgs.writeText "group" ''
     root:x:0:
-    nixbld:x:100:
   '';
   shadow = pkgs.writeText "shadow" ''
     root:x:16117::::::
@@ -29,8 +28,10 @@ let
     export HOME=/home/builder
     mkdir -p $HOME
 
+    groupadd -f nixbld
+
     mkdir -p /home/builder
-    useradd -d /home/builder -s /bin/sh nixbld1 || true
+    useradd -d /home/builder -s /bin/sh nixbld1 -g nixbld || true
 
     if [ -f /nix-path-registration ]; then
       nix-store --load-db < /nix-path-registration && rm /nix-path-registration
