@@ -76,10 +76,9 @@ let
 
     BASHFULL=`readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'`
     ln -sf ''${BASHFULL#$PROOT_ROOT} $PROOT_ROOT/bin/sh
-    ln -sf $PROOT_DIR/xchg/build.sh $PROOT_ROOT/bin/build.sh
-    ls -lah $PROOT_ROOT/bin
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_ROOT" \
+      -b $PROOT_DIR/xchg/build.sh:/bin/build.sh \
       ${extraPRootArgs} "/bin/build.sh"; } || true
 
     test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
