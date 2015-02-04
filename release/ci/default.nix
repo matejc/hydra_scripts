@@ -24,6 +24,8 @@ let
     export PATH="/bin:`readlink -f /nix/store/*-system-path/bin/ | awk 'NR==1'`:$PATH"
 
     chown -R 0:0 /etc
+    
+    ls -lah /etc
 
     export HOME=/home/builder
     mkdir -p $HOME
