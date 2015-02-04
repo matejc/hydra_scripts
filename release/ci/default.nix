@@ -31,8 +31,13 @@ let
     ls -lah /xchg/nix
     
     cd /xchg/nix && ./install
+    
+    . ~/.nix-profile/etc/profile.d/nix.sh
+    nix-env -qa '*' | wc -l
 
-    {  && nox-review pr ${pr}; }
+    nix-env -iA pkgs.nox
+
+    { nox-review pr ${pr}; }
 
     EXITSTATUSCODE=$?
 
