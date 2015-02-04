@@ -68,7 +68,7 @@ let
     test -d $PROOT_ROOT/nix/store || tar xf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
-    ln -s $PROOT_ROOT/nix/store/*-bash-*/bin/bash $PROOT_ROOT/bin/sh
+    ln -s `readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'` $PROOT_ROOT/bin/sh
     ls -lah $PROOT_ROOT
 
     if [ -f $PROOT_ROOT/nix-path-registration ]; then
