@@ -23,11 +23,13 @@ let
     echo "############################### BUILD START ###############################"
     export PATH="/bin:`readlink -f /nix/store/*-system-path/bin/ | awk 'NR==1'`:$PATH"
 
-    chown -R 0:0 /etc
+    # chown -R 0:0 /etc
+    
+    echo "login   auth    required        pam_nologin.so  no_warn" > /etc/pam.conf
     
     ls -lah /etc
 
-    export HOME=/home/builder
+    export HOME=/root
     mkdir -p $HOME
 
     strace groupadd -f -r -g 100 nixbld
