@@ -28,7 +28,9 @@ let
     cp ${group} /etc/group
     cp ${shadow} /etc/shadow
 
-    bash <(curl -sS https://nixos.org/nix/install)
+    ls -lah /xchg/nix
+    
+    cd /xchg/nix && ./install
 
     {  && nox-review pr ${pr}; }
 
@@ -45,7 +47,7 @@ let
   '';
 
   runCommand = pkgs.writeText "runCommand" ''
-    export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin:$PATH
+    export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin:${pkgs.curl}/bin:${pkgs.gnutar}/bin:$PATH
 
     export HASH=`echo "${nixpkgs}${pr}" | sha1sum - | awk '{print $1}'`
 
