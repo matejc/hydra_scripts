@@ -52,7 +52,7 @@ let
   '';
 
   runCommand = pkgs.writeText "runCommand" ''
-    export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin:${pkgs.curl}/bin:${pkgs.gnutar}/bin:$PATH
+    export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin:${pkgs.curl}/bin:${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
     export CURL_CA_BUNDLE=${pkgs.cacert}/etc/ca-bundle.crt
     export HASH=`echo "${nixpkgs}${pr}" | sha1sum - | awk '{print $1}'`
 
