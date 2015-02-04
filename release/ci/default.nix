@@ -37,7 +37,7 @@ let
     #chown -R builder /nix/store
     #chmod -R 1775 /nix/store
 
-    busybox su builder -c '/bin/sh /xchg/travis-nox-review-pr.sh nix'
+    busybox su builder -c '/xchg/travis-nox-review-pr.sh nix'
 
     EXITSTATUSCODE=$?
 
@@ -73,7 +73,7 @@ let
     chmod -R g+w $PROOT_DIR/xchg || true
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" \
-      -b /bin/sh -b /nix/store \
+      -b /bin/sh -b /nix/store -b /usr/bin/env \
       ${extraPRootArgs} /xchg/build.sh; } || true
 
     test -w $PROOT_DIR || echo "WARNING: `id` has no write permission for $PROOT_DIR"
