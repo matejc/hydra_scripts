@@ -62,8 +62,9 @@ let
     mkdir -p $PROOT_DIR/xchg
 
     cp -f ${buildScript}/bin/build.sh $PROOT_DIR/xchg
-    test -f $PROOT_DIR/xchg/tarball.tar.xx || curl ${tarball} -o $PROOT_DIR/xchg/tarball.tar.xx
-    tar xvf $PROOT_DIR/xchg/tarball.tar.xx -C $PROOT_ROOT
+    test -f $PROOT_DIR/xchg/tarball.tar.xz || curl ${tarball} -o $PROOT_DIR/xchg/tarball.tar.xz
+    xz -dk $PROOT_DIR/xchg/tarball.tar.xz
+    tar xvf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
     ls -lah $PROOT_ROOT
