@@ -57,12 +57,13 @@ let
 
     while `test -f /var/proots/$HASH.lock`; do sleep 10; echo "Waiting: $HASH.lock"; done
     touch /var/proots/$HASH.lock
+    export PROOT_DIR=/var/proots/$HASH
     postCommands() {
+      test -d $PROOT_DIR/xchg && rm -rf $PROOT_DIR/xchg
       rm /var/proots/$HASH.lock
     }
     trap "postCommands" EXIT
 
-    export PROOT_DIR=/var/proots/$HASH
     mkdir -p $PROOT_DIR/xchg
     #test -w $PROOT_DIR/xchg || chmod -R g+w $PROOT_DIR/xchg
 
