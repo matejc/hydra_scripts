@@ -1,4 +1,4 @@
-{ nixpkgs, system ? builtins.currentSystem, timeout ? "36000", extraPRootArgs ? "", pr ? "6118" }:
+{ nixpkgs, system ? builtins.currentSystem, timeout ? "36000", extraPRootArgs ? "", pr ? "6118", nix }:
 let
   pkgs = import <nixpkgs> { inherit system; };
 
@@ -61,6 +61,8 @@ let
     mkdir -p $PROOT_DIR/xchg
 
     cp ${buildScript}/bin/build.sh $PROOT_DIR/xchg
+    curl ${nix} -o $PROOT_DIR/xchg/nix.tar.xx
+    tar xvf $PROOT_DIR/xchg/nix.tar.xx -C $PROOT_DIR/xchg/nix
     chmod -R g+w $PROOT_DIR/xchg || true
 
     { timeout ${timeout} ${pkgs.proot}/bin/proot -S "$PROOT_DIR" \
