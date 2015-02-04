@@ -74,7 +74,8 @@ let
     test -d $PROOT_ROOT/nix/store || tar xf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
-    ln -sf `readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'` $PROOT_ROOT/bin/sh
+    BASHFULL=`readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'`
+    ln -sf ''${BASHFULL#$PROOT_ROOT} $PROOT_ROOT/bin/sh
     ln -sf $PROOT_DIR/xchg/build.sh $PROOT_ROOT/bin/build.sh
     ls -lah $PROOT_ROOT/bin
 
