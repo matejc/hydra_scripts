@@ -53,7 +53,7 @@ let
 
   runCommand = pkgs.writeText "runCommand" ''
     export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin:${pkgs.curl}/bin:${pkgs.gnutar}/bin:$PATH
-
+    export CURL_CA_BUNDLE=${pkgs.cacert}/etc/ca-bundle.crt
     export HASH=`echo "${nixpkgs}${pr}" | sha1sum - | awk '{print $1}'`
 
     while `test -f /var/proots/$HASH.lock`; do sleep 10; echo "Waiting: $HASH.lock"; done
