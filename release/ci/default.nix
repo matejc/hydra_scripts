@@ -64,6 +64,7 @@ let
     cp -f ${buildScript}/bin/build.sh $PROOT_DIR/xchg
     test -f $PROOT_DIR/xchg/tarball.tar.xz || wget ${tarball} -O $PROOT_DIR/xchg/tarball.tar.xz
     xz -dk $PROOT_DIR/xchg/tarball.tar.xz
+    mkdir -p $PROOT_ROOT
     tar xvf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
