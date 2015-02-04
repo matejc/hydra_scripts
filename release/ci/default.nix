@@ -22,7 +22,7 @@ let
   buildScript = pkgs.writeScriptBin "build.sh" ''
     #!/bin/sh
     echo "############################### BUILD START ###############################"
-    export PATH="/bin:`readlink -f /nix/store/*-nix-*/bin | awk 'NR==1'`:`readlink -f /nix/store/*-shadow-*/bin | awk 'NR==1'`:$PATH"
+    export PATH="/bin:$PATH"
 
     export HOME=/home/builder
     mkdir -p $HOME
@@ -80,8 +80,11 @@ let
     FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-bash-*/bin/bash | awk 'NR==1'`
     ln -sf ''${FULLPATH#$PROOT_ROOT} $PROOT_ROOT/bin/sh
 
-    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-shadow-*/bin/ | awk 'NR==1'`
-    ln -sf ''${FULLPATH#$PROOT_ROOT}/* $PROOT_ROOT/bin/
+    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-shadow-*/bin/useradd | awk 'NR==1'`
+    ln -sf ''${FULLPATH#$PROOT_ROOT} $PROOT_ROOT/bin/useradd
+
+    FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-shadow-*/bin/su | awk 'NR==1'`
+    ln -sf ''${FULLPATH#$PROOT_ROOT} $PROOT_ROOT/bin/su
 
     FULLPATH=`readlink -f $PROOT_ROOT/nix/store/*-nix-*/bin/ | awk 'NR==1'`
     ln -sf ''${FULLPATH#$PROOT_ROOT}/* $PROOT_ROOT/bin/
