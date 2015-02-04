@@ -18,7 +18,7 @@ let
   '';
 
   buildScript = pkgs.writeScriptBin "build.sh" ''
-    #!/bin/sh
+    #!bash
     echo "############################### BUILD START ###############################"
 
     # to associate uid with username and
