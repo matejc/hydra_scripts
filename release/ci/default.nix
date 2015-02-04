@@ -21,6 +21,7 @@ let
     #!/bin/sh
     echo "############################### BUILD START ###############################"
     export PATH=${pkgs.busybox}/bin:${pkgs.nix}/bin:${pkgs.curl}/bin:${pkgs.bashInteractive}/bin:$PATH
+    export CURL_CA_BUNDLE=${pkgs.cacert}/etc/ca-bundle.crt
 
     # to associate uid with username and
     # gid with groupname for programs like `id`
@@ -29,7 +30,6 @@ let
     cp ${group} /etc/group
     cp ${shadow} /etc/shadow
     #cp ${resolv_conf} /etc/resolv.conf
-    cat /etc/resolv.conf
 
     mkdir -p /home/builder
     busybox adduser -h /home/builder -s /bin/sh -D  builder || true
