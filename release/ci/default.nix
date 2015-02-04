@@ -80,6 +80,7 @@ let
     test -d $PROOT_ROOT/nix/store || tar xf $PROOT_DIR/xchg/tarball.tar -C $PROOT_ROOT
     chmod -R g+w $PROOT_DIR/xchg || true
 
+    mkdir -p $PROOT_ROOT/etc/
     cp ${passwd} $PROOT_ROOT/etc/passwd && chmod +w $PROOT_ROOT/etc/passwd
     cp ${group} $PROOT_ROOT/etc/group && chmod +w $PROOT_ROOT/etc/group
     cp ${shadow} $PROOT_ROOT/etc/shadow && chmod +w $PROOT_ROOT/etc/shadow
