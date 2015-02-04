@@ -8,7 +8,7 @@ let
   '';
   group = pkgs.writeText "group" ''
     root:x:0:
-    nixbld:x:0:
+    nixbld:x:100:
   '';
   shadow = pkgs.writeText "shadow" ''
     root:x:16117::::::
