@@ -1,6 +1,6 @@
 { nixpkgs, system, hydra_scripts }:
 let
-  kernelExtraConfig = builtins.readFile "${hydra_scripts}/";
+  kernelExtraConfig = builtins.readFile "${hydra_scripts}/config/t100pam_extra.config";
   config = {
     nixpkgs.config = {
       packageOverrides = pkgs: {
