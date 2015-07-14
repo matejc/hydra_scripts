@@ -1,6 +1,8 @@
 { nixpkgs, system, hydra_scripts }:
 let
+  pkgs = import <nixpkgs> { inherit system config; };
   kernelExtraConfig = builtins.readFile "${hydra_scripts}/config/t100pam_extra.config";
+  linuxPackages = pkgs.linuxPackages_4_1;
   config = {
     nixpkgs.config = {
       packageOverrides = pkgs: {
@@ -12,10 +14,10 @@ let
         };
       };
     };
-    boot.kernelPackages = pkgs.linuxPackages_4_1;
+    boot.kernelPackages = linuxPackages;
   };
-  pkgs = import <nixpkgs> { inherit system config; };
   jobs = {
-    kernelPackages = config.boot.kernelPackages;
+    #kernelPackages = config.boot.kernelPackages;
+    linux = linuxPackages.kernel.override { extraConfig = kernelExtraConfig; };
   };
 in jobs
