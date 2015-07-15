@@ -7,9 +7,9 @@ let
   config = {
     nixpkgs.config = {
       packageOverrides = pkgs: {
+        linux_4_1 = pkgs.linux_4_1.override { extraConfig = kernelExtraConfig; };
         stdenv = pkgs.stdenv // {
           platform = pkgs.stdenv.platform // {
-            inherit kernelExtraConfig;
             name = "tablet";
           };
         };
@@ -17,7 +17,6 @@ let
     };
     boot.kernelPackages = pkgs.linuxPackages_4_1;
   };
-  linux = linuxPackages.kernel.override { extraConfig = kernelExtraConfig; };
   tarball = import <nixpkgs/nixos/lib/make-system-tarball.nix> {
     inherit (pkgs) stdenv perl xz pathsFromGraph;
     contents = [];
