@@ -1,6 +1,7 @@
 { nixpkgs, system, hydra_scripts }:
 let
   pkgs = import <nixpkgs> { inherit system; };
+  pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
   kernelExtraConfig = builtins.readFile "${hydra_scripts}/config/t100pam_extra.config";
   linuxPackages = pkgs.linuxPackages_4_1;
   stdenv = pkgs.stdenv // {
