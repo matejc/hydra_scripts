@@ -6,8 +6,8 @@ let
   linuxPackages = pkgs.linuxPackages_4_1;
   config = {
     nixpkgs.config = {
-      packageOverrides = pkgs: {
-        linux_4_1 = pkgs.linux_4_1.override { extraConfig = kernelExtraConfig; };
+      packageOverrides = pkgs: rec {
+        linux_4_1 = pkgs.linux_4_1.override { extraConfig = kernelExtraConfig; inherit stdenv; };
         stdenv = pkgs.stdenv // {
           platform = pkgs.stdenv.platform // {
             name = "tablet";
