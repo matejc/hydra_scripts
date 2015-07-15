@@ -3,25 +3,17 @@ let
   pkgs = import <nixpkgs> { inherit system config; };
   pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
   kernelExtraConfig = builtins.readFile "${hydra_scripts}/config/t100pam_extra.config";
-  linuxPackages = pkgs.linuxPackages_4_1;
-  config = {
-    nixpkgs.config = {
-      packageOverrides = pkgs: rec {
-        linux_4_1 = pkgs.linux_4_1.override { extraConfig = kernelExtraConfig; inherit stdenv; };
-        stdenv = pkgs.stdenv // {
-          platform = pkgs.stdenv.platform // {
-            name = "tablet";
-          };
-        };
-      };
+  stdenv = pkgs.stdenv // {
+    platform = pkgs.stdenv.platform // {
+      name = "tablet";
     };
-    boot.kernelPackages = pkgs.linuxPackages_4_1;
   };
+  linux = pkgs.linux_4_1.override { extraConfig = kernelExtraConfig; inherit stdenv; };
   tarball = import <nixpkgs/nixos/lib/make-system-tarball.nix> {
     inherit (pkgs) stdenv perl xz pathsFromGraph;
     contents = [];
     extraArgs = "--owner=0";
-    storeContents = (pkgs2storeContents [ pkgs.config.boot.kernelPackages.kernel ]);
+    storeContents = (pkgs2storeContents [ linux ]);
   };
   jobs = {
     inherit tarball;
