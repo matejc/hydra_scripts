@@ -19,8 +19,7 @@ let
   };
   linux = linuxPackages.kernel.override { extraConfig = kernelExtraConfig; };
   tarball = import <nixpkgs/nixos/lib/make-system-tarball.nix> {
-    inherit (pkgs) perl xz pathsFromGraph;
-    inherit stdenv;
+    inherit (pkgs) stdenv perl xz pathsFromGraph;
     contents = [];
     extraArgs = "--owner=0";
     storeContents = (pkgs2storeContents [ pkgs.config.boot.kernelPackages.kernel ]);
