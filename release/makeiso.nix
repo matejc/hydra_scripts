@@ -1,8 +1,17 @@
 { nixpkgs, system, hydra_scripts }:
 let
   pkgs = import <nixpkgs> { inherit system; };
-  hydraJob = pkgs.lib.hydraJob;
   kernelExtraConfig = builtins.readFile "${hydra_scripts}/config/t100pam_extra.config";
+  hydraJob = pkgs.lib.hydraJob;
+  stableBranch = false;
+
+  version = builtins.readFile <nixpkgs/.version>;
+  versionSuffix =
+    (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
+  versionModule =
+    { system.nixosVersionSuffix = versionSuffix;
+      system.nixosRevision = nixpkgs.rev or nixpkgs.shortRev;
+    };
 
   makeIso =
     { module, type, description ? type, maintainers ? ["matejc"], system }:
