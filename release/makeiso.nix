@@ -8,7 +8,7 @@ let
     { module, type, description ? type, maintainers ? ["matejc"], system }:
     with import nixpkgs { inherit system; };
     let
-      config = (import <nixpkgs/lib/eval-config.nix> {
+      config = (import <nixpkgs/nixos/lib/eval-config.nix> {
         inherit system;
         modules = [ module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
       }).config;
