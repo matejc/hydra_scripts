@@ -1,6 +1,7 @@
 { nixpkgs, system, hydra_scripts }:
 let
   pkgs = import <nixpkgs> { inherit system; };
+  hydraJob = pkgs.lib.hydraJob;
   kernelExtraConfig = builtins.readFile "${hydra_scripts}/config/t100pam_extra.config";
 
   makeIso =
