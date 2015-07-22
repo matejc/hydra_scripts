@@ -1,5 +1,4 @@
 { nixpkgs, system, hydra_scripts }:
-with import <nixpkgs/nixos/lib/qemu-flags.nix>;
 with import <nixpkgs/lib>;
 let
   pkgs = import <nixpkgs> { inherit system; };
@@ -15,14 +14,18 @@ let
       system.nixosRevision = nixpkgs.rev or nixpkgs.shortRev;
     };
 
+  evalConfig = 
+    { module, type, versionModule, system }:
+    (import <nixpkgs/nixos/lib/eval-config.nix> {
+      inherit system;
+      modules = [ module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
+    });
+
   makeIso =
     { module, type, description ? type, maintainers ? ["matejc"], system }:
     with import nixpkgs { inherit system; };
     let
-      config = (import <nixpkgs/nixos/lib/eval-config.nix> {
-        inherit system;
-        modules = [ module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
-      }).config;
+      config = (evalConfig {inherit module type versionModule system;}).config;
       iso = config.system.build.isoImage;
     in
       # Declare the ISO as a build product so that it shows up in Hydra.
@@ -39,28 +42,30 @@ let
           echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
         ''); # */
   
-  iso = makeIso {
-    module =
-      { config, lib, pkgs, ... }:
-      {
-        imports = [
-          <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-base.nix>
-          <nixpkgs/nixos/modules/profiles/minimal.nix>
-        ];
-        boot.loader.gummiboot.enable = true;
-        boot.loader.efi.canTouchEfiVariables = true;
-        boot.kernelPackages = pkgs.linuxPackages_4_1;
-        nixpkgs.config = {
-          packageOverrides = pkgs: {
-            stdenv = pkgs.stdenv // {
-              platform = pkgs.stdenv.platform // {
-                kernelExtraConfig = kernelExtraConfig;
-                name = "tablet";
-              };
+  configuration =
+    { config, lib, pkgs, ... }:
+    {
+      imports = [
+        <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-base.nix>
+        <nixpkgs/nixos/modules/profiles/minimal.nix>
+      ];
+      boot.loader.gummiboot.enable = true;
+      boot.loader.efi.canTouchEfiVariables = true;
+      boot.kernelPackages = pkgs.linuxPackages_4_1;
+      nixpkgs.config = {
+        packageOverrides = pkgs: {
+          stdenv = pkgs.stdenv // {
+            platform = pkgs.stdenv.platform // {
+              kernelExtraConfig = kernelExtraConfig;
+              name = "tablet";
             };
           };
         };
       };
+    };
+  
+  iso = makeIso {
+    module = configuration;
     type = "minimal";
     inherit system;
   };
@@ -78,20 +83,23 @@ let
           $machine->shutdown;
         '';
     };
+    
+  isoImage = (evalConfig { module = configuration; type = "minimal"; inherit versionModule system; }).config.system.build.isoImage;
+
   makeBootTestJob = name: machineConfig: hydraJob (makeBootTest name machineConfig);
   tests = {
     bootBiosCdrom = makeBootTestJob "bios-cdrom" ''
-        cdrom => glob("${iso}/iso/*.iso")
+        cdrom => glob("${isoImage}/iso/*.iso")
       '';
     bootBiosUsb = makeBootTestJob "bios-usb" ''
-        usb => glob("${iso}/iso/*.iso")
+        usb => glob("${isoImage}/iso/*.iso")
       '';
     bootUefiCdrom = makeBootTestJob "uefi-cdrom" ''
-        cdrom => glob("${iso}/iso/*.iso"),
+        cdrom => glob("${isoImage}/iso/*.iso"),
         bios => '${pkgs.OVMF}/FV/OVMF.fd'
       '';
     bootUefiUsb = makeBootTestJob "uefi-usb" ''
-        usb => glob("${iso}/iso/*.iso"),
+        usb => glob("${isoImage}/iso/*.iso"),
         bios => '${pkgs.OVMF}/FV/OVMF.fd'
       '';
   };
