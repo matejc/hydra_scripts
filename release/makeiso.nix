@@ -46,6 +46,8 @@ let
           <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-base.nix>
           <nixpkgs/nixos/modules/profiles/minimal.nix>
         ];
+        boot.loader.gummiboot.enable = true;
+        boot.loader.efi.canTouchEfiVariables = true;
         boot.kernelPackages = pkgs.linuxPackages_4_1;
         nixpkgs.config = {
           packageOverrides = pkgs: {
