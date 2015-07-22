@@ -62,10 +62,10 @@ let
     inherit system;
   };
   
-  
+  iso = iso_minimal.config.system.build.isoImage;
   makeBootTest = name: machineConfig:
     makeTest {
-      iso = iso_minimal.config.system.build.isoImage;
+      inherit iso;
       name = "boot-" + name;
       nodes = { };
       testScript =
