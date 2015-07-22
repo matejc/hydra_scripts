@@ -1,8 +1,9 @@
 { nixpkgs, system, hydra_scripts }:
+with import <nixpkgs/nixos/lib/qemu-flags.nix>;
+with import <nixpkgs/lib>;
 let
   pkgs = import <nixpkgs> { inherit system; };
   kernelExtraConfig = builtins.readFile "${hydra_scripts}/config/t100pam_extra.config";
-  hydraJob = pkgs.lib.hydraJob;
   stableBranch = false;
   makeTest = (import <nixpkgs/nixos/lib/testing.nix> { inherit system; }).makeTest;
 
@@ -64,7 +65,6 @@ let
     inherit system;
   };
 
-  with import <nixpkgs/nixos/lib/qemu-flags.nix>;
   makeBootTest = name: machineConfig:
     makeTest {
       inherit iso;
