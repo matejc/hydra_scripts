@@ -64,6 +64,7 @@ let
     inherit system;
   };
 
+  with import <nixpkgs/nixos/lib/qemu-flags.nix>;
   makeBootTest = name: machineConfig:
     makeTest {
       inherit iso;
