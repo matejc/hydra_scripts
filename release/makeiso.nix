@@ -76,7 +76,7 @@ let
           $machine->shutdown;
         '';
     };
-  makeBootTestJob = hydraJob makeBootTest;
+  makeBootTestJob = name: machineConfig: hydraJob (makeBootTest name machineConfig);
   tests = {
     bootBiosCdrom = makeBootTestJob "bios-cdrom" ''
         cdrom => glob("${iso}/iso/*.iso")
