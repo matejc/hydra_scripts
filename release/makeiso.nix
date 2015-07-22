@@ -38,7 +38,7 @@ let
           echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
         ''); # */
   
-  iso_minimal = makeIso {
+  iso = makeIso {
     module =
       { config, lib, pkgs, ... }:
       {
@@ -61,8 +61,7 @@ let
     type = "minimal";
     inherit system;
   };
-  
-  iso = iso_minimal.config.system.build.isoImage;
+
   makeBootTest = name: machineConfig:
     makeTest {
       inherit iso;
@@ -95,6 +94,6 @@ let
   };
 
   jobs = {
-    inherit iso_minimal tests;
+    inherit iso tests;
   };
 in jobs
