@@ -60,8 +60,40 @@ let
     type = "minimal";
     inherit system;
   };
+  
+  
+  makeBootTest = name: machineConfig:
+    makeTest {
+      iso = iso_minimal.config.system.build.isoImage;
+      name = "boot-" + name;
+      nodes = { };
+      testScript =
+        ''
+          my $machine = createMachine({ ${machineConfig}, qemuFlags => '-m 768' });
+          $machine->start;
+          $machine->waitForUnit("multi-user.target");
+          $machine->shutdown;
+        '';
+    };
+  makeBootTestJob = hydraJob makeBootTest;
+  tests = {
+    bootBiosCdrom = makeBootTestJob "bios-cdrom" ''
+        cdrom => glob("${iso}/iso/*.iso")
+      '';
+    bootBiosUsb = makeBootTestJob "bios-usb" ''
+        usb => glob("${iso}/iso/*.iso")
+      '';
+    bootUefiCdrom = makeBootTestJob "uefi-cdrom" ''
+        cdrom => glob("${iso}/iso/*.iso"),
+        bios => '${pkgs.OVMF}/FV/OVMF.fd'
+      '';
+    bootUefiUsb = makeBootTestJob "uefi-usb" ''
+        usb => glob("${iso}/iso/*.iso"),
+        bios => '${pkgs.OVMF}/FV/OVMF.fd'
+      '';
+  };
 
   jobs = {
-    inherit iso_minimal;
+    inherit iso_minimal tests;
   };
 in jobs
