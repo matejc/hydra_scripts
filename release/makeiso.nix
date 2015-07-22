@@ -4,7 +4,7 @@ let
   kernelExtraConfig = builtins.readFile "${hydra_scripts}/config/t100pam_extra.config";
   hydraJob = pkgs.lib.hydraJob;
   stableBranch = false;
-  makeTest = import <nixpkgs/nixos/lib/testing.nix> { inherit system; };
+  makeTest = (import <nixpkgs/nixos/lib/testing.nix> { inherit system; }).makeTest;
 
   version = builtins.readFile <nixpkgs/.version>;
   versionSuffix =
