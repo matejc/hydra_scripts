@@ -106,5 +106,6 @@ let
 
   jobs = {
     inherit iso isoImage;
+    inherit (boot) bootUefiCdrom bootUefiUsb;
   };
 in jobs
