@@ -51,7 +51,7 @@ let
       ];
       boot.loader.gummiboot.enable = true;
       boot.loader.efi.canTouchEfiVariables = true;
-      boot.kernelPackages = pkgs.linuxPackages_4_1;
+      boot.kernelPackages = pkgs.linuxPackages_4_2;
       nixpkgs.config = {
         packageOverrides = pkgs: {
           stdenv = pkgs.stdenv // {
