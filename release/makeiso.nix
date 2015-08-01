@@ -42,7 +42,7 @@ let
           echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
         ''); # */
   
-  linux_testing = pkgs.linux_testing.override { features = { zfs = false; }; };
+  linux_testing = pkgs.linux_testing.override { features = { zfs = false; }; extraConfig = kernelExtraConfig; };
   linuxPackages_testing = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_testing linuxPackages_testing);
   
   configuration =
@@ -59,7 +59,7 @@ let
         packageOverrides = pkgs: {
           stdenv = pkgs.stdenv // {
             platform = pkgs.stdenv.platform // {
-              kernelExtraConfig = kernelExtraConfig;
+              #kernelExtraConfig = kernelExtraConfig;
               name = "tablet";
             };
           };
