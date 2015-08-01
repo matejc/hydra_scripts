@@ -42,18 +42,19 @@ let
           echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
         ''); # */
 
-  linux_testing = pkgs.linux_testing.override {
-    extraConfig = kernelExtraConfig;
-    stdenv = pkgs.stdenv // {
-      platform = pkgs.stdenv.platform // {
-        name = "tablet";
-      };
-    };
-  };
-  linuxPackages_testing = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_testing linuxPackages_testing);
-  
   configuration =
     { config, lib, pkgs, ... }:
+    let
+      linux_testing = pkgs.linux_testing.override {
+        extraConfig = kernelExtraConfig;
+        stdenv = pkgs.stdenv // {
+          platform = pkgs.stdenv.platform // {
+            name = "tablet";
+          };
+        };
+      };
+      linuxPackages_testing = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_testing linuxPackages_testing);
+    in
     {
       imports = [
         <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-base.nix>
@@ -63,6 +64,8 @@ let
       # boot.loader.efi.canTouchEfiVariables = true;
       boot.kernelPackages = linuxPackages_testing;
       boot.zfs.useGit = true;
+      hardware.enableAllFirmware = true;
+      boot.initrd.availableKernelModules = [ "ehci_pci" "usbhid" "usb_storage" ];
       # nixpkgs.config = {
       #   packageOverrides = pkgs: {
       #     stdenv = pkgs.stdenv // {
