@@ -105,7 +105,7 @@ let
   };
 
   jobs = {
-    inherit iso isoImage;
+    inherit iso;
     inherit (tests) bootUefiCdrom bootUefiUsb;
   };
 in jobs
