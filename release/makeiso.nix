@@ -43,7 +43,6 @@ let
         ''); # */
 
   linux_testing = pkgs.linux_testing.override {
-    features = { zfs = false; };
     extraConfig = kernelExtraConfig;
     stdenv = pkgs.stdenv // {
       platform = pkgs.stdenv.platform // {
@@ -59,12 +58,13 @@ let
       imports = [
         <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-base.nix>
         <nixpkgs/nixos/modules/profiles/minimal.nix>
+        <nixpkgs/nixos/modules/profiles/installation-device.nix>
+        <nixpkgs/nixos/modules/profiles/base.nix>
       ];
       boot.loader.gummiboot.enable = true;
       boot.loader.efi.canTouchEfiVariables = true;
       boot.kernelPackages = linuxPackages_testing;
       boot.zfs.useGit = true;
-      boot.initrd.kernelModules = [ "loop" "vfat" "dm_mod" "fuse" ];
       # nixpkgs.config = {
       #   packageOverrides = pkgs: {
       #     stdenv = pkgs.stdenv // {
