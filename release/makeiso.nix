@@ -45,7 +45,7 @@ let
   configuration =
     { config, lib, pkgs, ... }:
     let
-      linux_testing = pkgs.linux_testing.override {
+      linux = pkgs.linux_4_1.override {
         extraConfig = kernelExtraConfig;
         stdenv = pkgs.stdenv // {
           platform = pkgs.stdenv.platform // {
@@ -53,7 +53,7 @@ let
           };
         };
       };
-      linuxPackages_testing = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_testing linuxPackages_testing);
+      linuxPackages = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux linuxPackages);
     in
     {
       imports = [
@@ -62,7 +62,7 @@ let
       ];
       # boot.loader.gummiboot.enable = true;
       # boot.loader.efi.canTouchEfiVariables = true;
-      boot.kernelPackages = linuxPackages_testing;
+      boot.kernelPackages = linuxPackages;
       boot.zfs.useGit = true;
       hardware.enableAllFirmware = true;
       boot.initrd.availableKernelModules = [ "ehci_pci" "usbhid" "usb_storage" ];
