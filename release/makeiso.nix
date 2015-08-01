@@ -116,6 +116,6 @@ let
   };
 
   jobs = {
-    inherit iso;
+    inherit iso isoImage;
   };
 in jobs
