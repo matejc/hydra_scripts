@@ -43,7 +43,7 @@ let
         ''); # */
   
   linux_testing = pkgs.linux_testing.override { features = { zfs = false; }; };
-  linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor linux_testing linuxPackages_testing);
+  linuxPackages_testing = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_testing linuxPackages_testing);
   
   configuration =
     { config, lib, pkgs, ... }:
