@@ -58,11 +58,9 @@ let
       imports = [
         <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-base.nix>
         <nixpkgs/nixos/modules/profiles/minimal.nix>
-        <nixpkgs/nixos/modules/profiles/installation-device.nix>
-        <nixpkgs/nixos/modules/profiles/base.nix>
       ];
-      boot.loader.gummiboot.enable = true;
-      boot.loader.efi.canTouchEfiVariables = true;
+      # boot.loader.gummiboot.enable = true;
+      # boot.loader.efi.canTouchEfiVariables = true;
       boot.kernelPackages = linuxPackages_testing;
       boot.zfs.useGit = true;
       # nixpkgs.config = {
@@ -119,6 +117,5 @@ let
 
   jobs = {
     inherit iso;
-    inherit (tests) bootUefiCdrom bootUefiUsb;
   };
 in jobs
