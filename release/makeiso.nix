@@ -42,6 +42,9 @@ let
           echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
         ''); # */
   
+  linux_testing = pkgs.linux_testing.override { features = { zfs = false; }; };
+  linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor linux_testing linuxPackages_testing);
+  
   configuration =
     { config, lib, pkgs, ... }:
     {
@@ -51,7 +54,7 @@ let
       ];
       boot.loader.gummiboot.enable = true;
       boot.loader.efi.canTouchEfiVariables = true;
-      boot.kernelPackages = pkgs.linuxPackages_testing;
+      boot.kernelPackages = linuxPackages_testing;
       nixpkgs.config = {
         packageOverrides = pkgs: {
           stdenv = pkgs.stdenv // {
