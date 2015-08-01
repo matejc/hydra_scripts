@@ -42,7 +42,15 @@ let
           echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
         ''); # */
   
-  linux_testing = pkgs.linux_testing.override { features = { zfs = false; }; extraConfig = kernelExtraConfig; };
+  linux_testing = pkgs.linux_testing.override {
+    features = { zfs = false; };
+    extraConfig = kernelExtraConfig;
+    stdenv = pkgs.stdenv // {
+      platform = pkgs.stdenv.platform // {
+        name = "tablet";
+      };
+    };
+  };
   linuxPackages_testing = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_testing linuxPackages_testing);
   
   configuration =
@@ -55,16 +63,16 @@ let
       boot.loader.gummiboot.enable = true;
       boot.loader.efi.canTouchEfiVariables = true;
       boot.kernelPackages = linuxPackages_testing;
-      nixpkgs.config = {
-        packageOverrides = pkgs: {
-          stdenv = pkgs.stdenv // {
-            platform = pkgs.stdenv.platform // {
-              #kernelExtraConfig = kernelExtraConfig;
-              name = "tablet";
-            };
-          };
-        };
-      };
+      # nixpkgs.config = {
+      #   packageOverrides = pkgs: {
+      #     stdenv = pkgs.stdenv // {
+      #       platform = pkgs.stdenv.platform // {
+      #         #kernelExtraConfig = kernelExtraConfig;
+      #         name = "tablet";
+      #       };
+      #     };
+      #   };
+      # };
     };
   
   iso = makeIso {
