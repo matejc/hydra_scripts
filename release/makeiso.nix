@@ -51,7 +51,7 @@ let
       };
     };
   };
-  linuxPackages_testing = pkgs.recurseIntoAttrs (removeAttrs (pkgs.linuxPackagesFor linux_testing linuxPackages_testing) ["zfs"]);
+  linuxPackages_testing = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_testing linuxPackages_testing);
   
   configuration =
     { config, lib, pkgs, ... }:
@@ -63,6 +63,7 @@ let
       boot.loader.gummiboot.enable = true;
       boot.loader.efi.canTouchEfiVariables = true;
       boot.kernelPackages = linuxPackages_testing;
+      boot.zfs.useGit = true;
       # nixpkgs.config = {
       #   packageOverrides = pkgs: {
       #     stdenv = pkgs.stdenv // {
