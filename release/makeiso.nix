@@ -64,6 +64,7 @@ let
       boot.loader.efi.canTouchEfiVariables = true;
       boot.kernelPackages = linuxPackages_testing;
       boot.zfs.useGit = true;
+      boot.initrd.kernelModules = [ "loop" "vfat" "dm_mod" "fuse" ];
       # nixpkgs.config = {
       #   packageOverrides = pkgs: {
       #     stdenv = pkgs.stdenv // {
