@@ -41,7 +41,7 @@ let
           mkdir -p $out/nix-support
           echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
         ''); # */
-  
+
   linux_testing = pkgs.linux_testing.override {
     features = { zfs = false; };
     extraConfig = kernelExtraConfig;
@@ -51,7 +51,7 @@ let
       };
     };
   };
-  linuxPackages_testing = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_testing linuxPackages_testing);
+  linuxPackages_testing = pkgs.recurseIntoAttrs (removeAttrs (pkgs.linuxPackagesFor linux_testing linuxPackages_testing) ["zfs"]);
   
   configuration =
     { config, lib, pkgs, ... }:
