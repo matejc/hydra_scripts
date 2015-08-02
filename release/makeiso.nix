@@ -66,6 +66,7 @@ let
       boot.zfs.useGit = true;
       hardware.enableAllFirmware = true;
       boot.initrd.availableKernelModules = [ "ehci_pci" "usbhid" "usb_storage" ];
+      hardware.firmware = [ "${hydra_scripts}/config/firmware" ];
       # nixpkgs.config = {
       #   packageOverrides = pkgs: {
       #     stdenv = pkgs.stdenv // {
