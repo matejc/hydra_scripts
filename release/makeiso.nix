@@ -2,7 +2,7 @@
 with import <nixpkgs/lib>;
 let
   pkgs = import <nixpkgs> { inherit system; };
-  kernelExtraConfig = builtins.readFile "${hydra_scripts}/config/t100pam_extra.config";
+  kernelExtraConfig = builtins.readFile "${hydra_scripts}/config/t100tam_extra.config";
   stableBranch = false;
   makeTest = (import <nixpkgs/nixos/lib/testing.nix> { inherit system; }).makeTest;
 
