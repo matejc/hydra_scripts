@@ -2,6 +2,7 @@
 , supportedSystems ? [ "x86_64-linux" "i686-linux" ]
 , system ? builtins.currentSystem
 , attrs ? [ "pkgs.pythonPackages.virtualenv" "pkgs.bash" ]
+, ...
 }:
  
 with import <nixpkgs/pkgs/top-level/release-lib.nix> { inherit supportedSystems; };
